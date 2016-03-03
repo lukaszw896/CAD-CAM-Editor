@@ -17,7 +17,7 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     yPos = 0;
     zPos = -10.f;
 
-    rProjection = 5.0f;
+    rProjection = 4.0f;
 
     torus = Torus();
     torus.initTorus();
@@ -146,11 +146,25 @@ void OGlWidget::keyPressEvent(QKeyEvent *event)
         xPos-=0.05f;
         break;
     case Qt::Key_Plus:
-        zPos-=0.1f;
-        break;
-    case Qt::Key_Minus:
         zPos+=0.1f;
         break;
+    case Qt::Key_Minus:
+        zPos-=0.1f;
+        break;
+    case Qt::Key_BracketLeft:
+    if(torus.ringsCount>10){
+            torus.ringsCount -=10;
+            torus.sectionsCount -=10;
+            torus.initTorus();
+        }
+        break;
+    case Qt::Key_BracketRight:
+        if(torus.ringsCount<200){
+                torus.ringsCount +=10;
+                torus.sectionsCount +=10;
+                torus.initTorus();
+            }
+            break;
     }
 
 
@@ -168,7 +182,7 @@ void OGlWidget::computeTransformedPoints()
 {
     //TODO resize
     for(int i=0;i<torus.torusPoints.size();i++){
-        torus.trousTransPoints.push_back(vecTransformMat*torus.torusPoints[i]);
+        torus.trousTransPoints[i] = vecTransformMat*torus.torusPoints[i];
         //torus.trousTransPoints[i] = torus.trousTransPoints[i]/torus.trousTransPoints[i][3];
         torus.trousTransPoints[i].x = torus.trousTransPoints[i].x / torus.trousTransPoints[i].w;
         torus.trousTransPoints[i].y = torus.trousTransPoints[i].y / torus.trousTransPoints[i].w;
@@ -195,102 +209,17 @@ void OGlWidget::draw()
     glColor3f(1.0, 0.0, 0.0);
 
     glBegin(GL_LINES);
-    for(int i=0;i<torus.trousTransPoints.size();i=i+4){
-        //CohenSutherland(torus.trousTransPoints[i].x,torus.trousTransPoints[i].y,torus.trousTransPoints[i+1].x,torus.trousTransPoints[i+1].y);
 
+    for(int i=0;i<torus.edges.size();i++){
 
-        if(!(torus.trousTransPoints[i].w >=-0.06|| torus.trousTransPoints[i+1].w >=-0.06)){
-
-        glVertex2f(torus.trousTransPoints[i].x,torus.trousTransPoints[i].y);
-        glVertex2f(torus.trousTransPoints[i+1].x,torus.trousTransPoints[i+1].y);
-
+        if(!(torus.edges[i].vertice1->w >=-0.06|| torus.edges[i].vertice2->w >=-0.06)){
+            glVertex2f(torus.edges[i].vertice1->x,torus.edges[i].vertice1->y);
+            glVertex2f(torus.edges[i].vertice2->x,torus.edges[i].vertice2->y);
         }
 
-        if(!(torus.trousTransPoints[i+1].w>=-0.06 || torus.trousTransPoints[i+2].w>=-0.06)){
-       // CohenSutherland(torus.trousTransPoints[i+1].x,torus.trousTransPoints[i+1].y,torus.trousTransPoints[i+2].x,torus.trousTransPoints[i+2].y);
-        glVertex2f(torus.trousTransPoints[i+1].x,torus.trousTransPoints[i+1].y);
-        glVertex2f(torus.trousTransPoints[i+2].x,torus.trousTransPoints[i+2].y);
-        }
 
-        if(!(torus.trousTransPoints[i+2].w>=-0.6 || torus.trousTransPoints[i+3].w>=-0.06)){
-       // CohenSutherland(torus.trousTransPoints[i+2].x,torus.trousTransPoints[i+2].y,torus.trousTransPoints[i+3].x,torus.trousTransPoints[i+3].y);
-        glVertex2f(torus.trousTransPoints[i+2].x,torus.trousTransPoints[i+2].y);
-        glVertex2f(torus.trousTransPoints[i+3].x,torus.trousTransPoints[i+3].y);
-        }
-
-        if(!(torus.trousTransPoints[i+3].w>=-0.06 || torus.trousTransPoints[i+4].w>=-0.06)){
-        //CohenSutherland(torus.trousTransPoints[i+3].x,torus.trousTransPoints[i+3].y,torus.trousTransPoints[i].x,torus.trousTransPoints[i].y);
-        glVertex2f(torus.trousTransPoints[i+3].x,torus.trousTransPoints[i+3].y);
-        glVertex2f(torus.trousTransPoints[i].x,torus.trousTransPoints[i].y);
-        }
     }
-    torus.trousTransPoints.clear();
      glEnd();
 }
 
-BYTE  OGlWidget::ComputeOutcode(float x, float y)
-        {
-                BYTE outcode = 0;
-                if (x > xRatio) outcode |= 2;
-                else if (x < -xRatio) outcode |= 1;
-                if (y < -yRatio) outcode |= 8;
-                else if (y  > yRatio) outcode |= 4;
-                return outcode;
-        }
-
-        void OGlWidget::CohenSutherland(float x1, float y1, float x2, float y2)
-        {
-            bool accept = false, done = false;
-            BYTE outcode1 = ComputeOutcode(x1,y1);
-            BYTE outcode2 = ComputeOutcode(x2,y2);
-            do {
-                if ( ( outcode1 | outcode2 ) == 0 ) { //trivially accepted
-                    accept = true;
-                    done = true;
-                }
-                else if ( ( outcode1 & outcode2 ) != 0 ) { //trivially rejected
-                    accept = false;
-                    done = true;
-                }
-                else { //subdivide
-                    BYTE outcodeOut = (outcode1 != 0) ? outcode1 : outcode2;
-                    float x,y;
-                    if ( ( outcodeOut & 8 ) != 0 ) {
-                        x = x1 + (x2 - x1)*(-yRatio - y1)/(y2 - y1);
-                        y = -yRatio;
-                        std::cout << x << ", " << y << std::endl;
-
-                    }
-                    else if ( ( outcodeOut & 4 ) != 0 ) {
-                        x = x1 + (x2 - x1)*(yRatio - y1)/(y2 - y1);
-                        y = yRatio;
-                   }
-                    else if ((outcodeOut & 2) != 0)
-                    {
-                        x = xRatio;
-                        y = ((y2-y1)/(x2-x1))*(xRatio-x1)+y1;
-                    }
-                    else if ((outcodeOut & 1) != 0)
-                    {
-                        x = -xRatio;
-                        y = ((y2 - y1) / (x2 - x1)) * (-xRatio - x1) + y1;
-                    }
-                    if (outcodeOut == outcode1){
-                    x1=x;
-                    y1=y;
-                    outcode1 = ComputeOutcode(x1,y1);
-                    }
-                    else {
-                        x2=x;
-                        y2=y;
-                        outcode2 = ComputeOutcode(x2,y2);
-                    }
-                }
-            } while (!done);
-            if (accept){
-            glVertex2f(x1,y1);
-            glVertex2f(x2,y2);
-            }
-
-        }
 

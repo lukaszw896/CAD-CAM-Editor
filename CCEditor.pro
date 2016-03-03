@@ -20,6 +20,7 @@ SOURCES += main.cpp\
 
 HEADERS  += window.h \
     oglwidget.h \
-    torus.h
+    torus.h \
+    edge.h
 
 FORMS    += window.ui
