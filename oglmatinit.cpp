@@ -53,10 +53,14 @@ void OGlWidget::initProjectionMat(float r)
         }
     }
 
-    projectionMatrix[0][0] = 1.0f;
+   /* projectionMatrix[0][0] = 1.0f;
     projectionMatrix[1][1] = 1.0f;
     projectionMatrix[3][3] = 1.0f;
-    projectionMatrix[2][3] = 1.0f/r;
+    projectionMatrix[2][3] = 1.0f/r;*/
+    projectionMatrix[0][0] = 1.0f;
+    projectionMatrix[1][1] = 1.0f;
+    projectionMatrix[2][2] = 1.0f;
+    projectionMatrix[3][3] = 1.0f;
 }
 
 void OGlWidget::initXRotationMat(int angle){
@@ -105,16 +109,16 @@ void OGlWidget::initScaleMat(float s)
         for(int j=0;j<4;j++)
         {
             if(i==j){
-                translationMatrix[i][j] = 1.0f;
+                scaleMatrix[i][j] = 1.0f;
             }
             else{
-                translationMatrix[i][j] = 0.0f;
+                scaleMatrix[i][j] = 0.0f;
             }
         }
     }
 
-    translationMatrix[0][0] = s;
-    translationMatrix[1][1] = s;
-    translationMatrix[2][2] = s;
+    scaleMatrix[0][0] = s;
+    scaleMatrix[1][1] = s;
+    scaleMatrix[2][2] = s;
 
 }

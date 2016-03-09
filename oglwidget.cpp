@@ -3,7 +3,7 @@
 typedef unsigned char BYTE;
 OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
-    timerId = startTimer(17);
+    timerId = startTimer(16);
 
     this->setFocusPolicy(Qt::ClickFocus);
     xRatio = 1.f;
@@ -17,16 +17,22 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     yPos = 0;
     zPos = -10.f;
 
+    scale = 1.0;
+
     rProjection = 4.0f;
 
     torus = Torus();
     torus.initTorus();
+
     initIdentityMat();
     initTranslationMat(xPos,yPos,zPos);
     initProjectionMat(rProjection);
+    initScaleMat(scale);
     initXRotationMat(xRot);
     initYRotationMat(yRot);
     initZRotationMat(zRot);
+
+    elipsoid = Elipsoid(0.6,0.65,0.6);
 }
 
 OGlWidget::~OGlWidget()
@@ -98,6 +104,9 @@ void OGlWidget::paintGL()
 void OGlWidget::resizeGL(int width, int height)
 {
     glViewport(0, 0, width, height);
+    windowHeight = height;
+    windowWidth = width;
+
     if(width>height){
         xRatio = (float)width/(float)height;
         yRatio = 1.0f;
@@ -146,10 +155,12 @@ void OGlWidget::keyPressEvent(QKeyEvent *event)
         xPos-=0.05f;
         break;
     case Qt::Key_Plus:
-        zPos+=0.1f;
+        scale+=0.05f;
+        initScaleMat(scale);
         break;
     case Qt::Key_Minus:
-        zPos-=0.1f;
+        scale-=0.05f;
+        initScaleMat(scale);
         break;
     case Qt::Key_BracketLeft:
     if(torus.ringsCount>10){
@@ -194,13 +205,47 @@ void OGlWidget::computeTransformedPoints()
 void OGlWidget::computeTransformationMatrix()
 {
     //*identityMat
-    vecTransformMat = projectionMatrix*translationMatrix*zRotationMatrix* yRotationMatrix* xRotationMatrix;
+    vecTransformMat = projectionMatrix*translationMatrix*scaleMatrix* zRotationMatrix* yRotationMatrix* xRotationMatrix;
+}
+
+float OGlWidget::computePixFloatX(int xCord){
+    float ret = (float)xCord/(float)windowWidth*2 - 1.0;
+    return ret;
+}
+
+float OGlWidget::computePixFloatY(int yCord){
+    float ret = (float)yCord/(float)windowHeight*2 - 1.0;
+    return ret;
+
 }
 
 void OGlWidget::draw()
 {
     computeTransformationMatrix();
-    computeTransformedPoints();
+    elipsoid.calcDPMMat(vecTransformMat);
+
+    glDisable(GL_LIGHTING);
+    glBegin(GL_POINTS);
+
+    vec4* color;
+    float tmpX;
+    float tmpY;
+    for(int w=0;w<windowWidth;w++){
+        for(int h=0;h<windowHeight;h++){
+            tmpX = computePixFloatX(w);
+            tmpY = computePixFloatY(h);
+            if(elipsoid.intersectCalc(tmpX,tmpY,0,color) != NO_SOLUTION)
+            {
+
+                 glColor3f(color->x, color->y, color->z);
+                 glVertex2f(tmpX,tmpY);
+
+            }
+        }
+    }
+    glEnd();
+
+  /*  computeTransformedPoints();
 
     qglColor(Qt::red);
 
@@ -212,14 +257,14 @@ void OGlWidget::draw()
 
     for(int i=0;i<torus.edges.size();i++){
 
-        if(!(torus.edges[i].vertice1->w >=-0.06|| torus.edges[i].vertice2->w >=-0.06)){
+      //  if(!(torus.edges[i].vertice1->w >=-0.06|| torus.edges[i].vertice2->w >=-0.06)){
             glVertex2f(torus.edges[i].vertice1->x,torus.edges[i].vertice1->y);
             glVertex2f(torus.edges[i].vertice2->x,torus.edges[i].vertice2->y);
-        }
+       // }
 
 
     }
-     glEnd();
+     glEnd();*/
 }
 
 
