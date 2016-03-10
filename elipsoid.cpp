@@ -45,7 +45,7 @@ void Elipsoid::calcDPMMat(glm::mat4 transMat)
     DPMMat = transpose(inverse(transMat)) * diagMat * inverse(transMat);
 }
 
-float Elipsoid::intersectCalc(float x, float y, float cameraZ,vec4* color) {
+float Elipsoid::intersectCalc(float x, float y, vec3* camera,vec4* color) {
 
     float a = DPMMat[2][2];
     float b = (x * DPMMat[0][2] + y * DPMMat[1][2] + DPMMat[3][2]) +
@@ -68,21 +68,21 @@ float Elipsoid::intersectCalc(float x, float y, float cameraZ,vec4* color) {
     float z2 = (-b - delta) / 2*a;
 
     float z;
-    if(abs(z1-cameraZ)<abs(z2-cameraZ))
+    if(abs(z1-camera->z)<abs(z2-camera->z))
         z=z1;
     else
         z=z2;
 
     vec3 point = vec3(x,y,z);
 
-   vec3 v = normalize(derivative(point));
-   vec3 n = normalize(-point);
+   vec3 v = normalize(-derivative(point));
+   vec3 n = normalize(*camera+point);
 
    float dot = (v.x * n.x) + (v.y * n.y) + (v.z * n.z);
        if (dot < 0) dot = 0;
-       float lightIntensity = pow(dot, 0.5);
+       float lightIntensity = pow(dot, 10);
 
-       *color = vec4(1.000*lightIntensity, 1.000*lightIntensity, 0.000*lightIntensity,1);
+       *color = vec4(1.000*lightIntensity, 0.500*lightIntensity, 0.000*lightIntensity,1);
 }
 
 glm::vec3 Elipsoid::derivative(glm::vec3 p)

@@ -17,15 +17,16 @@ public:
     Elipsoid();
     Elipsoid(float a, float b, float c);
     void calcDPMMat(glm::mat4 transMat);
-    float intersectCalc(float x, float y, float cameraZ,vec4* c);
-private:
+    float intersectCalc(float x, float y,vec3* camera,vec4* c);
     float a;
     float b;
     float c;
+    void updateRadius(float a, float b, float c);
+private:
 
     float m;
 
-    void updateRadius(float a, float b, float c);
+
     void initDiagMat();
     void updateDiagMat();
     glm::vec3 derivative(glm::vec3);
