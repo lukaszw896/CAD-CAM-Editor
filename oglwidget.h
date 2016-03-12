@@ -10,8 +10,6 @@ typedef unsigned char BYTE;
 #include <glm/mat4x4.hpp> // glm::mat4
 #include "cmath"
 #include "torus.h"
-#include "elipsoid.h"
-#define NO_SOLUTION -1000
 
 class OGlWidget : public QGLWidget
 {
@@ -47,8 +45,7 @@ protected:
 
     void timerEvent(QTimerEvent *event);
 
-    float computePixFloatX(int xCord);
-    float computePixFloatY(int yCord);
+
 
 private:
     int timerId;
@@ -57,9 +54,6 @@ private:
     BYTE ComputeOutcode(float x,float y);
 
     void CohenSutherland(float x1,float y1, float x2, float y2);
-
-    int windowHeight;
-    int windowWidth;
 
     float xRatio;
     float yRatio;
@@ -71,8 +65,6 @@ private:
     float xPos;
     float yPos;
     float zPos;
-
-    float scale;
 
     glm::mat4 identityMat;
 
@@ -92,7 +84,6 @@ private:
     float rProjection;
 
     Torus torus;
-    Elipsoid elipsoid;
 
 signals:
     // signaling rotation from mouse movement

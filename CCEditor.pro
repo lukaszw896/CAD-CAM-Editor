@@ -16,13 +16,11 @@ SOURCES += main.cpp\
         window.cpp \
     oglwidget.cpp \
     torus.cpp \
-    oglmatinit.cpp \
-    elipsoid.cpp
+    oglmatinit.cpp
 
 HEADERS  += window.h \
     oglwidget.h \
     torus.h \
-    edge.h \
-    elipsoid.h
+    edge.h
 
 FORMS    += window.ui
