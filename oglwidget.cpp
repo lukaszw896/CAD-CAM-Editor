@@ -32,7 +32,7 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     initYRotationMat(yRot);
     initZRotationMat(zRot);
 
-    elipsoid = Elipsoid(0.9,0.95,0.9);
+    elipsoid = Elipsoid(0.6,0.65,0.6);
 
     drawAdaptive = true;
     adaptiveLastLoop = false;
@@ -75,26 +75,7 @@ void OGlWidget::setXRotation(int angle)
 }
 
 void OGlWidget::setRadiusA(int aRad){
-    elipsoid.updateRadius((float)aRad/(float)100,elipsoid.b,elipsoid.c);
-    drawAdaptive = true;
-    numOfTiles= 4;
-}
-void OGlWidget::setRadiusB(int bRad){
-    elipsoid.updateRadius(elipsoid.a,(float)bRad/(float)100,elipsoid.c);
-    drawAdaptive = true;
-    numOfTiles= 4;
-}
-
-void OGlWidget::setRadiusC(int cRad){
-    elipsoid.updateRadius(elipsoid.a,elipsoid.b,(float)cRad/(float)100);
-    drawAdaptive = true;
-    numOfTiles= 4;
-}
-
-void OGlWidget::setExponentM(int exponent){
-    elipsoid.m = (float)exponent/(float)10;
-    drawAdaptive = true;
-    numOfTiles = 4;
+    elipsoid.updateRadius((100-aRad)/100,elipsoid.b,elipsoid.c);
 }
 
 void OGlWidget::setYRotation(int angle)
@@ -146,7 +127,6 @@ void OGlWidget::resizeGL(int width, int height)
     else{xRatio = 1.0f;yRatio=1.0f;}
 
     drawAdaptive = true;
-    numOfTiles= 4;
 }
 
 void OGlWidget::mousePressEvent(QMouseEvent *event)
@@ -168,8 +148,6 @@ void OGlWidget::mouseMoveEvent(QMouseEvent *event)
     }
 
     lastPos = event->pos();
-    drawAdaptive = true;
-    numOfTiles= 4;
 }
 
 void OGlWidget::keyPressEvent(QKeyEvent *event)
@@ -177,36 +155,24 @@ void OGlWidget::keyPressEvent(QKeyEvent *event)
     switch(event->key()){
         case Qt::Key_Up:
             yPos -= 0.05f;
-            drawAdaptive = true;
-            numOfTiles= 4;
             break;
         case Qt::Key_Down:
             yPos += 0.05f;
-            drawAdaptive = true;
-            numOfTiles= 4;
             break;
     case Qt::Key_Left:
         xPos+=0.05f;
-        drawAdaptive = true;
-        numOfTiles= 4;
         break;
     case Qt::Key_Right:
         xPos-=0.05f;
-        drawAdaptive = true;
-        numOfTiles= 4;
         break;
     case Qt::Key_Plus:
-        scale+=0.005f;
+        scale+=0.05f;
         initScaleMat(scale);
-        drawAdaptive = true;
-        numOfTiles= 4;
        // zPos-=0.05f;
         break;
     case Qt::Key_Minus:
-        scale-=0.005f;
+        scale-=0.05f;
         initScaleMat(scale);
-        drawAdaptive = true;
-        numOfTiles= 4;
       //   -zPos+=0.05f;
         break;
     case Qt::Key_BracketLeft:
@@ -232,14 +198,8 @@ void OGlWidget::keyPressEvent(QKeyEvent *event)
 void OGlWidget::timerEvent(QTimerEvent *event)
 {
     if(drawAdaptive){
-        numOfTiles*=4;
-        float tmpWidth = (float)windowWidth/(float)numOfTiles;
-        float tmpHeight = (float)windowHeight/(float)numOfTiles;
-       if(tmpHeight<1.0 || tmpWidth <1.0){
-            drawAdaptive = false;
-       }
-       else
-        updateGL();
+
+   updateGL();
     }
 }
 
@@ -282,8 +242,7 @@ void OGlWidget::drawTile(int startX, int startY, int endX, int endY, vec4* color
     tmpY = computePixFloatY(startY);
     float isColored = elipsoid.intersectCalc(tmpX,tmpY,&camera,color);
     glColor3f(color->x, color->y, color->z);
-    if(isColored != NO_SOLUTION)
-    {
+    if(isColored != NO_SOLUTION){
         for(int w=startX;w<endX;w++){
             for(int h=startY;h<endY;h++){
                 tmpX = computePixFloatX(w);
@@ -303,27 +262,22 @@ void OGlWidget::draw()
     glBegin(GL_POINTS);
     vec4* color;
 
-        int tileWidth;
-        int tileHeight;
-
-        tileWidth =  windowWidth/numOfTiles;
-        tileHeight = windowHeight/numOfTiles;
-
+        int tileWidth = windowWidth/numOfTiles;
+        int tileHeight = windowHeight/numOfTiles;
         for(int i=0;i<numOfTiles;i++){
             for(int j=0;j<numOfTiles;j++){
-
                 drawTile(tileWidth*i,tileHeight*j,tileWidth*(i+1),tileWidth*(j+1),color);
             }
         }
-        /*numOfTiles*=4;
+        numOfTiles*=4;
         float tmpWidth = (float)windowWidth/(float)numOfTiles;
         float tmpHeight = (float)windowHeight/(float)numOfTiles;
         if(tmpHeight<1.0 || tmpWidth <1.0){
-            numOfTiles=4;*/
+            numOfTiles=4;
             //drawAdaptive=false;
 
 
-        //}
+        }
        /* else if(tmpHeight==1.0 || tmpWidth ==1.0)
         {
             numOfTiles=4;

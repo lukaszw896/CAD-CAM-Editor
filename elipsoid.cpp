@@ -80,7 +80,7 @@ float Elipsoid::intersectCalc(float x, float y, vec3* camera,vec4* color) {
 
    float dot = (v.x * n.x) + (v.y * n.y) + (v.z * n.z);
        if (dot < 0) dot = 0;
-       float lightIntensity = pow(dot, m);
+       float lightIntensity = pow(dot, 10);
 
        *color = vec4(1.000*lightIntensity, 0.500*lightIntensity, 0.000*lightIntensity,1);
 }
