@@ -114,6 +114,9 @@ public slots:
     void setYRotation(int angle);
     void setZRotation(int angle);
     void setRadiusA(int);
+    void setRadiusB(int);
+    void setRadiusC(int);
+    void setExponentM(int);
 };
 
 #endif // OGLWIDGET_H

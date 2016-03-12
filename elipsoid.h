@@ -21,11 +21,10 @@ public:
     float a;
     float b;
     float c;
-    void updateRadius(float a, float b, float c);
-private:
-
     float m;
+    void updateRadius(float a, float b, float c);
 
+private:
 
     void initDiagMat();
     void updateDiagMat();

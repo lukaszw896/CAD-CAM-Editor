@@ -52,14 +52,123 @@
        <widget class="QSlider" name="horizontalSlider">
         <property name="geometry">
          <rect>
-          <x>30</x>
-          <y>20</y>
+          <x>20</x>
+          <y>70</y>
           <width>160</width>
           <height>29</height>
          </rect>
         </property>
+        <property name="minimum">
+         <number>60</number>
+        </property>
+        <property name="maximum">
+         <number>99</number>
+        </property>
         <property name="value">
-         <number>40</number>
+         <number>90</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>30</y>
+          <width>81</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Radius A</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>120</y>
+          <width>67</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Radius B</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_3">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>200</y>
+          <width>67</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Radius C</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_4">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>270</y>
+          <width>91</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Exponent M</string>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSlider_2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>150</y>
+          <width>160</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="minimum">
+         <number>60</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSlider_3">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>230</y>
+          <width>160</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="minimum">
+         <number>60</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSlider_4">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>300</y>
+          <width>160</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -80,6 +189,9 @@
    <container>1</container>
    <slots>
     <slot>setRadiusA(int)</slot>
+    <slot>setRadiusB(int)</slot>
+    <slot>setRadiusC(int)</slot>
+    <slot>setExponentM(int)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -92,12 +204,60 @@
    <slot>setRadiusA(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>611</x>
-     <y>48</y>
+     <x>712</x>
+     <y>108</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
      <y>84</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>widget</receiver>
+   <slot>setRadiusB(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>585</x>
+     <y>175</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>463</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_3</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>widget</receiver>
+   <slot>setRadiusC(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>584</x>
+     <y>258</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>486</x>
+     <y>295</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_4</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>widget</receiver>
+   <slot>setExponentM(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>613</x>
+     <y>330</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>460</x>
+     <y>382</y>
     </hint>
    </hints>
   </connection>
