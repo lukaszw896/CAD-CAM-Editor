@@ -16,7 +16,7 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     xPos = 0;
     yPos = 0;
     zPos = -10.f;
-    camera = vec3(0,0,0);
+
     scale = 1.0;
 
     rProjection = 4.0f;
@@ -33,11 +33,6 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     initZRotationMat(zRot);
 
     elipsoid = Elipsoid(0.6,0.65,0.6);
-
-    drawAdaptive = true;
-    adaptiveLastLoop = false;
-    numOfTiles = 4;
-   // elipsoid.m
 }
 
 OGlWidget::~OGlWidget()
@@ -72,10 +67,6 @@ void OGlWidget::setXRotation(int angle)
         emit xRotationChanged(angle);
         initXRotationMat(xRot);
     }
-}
-
-void OGlWidget::setRadiusA(int aRad){
-    elipsoid.updateRadius((100-aRad)/100,elipsoid.b,elipsoid.c);
 }
 
 void OGlWidget::setYRotation(int angle)
@@ -125,8 +116,6 @@ void OGlWidget::resizeGL(int width, int height)
         yRatio = (float)height/(float)width;
     }
     else{xRatio = 1.0f;yRatio=1.0f;}
-
-    drawAdaptive = true;
 }
 
 void OGlWidget::mousePressEvent(QMouseEvent *event)
@@ -168,12 +157,10 @@ void OGlWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Plus:
         scale+=0.05f;
         initScaleMat(scale);
-       // zPos-=0.05f;
         break;
     case Qt::Key_Minus:
         scale-=0.05f;
         initScaleMat(scale);
-      //   -zPos+=0.05f;
         break;
     case Qt::Key_BracketLeft:
     if(torus.ringsCount>10){
@@ -197,10 +184,7 @@ void OGlWidget::keyPressEvent(QKeyEvent *event)
 
 void OGlWidget::timerEvent(QTimerEvent *event)
 {
-    if(drawAdaptive){
-
    updateGL();
-    }
 }
 
 
@@ -235,24 +219,6 @@ float OGlWidget::computePixFloatY(int yCord){
 
 }
 
-void OGlWidget::drawTile(int startX, int startY, int endX, int endY, vec4* color){
-    float tmpX;
-    float tmpY;
-    tmpX = computePixFloatX(startX);
-    tmpY = computePixFloatY(startY);
-    float isColored = elipsoid.intersectCalc(tmpX,tmpY,&camera,color);
-    glColor3f(color->x, color->y, color->z);
-    if(isColored != NO_SOLUTION){
-        for(int w=startX;w<endX;w++){
-            for(int h=startY;h<endY;h++){
-                tmpX = computePixFloatX(w);
-                tmpY = computePixFloatY(h);
-                 glVertex2f(tmpX,tmpY);
-            }
-        }
-    }
-}
-
 void OGlWidget::draw()
 {
     computeTransformationMatrix();
@@ -260,43 +226,23 @@ void OGlWidget::draw()
 
     glDisable(GL_LIGHTING);
     glBegin(GL_POINTS);
+
     vec4* color;
-
-        int tileWidth = windowWidth/numOfTiles;
-        int tileHeight = windowHeight/numOfTiles;
-        for(int i=0;i<numOfTiles;i++){
-            for(int j=0;j<numOfTiles;j++){
-                drawTile(tileWidth*i,tileHeight*j,tileWidth*(i+1),tileWidth*(j+1),color);
-            }
-        }
-        numOfTiles*=4;
-        float tmpWidth = (float)windowWidth/(float)numOfTiles;
-        float tmpHeight = (float)windowHeight/(float)numOfTiles;
-        if(tmpHeight<1.0 || tmpWidth <1.0){
-            numOfTiles=4;
-            //drawAdaptive=false;
-
-
-        }
-       /* else if(tmpHeight==1.0 || tmpWidth ==1.0)
-        {
-            numOfTiles=4;
-            drawAdaptive=false;
-        }*/
-
-   /* float tmpX;
+    float tmpX;
     float tmpY;
     for(int w=0;w<windowWidth;w++){
         for(int h=0;h<windowHeight;h++){
             tmpX = computePixFloatX(w);
             tmpY = computePixFloatY(h);
-            if(elipsoid.intersectCalc(tmpX,tmpY,&camera,color) != NO_SOLUTION)
+            if(elipsoid.intersectCalc(tmpX,tmpY,0,color) != NO_SOLUTION)
             {
+
                  glColor3f(color->x, color->y, color->z);
                  glVertex2f(tmpX,tmpY);
+
             }
         }
-    }*/
+    }
     glEnd();
 
   /*  computeTransformedPoints();

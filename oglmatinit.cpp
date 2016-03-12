@@ -39,10 +39,6 @@ void OGlWidget::initTranslationMat(float x, float y, float z)
     translationMatrix[3][1] = y;
     translationMatrix[3][2] = z;
 
-    camera.x = x;
-    camera.y = y;
-    camera.z = z;
-
 }
 
 void OGlWidget::initProjectionMat(float r)

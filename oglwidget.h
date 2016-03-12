@@ -50,8 +50,6 @@ protected:
     float computePixFloatX(int xCord);
     float computePixFloatY(int yCord);
 
-    void drawTile(int startX,int startY, int endX, int endY,vec4* color);
-
 private:
     int timerId;
 
@@ -88,8 +86,6 @@ private:
 
     glm::mat4 vecTransformMat;
 
-    vec3 camera;
-
     //last mouse position
     QPoint lastPos;
 
@@ -97,10 +93,6 @@ private:
 
     Torus torus;
     Elipsoid elipsoid;
-
-    bool drawAdaptive;
-    bool adaptiveLastLoop;
-    int numOfTiles;
 
 signals:
     // signaling rotation from mouse movement
@@ -113,7 +105,6 @@ public slots:
     void setXRotation(int angle);
     void setYRotation(int angle);
     void setZRotation(int angle);
-    void setRadiusA(int);
 };
 
 #endif // OGLWIDGET_H
