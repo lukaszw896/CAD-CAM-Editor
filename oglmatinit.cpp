@@ -48,7 +48,7 @@ void OGlWidget::initProjectionMat(float r)
         for(int j=0;j<4;j++)
         {
 
-                projectionMatrix[i][j] = 0.0f;
+                projectionMatrixLeftEye[i][j] = 0.0f;
 
         }
     }
@@ -57,6 +57,48 @@ void OGlWidget::initProjectionMat(float r)
     projectionMatrix[1][1] = 1.0f;
     projectionMatrix[3][3] = 1.0f;
     projectionMatrix[2][3] = 1.0f/r;
+
+
+}
+
+void OGlWidget::initProjectionMatLeftEye(float r, float e)
+{
+    for(int i=0;i<4;i++)
+    {
+        for(int j=0;j<4;j++)
+        {
+
+                projectionMatrixLeftEye[i][j] = 0.0f;
+
+        }
+    }
+
+    projectionMatrixLeftEye[0][0] = 1.0f;
+    projectionMatrixLeftEye[1][1] = 1.0f;
+    projectionMatrixLeftEye[3][3] = 1.0f;
+    projectionMatrixLeftEye[2][3] = 1.0f/r;
+
+    projectionMatrixLeftEye[2][0] = -e/(2*r);
+}
+
+void OGlWidget::initProjectionMatRightEye(float r, float e)
+{
+    for(int i=0;i<4;i++)
+    {
+        for(int j=0;j<4;j++)
+        {
+
+                projectionMatrixRightEye[i][j] = 0.0f;
+
+        }
+    }
+
+    projectionMatrixRightEye[0][0] = 1.0f;
+    projectionMatrixRightEye[1][1] = 1.0f;
+    projectionMatrixRightEye[3][3] = 1.0f;
+    projectionMatrixRightEye[2][3] = 1.0f/r;
+
+    projectionMatrixRightEye[2][0] = e/(2*r);
 }
 
 void OGlWidget::initXRotationMat(int angle){

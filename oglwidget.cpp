@@ -18,12 +18,15 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     zPos = -10.f;
 
     rProjection = 4.0f;
+    eyeDist = 0.060f;
 
     torus = Torus();
     torus.initTorus();
     initIdentityMat();
     initTranslationMat(xPos,yPos,zPos);
     initProjectionMat(rProjection);
+    initProjectionMatLeftEye(rProjection,eyeDist);
+    initProjectionMatRightEye(rProjection,eyeDist);
     initXRotationMat(xRot);
     initYRotationMat(yRot);
     initZRotationMat(zRot);
@@ -87,6 +90,8 @@ void OGlWidget::initializeGL()
 {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
+    glEnable ( GL_COLOR_MATERIAL );
 }
 
 void OGlWidget::paintGL()
@@ -182,19 +187,36 @@ void OGlWidget::computeTransformedPoints()
 {
     //TODO resize
     for(int i=0;i<torus.torusPoints.size();i++){
-        torus.trousTransPoints[i] = vecTransformMat*torus.torusPoints[i];
+       /* torus.trousTransPoints[i] = vecTransformMat*torus.torusPoints[i];
         //torus.trousTransPoints[i] = torus.trousTransPoints[i]/torus.trousTransPoints[i][3];
         torus.trousTransPoints[i].x = torus.trousTransPoints[i].x / torus.trousTransPoints[i].w;
         torus.trousTransPoints[i].y = torus.trousTransPoints[i].y / torus.trousTransPoints[i].w;
         torus.trousTransPoints[i].x /= xRatio;
-        torus.trousTransPoints[i].y /= yRatio;
+        torus.trousTransPoints[i].y /= yRatio;*/
+
+                torus.toursPointsLeftEye[i] = transformationMatrixLeftEye*torus.torusPoints[i];
+                torus.toursPointsLeftEye[i].x = torus.toursPointsLeftEye[i].x / torus.toursPointsLeftEye[i].w;
+                torus.toursPointsLeftEye[i].y = torus.toursPointsLeftEye[i].y / torus.toursPointsLeftEye[i].w;
+                torus.toursPointsLeftEye[i].x /= xRatio;
+                torus.toursPointsLeftEye[i].y /= yRatio;
+
+
+                torus.torusPointsRightEye[i] = transformationMatrixRightEye*torus.torusPoints[i];
+                torus.torusPointsRightEye[i].x = torus.torusPointsRightEye[i].x / torus.torusPointsRightEye[i].w;
+                torus.torusPointsRightEye[i].y = torus.torusPointsRightEye[i].y / torus.torusPointsRightEye[i].w;
+                torus.torusPointsRightEye[i].x /= xRatio;
+                torus.torusPointsRightEye[i].y /= yRatio;
+
     }
 }
 
 void OGlWidget::computeTransformationMatrix()
 {
     //*identityMat
-    vecTransformMat = projectionMatrix*translationMatrix*zRotationMatrix* yRotationMatrix* xRotationMatrix;
+   // vecTransformMat = projectionMatrix*translationMatrix*zRotationMatrix* yRotationMatrix* xRotationMatrix;
+
+    transformationMatrixLeftEye = projectionMatrixLeftEye*translationMatrix*zRotationMatrix* yRotationMatrix* xRotationMatrix;
+    transformationMatrixRightEye = projectionMatrixRightEye*translationMatrix*zRotationMatrix* yRotationMatrix* xRotationMatrix;
 }
 
 void OGlWidget::draw()
@@ -202,22 +224,39 @@ void OGlWidget::draw()
     computeTransformationMatrix();
     computeTransformedPoints();
 
-    qglColor(Qt::red);
+    glEnable(GL_BLEND);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
 
     glLineWidth(-15/zPos - (5.f-rProjection)/5);
-    glColor3f(1.0, 0.0, 0.0);
-
+   // glColor3f(1.0,0, 0.0);
+glColor3f(0, 0.0, 0.9);
     glBegin(GL_LINES);
 
-    for(int i=0;i<torus.edges.size();i++){
+    /*for(int i=0;i<torus.edges.size();i++){
 
         if(!(torus.edges[i].vertice1->w >=-0.06|| torus.edges[i].vertice2->w >=-0.06)){
             glVertex2f(torus.edges[i].vertice1->x,torus.edges[i].vertice1->y);
             glVertex2f(torus.edges[i].vertice2->x,torus.edges[i].vertice2->y);
         }
+    }*/
 
+    for(int i=0;i<torus.edgesLeftEye.size();i++){
 
+        if(!(torus.edgesLeftEye[i].vertice1->w >=-0.06|| torus.edgesLeftEye[i].vertice2->w >=-0.06)){
+            glVertex2f(torus.edgesLeftEye[i].vertice1->x,torus.edgesLeftEye[i].vertice1->y);
+            glVertex2f(torus.edgesLeftEye[i].vertice2->x,torus.edgesLeftEye[i].vertice2->y);
+        }
+    }
+
+    //glColor3f(0, 0, 1);
+    glColor4f(0.3,0.0, 0.0,5);
+    for(int i=0;i<torus.edgesRightEye.size();i++){
+
+        if(!(torus.edgesRightEye[i].vertice1->w >=-0.06|| torus.edgesRightEye[i].vertice2->w >=-0.06)){
+            glVertex2f(torus.edgesRightEye[i].vertice1->x,torus.edgesRightEye[i].vertice1->y);
+            glVertex2f(torus.edgesRightEye[i].vertice2->x,torus.edgesRightEye[i].vertice2->y);
+        }
     }
      glEnd();
 }

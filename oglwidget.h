@@ -11,6 +11,8 @@ typedef unsigned char BYTE;
 #include "cmath"
 #include "torus.h"
 
+using namespace glm;
+
 class OGlWidget : public QGLWidget
 {
     Q_OBJECT
@@ -33,6 +35,9 @@ protected:
     void initIdentityMat();
     void initTranslationMat(float x, float y, float z);
     void initProjectionMat(float r);
+    void initProjectionMatLeftEye(float r, float e);
+    void initProjectionMatRightEye(float r, float e);
+
     void initXRotationMat(int angle);
     void initYRotationMat(int angle);
     void initZRotationMat(int angle);
@@ -76,12 +81,19 @@ private:
     glm::mat4 scaleMatrix;
     glm::mat4 projectionMatrix;
 
+    mat4 projectionMatrixLeftEye;
+    mat4 projectionMatrixRightEye;
+
     glm::mat4 vecTransformMat;
+
+    mat4 transformationMatrixLeftEye;
+    mat4 transformationMatrixRightEye;
 
     //last mouse position
     QPoint lastPos;
 
     float rProjection;
+    float eyeDist;
 
     Torus torus;
 

@@ -58,12 +58,25 @@ void Torus::initTorus()
            phi += du;
        }
        trousTransPoints.resize(torusPoints.size());
+       torusPointsRightEye.resize(torusPoints.size());
+       toursPointsLeftEye.resize(torusPoints.size());
 
        for(int i=0;i<trousTransPoints.size();i=i+4){
+
            edges.push_back(Edge(trousTransPoints[i],trousTransPoints[i+1]));
            edges.push_back(Edge(trousTransPoints[i+1],trousTransPoints[i+2]));
            edges.push_back(Edge(trousTransPoints[i+2],trousTransPoints[i+3]));
            edges.push_back(Edge(trousTransPoints[i+3],trousTransPoints[i]));
+
+           edgesLeftEye.push_back(Edge(toursPointsLeftEye[i],toursPointsLeftEye[i+1]));
+           edgesLeftEye.push_back(Edge(toursPointsLeftEye[i+1],toursPointsLeftEye[i+2]));
+           edgesLeftEye.push_back(Edge(toursPointsLeftEye[i+2],toursPointsLeftEye[i+3]));
+           edgesLeftEye.push_back(Edge(toursPointsLeftEye[i+3],toursPointsLeftEye[i]));
+
+           edgesRightEye.push_back(Edge(torusPointsRightEye[i],torusPointsRightEye[i+1]));
+           edgesRightEye.push_back(Edge(torusPointsRightEye[i+1],torusPointsRightEye[i+2]));
+           edgesRightEye.push_back(Edge(torusPointsRightEye[i+2],torusPointsRightEye[i+3]));
+           edgesRightEye.push_back(Edge(torusPointsRightEye[i+3],torusPointsRightEye[i]));
        }
 
    }

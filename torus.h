@@ -3,6 +3,8 @@
 #include <glm/vec4.hpp> // glm::vec4
 #include <vector>
 #include "edge.h"
+using namespace std;
+using namespace glm;
 class Torus
 {
 public:
@@ -11,9 +13,15 @@ public:
 public:
     void initTorus();
 
-    std::vector<glm::vec4> torusPoints;
-    std::vector<glm::vec4> trousTransPoints;
-    std::vector<Edge> edges;
+    vector<vec4> torusPoints;
+    vector<vec4> trousTransPoints;
+    vector<vec4> toursPointsLeftEye;
+    vector<vec4> torusPointsRightEye;
+
+    vector<Edge> edges;
+    vector<Edge> edgesLeftEye;
+    vector<Edge> edgesRightEye;
+
 
     int    sectionsCount;
     int    ringsCount;
