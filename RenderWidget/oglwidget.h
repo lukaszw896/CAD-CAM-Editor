@@ -34,14 +34,9 @@ protected:
     void keyPressEvent(QKeyEvent *event);
 
     void initIdentityMat();
-    void initTranslationMat(float x, float y, float z);
     void initProjectionMat(float r);
     void initProjectionMatLeftEye(float r, float e);
     void initProjectionMatRightEye(float r, float e);
-
-    void initXRotationMat(int angle);
-    void initYRotationMat(int angle);
-    void initZRotationMat(int angle);
     void initScaleMat(float s);
 
 
@@ -62,23 +57,10 @@ private:
     float xRatio;
     float yRatio;
 
-    int xRot;
-    int yRot;
-    int zRot;
-
-    float xPos;
-    float yPos;
-    float zPos;
-
     float scale;
 
     glm::mat4 identityMat;
 
-    glm::mat4 xRotationMatrix;
-    glm::mat4 yRotationMatrix;
-    glm::mat4 zRotationMatrix;
-
-    glm::mat4 translationMatrix;
     glm::mat4 scaleMatrix;
     glm::mat4 projectionMatrix;
 

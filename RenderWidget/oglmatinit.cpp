@@ -20,27 +20,6 @@ void OGlWidget::initIdentityMat()
     }
 }
 
-void OGlWidget::initTranslationMat(float x, float y, float z)
-{
-    for(int i=0;i<4;i++)
-    {
-        for(int j=0;j<4;j++)
-        {
-            if(i==j){
-                translationMatrix[i][j] = 1.0f;
-            }
-            else{
-                translationMatrix[i][j] = 0.0f;
-            }
-        }
-    }
-
-    translationMatrix[3][0] = x;
-    translationMatrix[3][1] = y;
-    translationMatrix[3][2] = z;
-
-}
-
 void OGlWidget::initProjectionMat(float r)
 {
     for(int i=0;i<4;i++)
@@ -99,45 +78,6 @@ void OGlWidget::initProjectionMatRightEye(float r, float e)
     projectionMatrixRightEye[2][3] = 1.0f/r;
 
     projectionMatrixRightEye[2][0] = e/(2*r);
-}
-
-void OGlWidget::initXRotationMat(int angle){
-    for(int i=0;i<4;i++){
-        for(int j=0;j<4;j++){
-            if(i==j) xRotationMatrix[i][j] = 1.f;
-            else xRotationMatrix[i][j] =0.f;
-        }
-    }
-    xRotationMatrix[1][1] = cos((double)angle/360.0f);
-    xRotationMatrix[1][2] = sin((double)angle/360.0f);
-    xRotationMatrix[2][1] = -sin((double)angle/360.0f);
-    xRotationMatrix[2][2] = cos((double)angle/360.0f);
-}
-
-void OGlWidget::initYRotationMat(int angle){
-    for(int i=0;i<4;i++){
-        for(int j=0;j<4;j++){
-            if(i==j) yRotationMatrix[i][j] = 1.f;
-            else yRotationMatrix[i][j] =0.f;
-        }
-    }
-    yRotationMatrix[0][0] = cos((double)angle/360.0f);
-    yRotationMatrix[2][0] = sin((double)angle/360.0f);
-    yRotationMatrix[0][2] = -sin((double)angle/360.0f);
-    yRotationMatrix[2][2] = cos((double)angle/360.0f);
-}
-
-void OGlWidget::initZRotationMat(int angle){
-    for(int i=0;i<4;i++){
-        for(int j=0;j<4;j++){
-            if(i==j) zRotationMatrix[i][j] = 1.f;
-            else zRotationMatrix[i][j] =0.f;
-        }
-    }
-    zRotationMatrix[0][0] = cos((double)angle/360.0f);
-    zRotationMatrix[0][1] = sin((double)angle/360.0f);
-    zRotationMatrix[1][0] = -sin((double)angle/360.0f);
-    zRotationMatrix[1][1] = cos((double)angle/360.0f);
 }
 
 void OGlWidget::initScaleMat(float s)

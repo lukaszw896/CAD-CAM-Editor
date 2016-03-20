@@ -18,7 +18,6 @@ public:
     void updateYRotationMat(float angle);
     void updateZRotationMat(float angle);
 
-private:
     int xRot;
     int yRot;
     int zRot;

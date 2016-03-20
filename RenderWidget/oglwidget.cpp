@@ -27,14 +27,15 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     torus = Torus();
     torus.initTorus();
     initIdentityMat();
-    initTranslationMat(xPos,yPos,zPos);
+    initTranslationMat();
+    updateTranslationMatZ(zPos);
     initScaleMat(scale);
     initProjectionMat(rProjection);
     initProjectionMatLeftEye(rProjection,eyeDist);
     initProjectionMatRightEye(rProjection,eyeDist);
-    initXRotationMat(xRot);
-    initYRotationMat(yRot);
-    initZRotationMat(zRot);
+    initXRotationMat();
+    initYRotationMat();
+    initZRotationMat();
 }
 
 OGlWidget::~OGlWidget()
@@ -67,7 +68,7 @@ void OGlWidget::setXRotation(int angle)
     if (angle != xRot) {
         xRot = angle;
         emit xRotationChanged(angle);
-        initXRotationMat(xRot);
+        updateXRotationMat(xRot);
     }
 }
 
@@ -77,7 +78,7 @@ void OGlWidget::setYRotation(int angle)
     if (angle != yRot) {
         yRot = angle;
         emit yRotationChanged(angle);
-        initYRotationMat(yRot);
+        updateYRotationMat(yRot);
     }
 }
 
@@ -87,7 +88,7 @@ void OGlWidget::setZRotation(int angle)
     if (angle != zRot) {
         zRot = angle;
         emit zRotationChanged(angle);
-        initZRotationMat(zRot);
+        updateZRotationMat(zRot);
     }
 }
 
@@ -166,21 +167,27 @@ void OGlWidget::keyPressEvent(QKeyEvent *event)
     switch(event->key()){
         case Qt::Key_Up:
             yPos -= 0.05f;
+            updateTranslationMatY(yPos);
             break;
         case Qt::Key_Down:
             yPos += 0.05f;
+             updateTranslationMatY(yPos);
             break;
     case Qt::Key_Left:
         xPos+=0.05f;
+        updateTranslationMatX(xPos);
         break;
     case Qt::Key_Right:
         xPos-=0.05f;
+        updateTranslationMatX(xPos);
         break;
     case Qt::Key_Plus:
         zPos+=0.1f;
+        updateTranslationMatZ(zPos);
         break;
     case Qt::Key_Minus:
         zPos-=0.1f;
+        updateTranslationMatZ(zPos);
         break;
     case Qt::Key_BracketLeft:
     if(torus.ringsCount>10){
@@ -197,9 +204,6 @@ void OGlWidget::keyPressEvent(QKeyEvent *event)
             }
             break;
     }
-
-
-    initTranslationMat(xPos,yPos,zPos);
 }
 
 void OGlWidget::timerEvent(QTimerEvent *event)
