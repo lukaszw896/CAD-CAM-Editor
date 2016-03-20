@@ -9,7 +9,7 @@ typedef unsigned char BYTE;
 #include <glm/vec4.hpp> // glm::vec4
 #include <glm/mat4x4.hpp> // glm::mat4
 #include "cmath"
-#include "torus.h"
+#include "drawable/torus.h"
 
 using namespace glm;
 
@@ -58,8 +58,6 @@ private:
     void draw();
     BYTE ComputeOutcode(float x,float y);
 
-    void CohenSutherland(float x1,float y1, float x2, float y2);
-
     float xRatio;
     float yRatio;
 
@@ -70,6 +68,8 @@ private:
     float xPos;
     float yPos;
     float zPos;
+
+    float scale;
 
     glm::mat4 identityMat;
 
@@ -95,6 +95,8 @@ private:
     float rProjection;
     float eyeDist;
 
+    bool isStereoscopic;
+
     Torus torus;
 
 signals:
@@ -108,6 +110,9 @@ public slots:
     void setXRotation(int angle);
     void setYRotation(int angle);
     void setZRotation(int angle);
+    void checkBoxStateChanged(bool);
+    void changeEyeDistance(int);
+    void changeScale(int);
 };
 
 #endif // OGLWIDGET_H

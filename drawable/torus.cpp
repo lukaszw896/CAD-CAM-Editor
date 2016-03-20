@@ -20,7 +20,11 @@ void Torus::initTorus()
     */
 
        torusPoints.clear();
+       toursPointsLeftEye.clear();
+       torusPointsRightEye.clear();
        edges.clear();
+       edgesLeftEye.clear();
+       edgesRightEye.clear();
 
        float du = (2 * M_PI) / ringsCount;
        float dv = (2 * M_PI) / sectionsCount;

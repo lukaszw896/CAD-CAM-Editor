@@ -14,13 +14,17 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         window.cpp \
-    oglwidget.cpp \
-    torus.cpp \
-    oglmatinit.cpp
+    drawable/torus.cpp \
+    RenderWidget/oglmatinit.cpp \
+    RenderWidget/oglwidget.cpp \
+    Camera/camera.cpp \
+    drawable/drawable.cpp
 
 HEADERS  += window.h \
-    oglwidget.h \
-    torus.h \
-    edge.h
+    edge.h \
+    drawable/torus.h \
+    RenderWidget/oglwidget.h \
+    Camera/camera.h \
+    drawable/drawable.h
 
 FORMS    += window.ui

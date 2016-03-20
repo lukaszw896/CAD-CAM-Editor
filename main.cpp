@@ -7,7 +7,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QTextBlock>
-#include "oglwidget.h"
+#include "RenderWidget/oglwidget.h"
 
 int main(int argc, char *argv[])
 {

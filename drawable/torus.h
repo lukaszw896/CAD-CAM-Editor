@@ -1,6 +1,7 @@
 #ifndef TORUS_H
 #define TORUS_H
 #include <glm/vec4.hpp> // glm::vec4
+#include <glm/mat4x4.hpp>
 #include <vector>
 #include "edge.h"
 using namespace std;
@@ -9,9 +10,9 @@ class Torus
 {
 public:
     Torus();
-
-public:
     void initTorus();
+
+    void draw(mat4* camera);
 
     vector<vec4> torusPoints;
     vector<vec4> trousTransPoints;

@@ -147,16 +147,16 @@ void OGlWidget::initScaleMat(float s)
         for(int j=0;j<4;j++)
         {
             if(i==j){
-                translationMatrix[i][j] = 1.0f;
+                scaleMatrix[i][j] = 1.0f;
             }
             else{
-                translationMatrix[i][j] = 0.0f;
+                scaleMatrix[i][j] = 0.0f;
             }
         }
     }
 
-    translationMatrix[0][0] = s;
-    translationMatrix[1][1] = s;
-    translationMatrix[2][2] = s;
+    scaleMatrix[0][0] = s;
+    scaleMatrix[1][1] = s;
+    scaleMatrix[2][2] = s;
 
 }
