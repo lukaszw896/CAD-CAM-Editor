@@ -10,10 +10,11 @@ typedef unsigned char BYTE;
 #include <glm/mat4x4.hpp> // glm::mat4
 #include "cmath"
 #include "drawable/torus.h"
+#include "drawable/drawable.h"
 
 using namespace glm;
 
-class OGlWidget : public QGLWidget
+class OGlWidget : public QGLWidget, public Drawable
 {
     Q_OBJECT
 public:

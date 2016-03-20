@@ -1,7 +1,9 @@
 #ifndef DRAWABLE_H
 #define DRAWABLE_H
 
+
 #include <glm/mat4x4.hpp>
+#include "cmath"
 
 using namespace glm;
 
@@ -9,10 +11,12 @@ class Drawable
 {
 public:
     Drawable();
-    void updateTranslationMat();
-    void updateXRotationMat();
-    void updateYRotationMat();
-    void updateZRotationMat();
+    void updateTranslationMatX(float x);
+    void updateTranslationMatY(float y);
+    void updateTranslationMatZ(float z);
+    void updateXRotationMat(float angle);
+    void updateYRotationMat(float angle);
+    void updateZRotationMat(float angle);
 
 private:
     int xRot;
