@@ -261,7 +261,7 @@ void OGlWidget::computeTransformationMatrix()
 void OGlWidget::draw()
 {
     computeTransformationMatrix();
-    computeTransformedPoints();
+   // computeTransformedPoints();
 
     glEnable(GL_BLEND);
    // glBlendFunc(GL_SRC_COLOR, GL_ONE);
@@ -269,11 +269,12 @@ void OGlWidget::draw()
 
 
     glLineWidth(-15/zPos - (5.f-rProjection)/5);
+    torus.draw(&vecTransformMat);
     //glLineWidth(1);
 
    // glColor3f(1.0,0, 0.0);
 
-    glBegin(GL_LINES);
+    /*glBegin(GL_LINES);
 
     if(!isStereoscopic){
         glColor4f(1,1.0, 1.0,1.0);
@@ -306,7 +307,7 @@ void OGlWidget::draw()
              }
         }
     }
-     glEnd();
+     glEnd();*/
 }
 
 

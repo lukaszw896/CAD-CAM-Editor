@@ -5,7 +5,6 @@
 #include <glm/mat4x4.hpp>
 #include "cmath"
 
-using namespace glm;
 
 class Drawable
 {
@@ -17,6 +16,7 @@ public:
     void updateXRotationMat(float angle);
     void updateYRotationMat(float angle);
     void updateZRotationMat(float angle);
+
 
     int xRot;
     int yRot;

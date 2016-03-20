@@ -4,24 +4,30 @@
 #include <glm/mat4x4.hpp>
 #include <vector>
 #include "edge.h"
+#include "drawable/drawable.h"
 using namespace std;
-using namespace glm;
-class Torus
+class Torus : public Drawable
 {
 public:
     Torus();
     void initTorus();
 
-    void draw(mat4* camera);
+    void computeLocalTransformationMatrix();
+    void computeGlobalTransformationMatrix(glm::mat4* camera);
+    void transformPoints();
+    void draw(glm::mat4* camera);
 
-    vector<vec4> torusPoints;
-    vector<vec4> trousTransPoints;
-    vector<vec4> toursPointsLeftEye;
-    vector<vec4> torusPointsRightEye;
+    vector<glm::vec4> torusPoints;
+    vector<glm::vec4> trousTransPoints;
+    vector<glm::vec4> toursPointsLeftEye;
+    vector<glm::vec4> torusPointsRightEye;
 
     vector<Edge> edges;
     vector<Edge> edgesLeftEye;
     vector<Edge> edgesRightEye;
+
+    glm::mat4 localTransformationMatrix;
+    glm::mat4 globalTransformationMatrix;
 
 
     int    sectionsCount;

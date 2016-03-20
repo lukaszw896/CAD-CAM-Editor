@@ -1,6 +1,6 @@
 #include "torus.h"
 #include "cmath"
-
+#include <GL/gl.h>
 Torus::Torus()
 {
     sectionsCount = 60;
@@ -85,3 +85,61 @@ void Torus::initTorus()
 
    }
 
+void Torus::computeLocalTransformationMatrix()
+{
+    localTransformationMatrix = zRotationMatrix*yRotationMatrix*xRotationMatrix*translationMatrix;
+}
+
+void Torus::computeGlobalTransformationMatrix(glm::mat4* camera)
+{
+    globalTransformationMatrix = *camera * localTransformationMatrix;
+}
+
+void Torus::transformPoints()
+{
+    for(int i=0;i<torusPoints.size();i++){
+        //if(!isStereoscopic){
+            trousTransPoints[i] = globalTransformationMatrix*torusPoints[i];
+        //torus.trousTransPoints[i] = torus.trousTransPoints[i]/torus.trousTransPoints[i][3];
+            trousTransPoints[i].x = trousTransPoints[i].x / trousTransPoints[i].w;
+            trousTransPoints[i].y = trousTransPoints[i].y / trousTransPoints[i].w;
+          //  torus.trousTransPoints[i].x /= xRatio;
+          //  torus.trousTransPoints[i].y /= yRatio;
+       /* }
+        else
+        {
+
+                torus.toursPointsLeftEye[i] = transformationMatrixLeftEye*torus.torusPoints[i];
+                torus.toursPointsLeftEye[i].x = torus.toursPointsLeftEye[i].x / torus.toursPointsLeftEye[i].w;
+                torus.toursPointsLeftEye[i].y = torus.toursPointsLeftEye[i].y / torus.toursPointsLeftEye[i].w;
+               // torus.toursPointsLeftEye[i].x /= xRatio;
+               // torus.toursPointsLeftEye[i].y /= yRatio;
+
+
+                torus.torusPointsRightEye[i] = transformationMatrixRightEye*torus.torusPoints[i];
+                torus.torusPointsRightEye[i].x = torus.torusPointsRightEye[i].x / torus.torusPointsRightEye[i].w;
+                torus.torusPointsRightEye[i].y = torus.torusPointsRightEye[i].y / torus.torusPointsRightEye[i].w;
+              //  torus.torusPointsRightEye[i].x /= xRatio;
+               // torus.torusPointsRightEye[i].y /= yRatio;
+        }*/
+
+    }
+}
+
+void Torus::draw(glm::mat4* camera)
+{
+    computeLocalTransformationMatrix();
+    computeGlobalTransformationMatrix(camera);
+    transformPoints();
+
+    glBegin(GL_LINES);
+    glColor4f(1,1.0, 1.0,1.0);
+    for(int i=0;i<edges.size();i++){
+
+        if(!(edges[i].vertice1->w >=-0.06|| edges[i].vertice2->w >=-0.06)){
+            glVertex2f(edges[i].vertice1->x,edges[i].vertice1->y);
+            glVertex2f(edges[i].vertice2->x,edges[i].vertice2->y);
+        }
+    }
+    glEnd();
+}

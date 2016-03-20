@@ -52,7 +52,6 @@ private:
     int timerId;
 
     void draw();
-    BYTE ComputeOutcode(float x,float y);
 
     float xRatio;
     float yRatio;
