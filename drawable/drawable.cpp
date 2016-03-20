@@ -2,6 +2,9 @@
 
 Drawable::Drawable()
 {
+    xPos = 0;
+    yPos = 0;
+    zPos = -10.f;
     initTranslationMat();
     initXRotationMat();
     initYRotationMat();
@@ -66,41 +69,41 @@ void Drawable::initZRotationMat()
     zRotationMatrix[1][1] = cos(0.f);
 }
 
-void Drawable::updateTranslationMatX(float x)
+void Drawable::updateTranslationMatX()
 {
-    translationMatrix[3][0] = x;
+    translationMatrix[3][0] = xPos;
 }
 
-void Drawable::updateTranslationMatY(float y)
+void Drawable::updateTranslationMatY()
 {
-    translationMatrix[3][1] = y;
+    translationMatrix[3][1] = yPos;
 }
 
-void Drawable::updateTranslationMatZ(float z)
+void Drawable::updateTranslationMatZ()
 {
-    translationMatrix[3][2] = z;
+    translationMatrix[3][2] = zPos;
 }
 
-void Drawable::updateXRotationMat(float angle)
+void Drawable::updateXRotationMat()
 {
-    xRotationMatrix[1][1] = cos((double)angle/360.0f);
-    xRotationMatrix[1][2] = sin((double)angle/360.0f);
-    xRotationMatrix[2][1] = -sin((double)angle/360.0f);
-    xRotationMatrix[2][2] = cos((double)angle/360.0f);
+    xRotationMatrix[1][1] = cos((double)xRot/360.0f);
+    xRotationMatrix[1][2] = sin((double)xRot/360.0f);
+    xRotationMatrix[2][1] = -sin((double)xRot/360.0f);
+    xRotationMatrix[2][2] = cos((double)xRot/360.0f);
 }
 
-void Drawable::updateYRotationMat(float angle)
+void Drawable::updateYRotationMat()
 {
-    yRotationMatrix[0][0] = cos((double)angle/360.0f);
-    yRotationMatrix[2][0] = sin((double)angle/360.0f);
-    yRotationMatrix[0][2] = -sin((double)angle/360.0f);
-    yRotationMatrix[2][2] = cos((double)angle/360.0f);
+    yRotationMatrix[0][0] = cos((double)yRot/360.0f);
+    yRotationMatrix[2][0] = sin((double)yRot/360.0f);
+    yRotationMatrix[0][2] = -sin((double)yRot/360.0f);
+    yRotationMatrix[2][2] = cos((double)yRot/360.0f);
 }
 
-void Drawable::updateZRotationMat(float angle)
+void Drawable::updateZRotationMat()
 {
-    zRotationMatrix[0][0] = cos((double)angle/360.0f);
-    zRotationMatrix[0][1] = sin((double)angle/360.0f);
-    zRotationMatrix[1][0] = -sin((double)angle/360.0f);
-    zRotationMatrix[1][1] = cos((double)angle/360.0f);
+    zRotationMatrix[0][0] = cos((double)zRot/360.0f);
+    zRotationMatrix[0][1] = sin((double)zRot/360.0f);
+    zRotationMatrix[1][0] = -sin((double)zRot/360.0f);
+    zRotationMatrix[1][1] = cos((double)zRot/360.0f);
 }

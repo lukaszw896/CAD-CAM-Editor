@@ -11,10 +11,11 @@ typedef unsigned char BYTE;
 #include "cmath"
 #include "drawable/torus.h"
 #include "drawable/drawable.h"
+#include "Camera/camera.h"
 
 using namespace glm;
 
-class OGlWidget : public QGLWidget, public Drawable
+class OGlWidget : public QGLWidget
 {
     Q_OBJECT
 public:
@@ -33,17 +34,6 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
 
-    void initIdentityMat();
-    void initProjectionMat(float r);
-    void initProjectionMatLeftEye(float r, float e);
-    void initProjectionMatRightEye(float r, float e);
-    void initScaleMat(float s);
-
-
-    void computeTransformationMatrix();
-
-    void computeTransformedPoints();
-
     void timerEvent(QTimerEvent *event);
 
 
@@ -53,33 +43,13 @@ private:
 
     void draw();
 
-    float xRatio;
-    float yRatio;
-
-    float scale;
-
-    glm::mat4 identityMat;
-
-    glm::mat4 scaleMatrix;
-    glm::mat4 projectionMatrix;
-
-    mat4 projectionMatrixLeftEye;
-    mat4 projectionMatrixRightEye;
-
-    glm::mat4 vecTransformMat;
-
-    mat4 transformationMatrixLeftEye;
-    mat4 transformationMatrixRightEye;
-
     //last mouse position
     QPoint lastPos;
 
-    float rProjection;
-    float eyeDist;
-
-    bool isStereoscopic;
-
     Torus torus;
+    Torus torus2;
+
+    Camera camera;
 
 signals:
     // signaling rotation from mouse movement

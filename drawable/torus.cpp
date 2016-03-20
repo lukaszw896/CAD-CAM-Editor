@@ -1,8 +1,14 @@
 #include "torus.h"
 #include "cmath"
 #include <GL/gl.h>
-Torus::Torus()
+
+Torus::Torus(){
+
+}
+
+Torus::Torus(Camera* camera)
 {
+    this->camera = camera;
     sectionsCount = 60;
     ringsCount = 60;
     r1=0.25,
@@ -90,55 +96,77 @@ void Torus::computeLocalTransformationMatrix()
     localTransformationMatrix = zRotationMatrix*yRotationMatrix*xRotationMatrix*translationMatrix;
 }
 
-void Torus::computeGlobalTransformationMatrix(glm::mat4* camera)
+void Torus::computeGlobalTransformationMatrix()
 {
-    globalTransformationMatrix = *camera * localTransformationMatrix;
+    globalTransformationMatrix = camera->transformationMatrix * localTransformationMatrix;
 }
 
 void Torus::transformPoints()
 {
     for(int i=0;i<torusPoints.size();i++){
-        //if(!isStereoscopic){
+        if(!camera->isStereoscopic){
             trousTransPoints[i] = globalTransformationMatrix*torusPoints[i];
-        //torus.trousTransPoints[i] = torus.trousTransPoints[i]/torus.trousTransPoints[i][3];
             trousTransPoints[i].x = trousTransPoints[i].x / trousTransPoints[i].w;
             trousTransPoints[i].y = trousTransPoints[i].y / trousTransPoints[i].w;
-          //  torus.trousTransPoints[i].x /= xRatio;
-          //  torus.trousTransPoints[i].y /= yRatio;
-       /* }
+            trousTransPoints[i].x /= camera->xRatio;
+            trousTransPoints[i].y /= camera->yRatio;
+        }
         else
         {
 
-                torus.toursPointsLeftEye[i] = transformationMatrixLeftEye*torus.torusPoints[i];
-                torus.toursPointsLeftEye[i].x = torus.toursPointsLeftEye[i].x / torus.toursPointsLeftEye[i].w;
-                torus.toursPointsLeftEye[i].y = torus.toursPointsLeftEye[i].y / torus.toursPointsLeftEye[i].w;
-               // torus.toursPointsLeftEye[i].x /= xRatio;
-               // torus.toursPointsLeftEye[i].y /= yRatio;
+                toursPointsLeftEye[i] = camera->transformationMatrixLeftEye*localTransformationMatrix*torusPoints[i];
+                toursPointsLeftEye[i].x = toursPointsLeftEye[i].x / toursPointsLeftEye[i].w;
+                toursPointsLeftEye[i].y = toursPointsLeftEye[i].y / toursPointsLeftEye[i].w;
+                toursPointsLeftEye[i].x /= camera->xRatio;
+                toursPointsLeftEye[i].y /= camera->yRatio;
 
 
-                torus.torusPointsRightEye[i] = transformationMatrixRightEye*torus.torusPoints[i];
-                torus.torusPointsRightEye[i].x = torus.torusPointsRightEye[i].x / torus.torusPointsRightEye[i].w;
-                torus.torusPointsRightEye[i].y = torus.torusPointsRightEye[i].y / torus.torusPointsRightEye[i].w;
-              //  torus.torusPointsRightEye[i].x /= xRatio;
-               // torus.torusPointsRightEye[i].y /= yRatio;
-        }*/
+                torusPointsRightEye[i] = camera->transformationMatrixRightEye*localTransformationMatrix*torusPoints[i];
+                torusPointsRightEye[i].x = torusPointsRightEye[i].x / torusPointsRightEye[i].w;
+                torusPointsRightEye[i].y = torusPointsRightEye[i].y / torusPointsRightEye[i].w;
+                torusPointsRightEye[i].x /= camera->xRatio;
+                torusPointsRightEye[i].y /= camera->yRatio;
+        }
 
     }
 }
 
-void Torus::draw(glm::mat4* camera)
+void Torus::draw()
 {
     computeLocalTransformationMatrix();
-    computeGlobalTransformationMatrix(camera);
+    computeGlobalTransformationMatrix();
     transformPoints();
 
     glBegin(GL_LINES);
-    glColor4f(1,1.0, 1.0,1.0);
-    for(int i=0;i<edges.size();i++){
+    if(!camera->isStereoscopic){
+        glColor4f(1,1.0, 1.0,1.0);
+        for(int i=0;i<edges.size();i++){
 
-        if(!(edges[i].vertice1->w >=-0.06|| edges[i].vertice2->w >=-0.06)){
-            glVertex2f(edges[i].vertice1->x,edges[i].vertice1->y);
-            glVertex2f(edges[i].vertice2->x,edges[i].vertice2->y);
+            if(!(edges[i].vertice1->w >=-0.06|| edges[i].vertice2->w >=-0.06)){
+                glVertex2f(edges[i].vertice1->x,edges[i].vertice1->y);
+                glVertex2f(edges[i].vertice2->x,edges[i].vertice2->y);
+            }
+        }
+
+    }else
+    {
+        glColor3f(0.4,0.0, 0.0);
+        for(int i=0;i<edgesLeftEye.size();i++){
+
+            if(!(edgesLeftEye[i].vertice1->w >=-0.06|| edgesLeftEye[i].vertice2->w >=-0.06)){
+                glVertex2f(edgesLeftEye[i].vertice1->x,edgesLeftEye[i].vertice1->y);
+                glVertex2f(edgesLeftEye[i].vertice2->x,edgesLeftEye[i].vertice2->y);
+            }
+        }
+
+    //glColor3f(0, 0, 1);
+     glColor3f(0, 0.5, 0.5);
+        for(int i=0;i<edgesRightEye.size();i++){
+
+            if(!(edgesRightEye[i].vertice1->w >=-0.06|| edgesRightEye[i].vertice2->w >=-0.06)){
+             glVertex2f(edgesRightEye[i].vertice1->x,edgesRightEye[i].vertice1->y);
+             glVertex2f(edgesRightEye[i].vertice2->x,edgesRightEye[i].vertice2->y);
+             }
         }
     }
     glEnd();

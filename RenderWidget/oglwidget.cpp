@@ -6,36 +6,20 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     timerId = startTimer(17);
 
     this->setFocusPolicy(Qt::ClickFocus);
-    xRatio = 1.f;
-    yRatio = 1.f;
 
-    xRot = 0;
-    yRot = 0;
-    zRot = 0;
+    camera = Camera();
 
-    xPos = 0;
-    yPos = 0;
-    zPos = -10.f;
-
-    scale = 1.0f;
-
-    rProjection = 4.f;
-    eyeDist = 0.10f;
-    isStereoscopic = false;
-
-
-    torus = Torus();
+    torus = Torus(&camera);
     torus.initTorus();
-    initIdentityMat();
-    initTranslationMat();
-    updateTranslationMatZ(zPos);
-    initScaleMat(scale);
-    initProjectionMat(rProjection);
-    initProjectionMatLeftEye(rProjection,eyeDist);
-    initProjectionMatRightEye(rProjection,eyeDist);
-    initXRotationMat();
-    initYRotationMat();
-    initZRotationMat();
+
+    torus2 = Torus(&camera);
+    torus2.initTorus();
+    torus2.xPos = -0.7f;
+    torus2.updateTranslationMatX();
+    torus2.yPos = -0.7f;
+    torus2.updateTranslationMatY();
+    torus2.zPos = -13.7f;
+    torus2.updateTranslationMatZ();
 }
 
 OGlWidget::~OGlWidget()
@@ -65,52 +49,52 @@ static void qNormalizeAngle(int &angle)
 void OGlWidget::setXRotation(int angle)
 {
     qNormalizeAngle(angle);
-    if (angle != xRot) {
-        xRot = angle;
+    if (angle != camera.xRot) {
+        camera.xRot = angle;
         emit xRotationChanged(angle);
-        updateXRotationMat(xRot);
+        camera.updateXRotationMat();
     }
 }
 
 void OGlWidget::setYRotation(int angle)
 {
     qNormalizeAngle(angle);
-    if (angle != yRot) {
-        yRot = angle;
+    if (angle != camera.yRot) {
+        camera.yRot = angle;
         emit yRotationChanged(angle);
-        updateYRotationMat(yRot);
+        camera.updateYRotationMat();
     }
 }
 
 void OGlWidget::setZRotation(int angle)
 {
     qNormalizeAngle(angle);
-    if (angle != zRot) {
-        zRot = angle;
+    if (angle != camera.zRot) {
+        camera.zRot = angle;
         emit zRotationChanged(angle);
-        updateZRotationMat(zRot);
+        camera.updateZRotationMat();
     }
 }
 
 void OGlWidget::checkBoxStateChanged(bool state){
     if(state == true){
-        isStereoscopic = true;
+        camera.isStereoscopic = true;
     }
     else
     {
-        isStereoscopic = false;
+        camera.isStereoscopic = false;
     }
 }
 
 void OGlWidget::changeEyeDistance(int distance){
-    eyeDist = (float)distance/100;
-    initProjectionMatLeftEye(rProjection,eyeDist);
-    initProjectionMatRightEye(rProjection,eyeDist);
+    camera.eyeDist = (float)distance/100;
+    camera.initProjectionMatLeftEye(camera.rProjection,camera.eyeDist);
+    camera.initProjectionMatRightEye(camera.rProjection,camera.eyeDist);
 }
 
 void OGlWidget::changeScale(int scale){
-    this->scale = (float)scale/25;
-    initScaleMat(this->scale);
+    camera.scale = (float)scale/25;
+    camera.updateScaleMatrix(camera.scale);
 }
 
 void OGlWidget::initializeGL()
@@ -131,14 +115,14 @@ void OGlWidget::resizeGL(int width, int height)
 {
     glViewport(0, 0, width, height);
     if(width>height){
-        xRatio = (float)width/(float)height;
-        yRatio = 1.0f;
+        camera.xRatio = (float)width/(float)height;
+        camera.yRatio = 1.0f;
     }
     else if(height>width){
-        xRatio = 1.0f;
-        yRatio = (float)height/(float)width;
+        camera.xRatio = 1.0f;
+        camera.yRatio = (float)height/(float)width;
     }
-    else{xRatio = 1.0f;yRatio=1.0f;}
+    else{camera.xRatio = 1.0f;camera.yRatio=1.0f;}
 }
 
 void OGlWidget::mousePressEvent(QMouseEvent *event)
@@ -152,11 +136,11 @@ void OGlWidget::mouseMoveEvent(QMouseEvent *event)
     int dy = event->y() - lastPos.y();
 
     if (event->buttons() & Qt::LeftButton) {
-        setXRotation(xRot + 8 * dy);
-        setYRotation(yRot + 8 * dx);
+        setXRotation(camera.xRot + 1 * dy);
+        setYRotation(camera.yRot + 1 * dx);
     } else if (event->buttons() & Qt::RightButton) {
-        setXRotation(xRot + 8 * dy);
-        setZRotation(zRot + 8 * dx);
+        setXRotation(camera.xRot + 1 * dy);
+        setZRotation(camera.zRot + 1 * dx);
     }
 
     lastPos = event->pos();
@@ -166,28 +150,28 @@ void OGlWidget::keyPressEvent(QKeyEvent *event)
 {
     switch(event->key()){
         case Qt::Key_Up:
-            yPos -= 0.05f;
-            updateTranslationMatY(yPos);
+            camera.yPos -= 0.05f;
+            camera.updateTranslationMatY();
             break;
         case Qt::Key_Down:
-            yPos += 0.05f;
-             updateTranslationMatY(yPos);
+            camera.yPos += 0.05f;
+             camera.updateTranslationMatY();
             break;
     case Qt::Key_Left:
-        xPos+=0.05f;
-        updateTranslationMatX(xPos);
+        camera.xPos+=0.05f;
+        camera.updateTranslationMatX();
         break;
     case Qt::Key_Right:
-        xPos-=0.05f;
-        updateTranslationMatX(xPos);
+        camera.xPos-=0.05f;
+        camera.updateTranslationMatX();
         break;
     case Qt::Key_Plus:
-        zPos+=0.1f;
-        updateTranslationMatZ(zPos);
+        camera.zPos+=0.2f;
+        camera.updateTranslationMatZ();
         break;
     case Qt::Key_Minus:
-        zPos-=0.1f;
-        updateTranslationMatZ(zPos);
+        camera.zPos-=0.2f;
+        camera.updateTranslationMatZ();
         break;
     case Qt::Key_BracketLeft:
     if(torus.ringsCount>10){
@@ -212,55 +196,9 @@ void OGlWidget::timerEvent(QTimerEvent *event)
 }
 
 
-
-void OGlWidget::computeTransformedPoints()
-{
-    //TODO resize
-    for(int i=0;i<torus.torusPoints.size();i++){
-        if(!isStereoscopic){
-            torus.trousTransPoints[i] = vecTransformMat*torus.torusPoints[i];
-        //torus.trousTransPoints[i] = torus.trousTransPoints[i]/torus.trousTransPoints[i][3];
-            torus.trousTransPoints[i].x = torus.trousTransPoints[i].x / torus.trousTransPoints[i].w;
-            torus.trousTransPoints[i].y = torus.trousTransPoints[i].y / torus.trousTransPoints[i].w;
-            torus.trousTransPoints[i].x /= xRatio;
-            torus.trousTransPoints[i].y /= yRatio;
-        }
-        else
-        {
-
-                torus.toursPointsLeftEye[i] = transformationMatrixLeftEye*torus.torusPoints[i];
-                torus.toursPointsLeftEye[i].x = torus.toursPointsLeftEye[i].x / torus.toursPointsLeftEye[i].w;
-                torus.toursPointsLeftEye[i].y = torus.toursPointsLeftEye[i].y / torus.toursPointsLeftEye[i].w;
-                torus.toursPointsLeftEye[i].x /= xRatio;
-                torus.toursPointsLeftEye[i].y /= yRatio;
-
-
-                torus.torusPointsRightEye[i] = transformationMatrixRightEye*torus.torusPoints[i];
-                torus.torusPointsRightEye[i].x = torus.torusPointsRightEye[i].x / torus.torusPointsRightEye[i].w;
-                torus.torusPointsRightEye[i].y = torus.torusPointsRightEye[i].y / torus.torusPointsRightEye[i].w;
-                torus.torusPointsRightEye[i].x /= xRatio;
-                torus.torusPointsRightEye[i].y /= yRatio;
-        }
-
-    }
-}
-
-void OGlWidget::computeTransformationMatrix()
-{
-    //*identityMat
-    if(!isStereoscopic){
-         vecTransformMat = projectionMatrix*translationMatrix*scaleMatrix * zRotationMatrix* yRotationMatrix* xRotationMatrix;
-    }
-    else
-    {
-        transformationMatrixLeftEye = projectionMatrixLeftEye*translationMatrix*scaleMatrix *zRotationMatrix* yRotationMatrix* xRotationMatrix;
-        transformationMatrixRightEye = projectionMatrixRightEye*translationMatrix*scaleMatrix *zRotationMatrix* yRotationMatrix* xRotationMatrix;
-    }
-}
-
 void OGlWidget::draw()
 {
-    computeTransformationMatrix();
+    camera.computeTransformationMatrix();
    // computeTransformedPoints();
 
     glEnable(GL_BLEND);
@@ -268,46 +206,11 @@ void OGlWidget::draw()
     glBlendEquation(GL_MAX);
 
 
-    glLineWidth(-15/zPos - (5.f-rProjection)/5);
-    torus.draw(&vecTransformMat);
-    //glLineWidth(1);
+    //glLineWidth(-15/camera.zPos - (5.f-camera.rProjection)/5);
+    glLineWidth(1);
+    torus.draw();
+    torus2.draw();
 
-   // glColor3f(1.0,0, 0.0);
-
-    /*glBegin(GL_LINES);
-
-    if(!isStereoscopic){
-        glColor4f(1,1.0, 1.0,1.0);
-        for(int i=0;i<torus.edges.size();i++){
-
-            if(!(torus.edges[i].vertice1->w >=-0.06|| torus.edges[i].vertice2->w >=-0.06)){
-                glVertex2f(torus.edges[i].vertice1->x,torus.edges[i].vertice1->y);
-                glVertex2f(torus.edges[i].vertice2->x,torus.edges[i].vertice2->y);
-            }
-        }
-
-    }else
-    {
-        glColor3f(0.4,0.0, 0.0);
-        for(int i=0;i<torus.edgesLeftEye.size();i++){
-
-            if(!(torus.edgesLeftEye[i].vertice1->w >=-0.06|| torus.edgesLeftEye[i].vertice2->w >=-0.06)){
-                glVertex2f(torus.edgesLeftEye[i].vertice1->x,torus.edgesLeftEye[i].vertice1->y);
-                glVertex2f(torus.edgesLeftEye[i].vertice2->x,torus.edgesLeftEye[i].vertice2->y);
-            }
-        }
-
-    //glColor3f(0, 0, 1);
-     glColor3f(0, 0.5, 0.5);
-        for(int i=0;i<torus.edgesRightEye.size();i++){
-
-            if(!(torus.edgesRightEye[i].vertice1->w >=-0.06|| torus.edgesRightEye[i].vertice2->w >=-0.06)){
-             glVertex2f(torus.edgesRightEye[i].vertice1->x,torus.edgesRightEye[i].vertice1->y);
-             glVertex2f(torus.edgesRightEye[i].vertice2->x,torus.edgesRightEye[i].vertice2->y);
-             }
-        }
-    }
-     glEnd();*/
 }
 
 

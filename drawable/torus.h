@@ -5,17 +5,20 @@
 #include <vector>
 #include "edge.h"
 #include "drawable/drawable.h"
+#include "Camera/camera.h"
+
 using namespace std;
 class Torus : public Drawable
 {
 public:
     Torus();
+    Torus(Camera* camera);
     void initTorus();
 
     void computeLocalTransformationMatrix();
-    void computeGlobalTransformationMatrix(glm::mat4* camera);
+    void computeGlobalTransformationMatrix();
     void transformPoints();
-    void draw(glm::mat4* camera);
+    void draw();
 
     vector<glm::vec4> torusPoints;
     vector<glm::vec4> trousTransPoints;
@@ -32,6 +35,8 @@ public:
 
     int    sectionsCount;
     int    ringsCount;
+
+    Camera* camera;
 
     float r1,r0;
 

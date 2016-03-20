@@ -10,12 +10,12 @@ class Drawable
 {
 public:
     Drawable();
-    void updateTranslationMatX(float x);
-    void updateTranslationMatY(float y);
-    void updateTranslationMatZ(float z);
-    void updateXRotationMat(float angle);
-    void updateYRotationMat(float angle);
-    void updateZRotationMat(float angle);
+    void updateTranslationMatX();
+    void updateTranslationMatY();
+    void updateTranslationMatZ();
+    void updateXRotationMat();
+    void updateYRotationMat();
+    void updateZRotationMat();
 
 
     int xRot;
