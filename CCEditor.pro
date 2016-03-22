@@ -15,7 +15,6 @@ TEMPLATE = app
 SOURCES += main.cpp\
         window.cpp \
     drawable/torus.cpp \
-    RenderWidget/oglmatinit.cpp \
     RenderWidget/oglwidget.cpp \
     Camera/camera.cpp \
     drawable/drawable.cpp \

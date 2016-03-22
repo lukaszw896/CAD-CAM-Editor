@@ -20,7 +20,7 @@
    <property name="rightMargin">
     <number>9</number>
    </property>
-   <item row="0" column="0">
+   <item row="1" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QFrame" name="frame">

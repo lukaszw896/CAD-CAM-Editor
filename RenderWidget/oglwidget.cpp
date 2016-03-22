@@ -9,17 +9,15 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
 
     camera = Camera();
 
-    torus = Torus(&camera);
-    torus.initTorus();
+    drawableObjects.push_back(new Torus(&camera));
+    drawableObjects.push_back(new Torus(&camera));
 
-    torus2 = Torus(&camera);
-    torus2.initTorus();
-    torus2.xPos = -0.7f;
-    torus2.updateTranslationMatX();
-    torus2.yPos = -0.7f;
-    torus2.updateTranslationMatY();
-    torus2.zPos = -13.7f;
-    torus2.updateTranslationMatZ();
+    drawableObjects[1]->xPos = -0.7f;
+    drawableObjects[1]->updateTranslationMatX();
+    drawableObjects[1]->yPos = -0.7f;
+    drawableObjects[1]->updateTranslationMatY();
+    drawableObjects[1]->zPos = -13.7f;
+    drawableObjects[1]->updateTranslationMatZ();
 }
 
 OGlWidget::~OGlWidget()
@@ -174,18 +172,10 @@ void OGlWidget::keyPressEvent(QKeyEvent *event)
         camera.updateTranslationMatZ();
         break;
     case Qt::Key_BracketLeft:
-    if(torus.ringsCount>10){
-            torus.ringsCount -=10;
-            torus.sectionsCount -=10;
-            torus.initTorus();
-        }
+
         break;
     case Qt::Key_BracketRight:
-        if(torus.ringsCount<200){
-                torus.ringsCount +=10;
-                torus.sectionsCount +=10;
-                torus.initTorus();
-            }
+
             break;
     }
 }
@@ -208,8 +198,10 @@ void OGlWidget::draw()
 
     //glLineWidth(-15/camera.zPos - (5.f-camera.rProjection)/5);
     glLineWidth(1);
-    torus.draw();
-    torus2.draw();
+
+    for(int i=0; i<drawableObjects.size();i++){
+        drawableObjects[i]->draw();
+    }
 
 }
 

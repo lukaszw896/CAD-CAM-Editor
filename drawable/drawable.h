@@ -37,6 +37,8 @@ public:
     void initYRotationMat();
     void initZRotationMat();
 
+    virtual void draw();
+
 };
 
 #endif // DRAWABLE_H

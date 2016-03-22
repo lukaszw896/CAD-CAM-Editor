@@ -107,3 +107,8 @@ void Drawable::updateZRotationMat()
     zRotationMatrix[1][0] = -sin((double)zRot/360.0f);
     zRotationMatrix[1][1] = cos((double)zRot/360.0f);
 }
+
+void Drawable::draw()
+{
+
+}

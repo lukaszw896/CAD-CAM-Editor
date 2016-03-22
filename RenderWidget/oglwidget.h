@@ -46,8 +46,7 @@ private:
     //last mouse position
     QPoint lastPos;
 
-    Torus torus;
-    Torus torus2;
+    std::vector<Drawable*> drawableObjects;
 
     Camera camera;
 

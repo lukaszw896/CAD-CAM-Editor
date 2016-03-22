@@ -13,6 +13,7 @@ Torus::Torus(Camera* camera)
     ringsCount = 60;
     r1=0.25,
     r0=1.0;
+    initTorus();
 }
 
 void Torus::initTorus()
@@ -171,3 +172,4 @@ void Torus::draw()
     }
     glEnd();
 }
+
