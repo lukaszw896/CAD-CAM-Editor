@@ -18,7 +18,10 @@ SOURCES += main.cpp\
     RenderWidget/oglwidget.cpp \
     Camera/camera.cpp \
     drawable/drawable.cpp \
-    drawable/point.cpp
+    drawable/point.cpp \
+    uiaccess.cpp \
+    transclass.cpp \
+    drawerwindow.cpp
 
 HEADERS  += window.h \
     edge.h \
@@ -26,6 +29,9 @@ HEADERS  += window.h \
     RenderWidget/oglwidget.h \
     Camera/camera.h \
     drawable/drawable.h \
-    drawable/point.h
+    drawable/point.h \
+    uiaccess.h \
+    transclass.h \
+    drawerwindow.h
 
 FORMS    += window.ui

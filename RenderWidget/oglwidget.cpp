@@ -1,5 +1,7 @@
 #include "oglwidget.h"
 #include <iostream>
+#include "uiaccess.h"
+#include <QListWidgetItem>
 typedef unsigned char BYTE;
 OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
@@ -8,6 +10,9 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     this->setFocusPolicy(Qt::ClickFocus);
 
     camera = Camera();
+
+   // Window& w = Window::getInstance();
+   // Ui::Window* ui = w.getUi();
 
     drawableObjects.push_back(new Torus(&camera));
     drawableObjects.push_back(new Torus(&camera));
@@ -18,6 +23,14 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     drawableObjects[1]->updateTranslationMatY();
     drawableObjects[1]->zPos = -13.7f;
     drawableObjects[1]->updateTranslationMatZ();
+
+    UiAccess& uiAccess = UiAccess::getInstance();
+
+    ui = uiAccess.ui;
+
+       QListWidgetItem item = QListWidgetItem();
+       item.setText("test");
+      // ui->drawableObjectsList->addItem(item);
 }
 
 OGlWidget::~OGlWidget()

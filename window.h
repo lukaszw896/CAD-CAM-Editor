@@ -7,16 +7,23 @@ namespace Ui {
 class Window;
 }
 
-class Window : public QWidget
+class MyWindow : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Window(QWidget *parent = 0);
-    ~Window();
+    explicit MyWindow(QWidget *parent = 0);
+    ~MyWindow();
 
-private:
-    Ui::Window *ui;
+   Ui::Window *ui;
+
+   static MyWindow& getInstance();
+
+   Ui::Window* getUi();
+
+
+
+
 };
 
 #endif // WINDOW_H

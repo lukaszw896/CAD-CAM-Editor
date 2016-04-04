@@ -12,6 +12,7 @@ typedef unsigned char BYTE;
 #include "drawable/torus.h"
 #include "drawable/drawable.h"
 #include "Camera/camera.h"
+#include "window.h"
 
 using namespace glm;
 
@@ -21,6 +22,8 @@ class OGlWidget : public QGLWidget
 public:
     explicit OGlWidget(QWidget *parent = 0);
     ~OGlWidget();
+
+   //
 
 protected:
 
@@ -49,6 +52,8 @@ private:
     std::vector<Drawable*> drawableObjects;
 
     Camera camera;
+
+    Ui::Window* ui;
 
 signals:
     // signaling rotation from mouse movement

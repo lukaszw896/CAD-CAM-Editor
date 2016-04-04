@@ -4,14 +4,28 @@
 #include "ui_window.h"
 #include "RenderWidget/oglwidget.h"
 
-Window::Window(QWidget *parent) :
+MyWindow::MyWindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Window)
 {
     ui->setupUi(this);
 }
 
-Window::~Window()
+MyWindow::~MyWindow()
 {
     delete ui;
 }
+
+Ui::Window* MyWindow::getUi()
+{
+    return this->ui;
+}
+
+MyWindow& MyWindow::getInstance(){
+
+    static MyWindow instance;
+
+    return instance;
+}
+
+
