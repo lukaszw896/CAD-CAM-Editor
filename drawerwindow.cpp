@@ -12,7 +12,9 @@ DrawerWindow::DrawerWindow(QWidget *parent) : QMainWindow(parent)
 void DrawerWindow::createActions()
 {
     addTorusAct = new QAction(tr("&Torus"),this);
+    connect(addTorusAct, &QAction::triggered, this, &DrawerWindow::addTorus);
     addPointAct = new QAction(tr("&Point"),this);
+    connect(addPointAct, &QAction::triggered, this, &DrawerWindow::addPoint);
     addCurveAct = new QAction(tr("&Curve"),this);
 
     stereoscopyAct = new QAction(tr("&Stereoscopy"),this);
@@ -76,5 +78,33 @@ void DrawerWindow::openStereoscopySettingsDialog()
 {
     settingsDialog->show();
 }
+
+void DrawerWindow::addPoint()
+{
+    Point* point = new Point(drawableObjectsData.camera);
+    glm::vec4 position = drawableObjectsData.cursor->getCursorPos();
+    point->xPos = position.x;
+    point->updateTranslationMatX();
+    point->yPos = position.y;
+    point->updateTranslationMatY();
+    point->zPos = position.z;
+    point->updateTranslationMatZ();
+    drawableObjectsData.addPoint(point);
+}
+
+void DrawerWindow::addTorus()
+{
+    Torus* torus = new Torus(drawableObjectsData.camera);
+    glm::vec4 position = drawableObjectsData.cursor->getCursorPos();
+    torus->xPos = position.x;
+    torus->updateTranslationMatX();
+    torus->yPos = position.y;
+    torus->updateTranslationMatY();
+    torus->zPos = position.z;
+    torus->updateTranslationMatZ();
+    drawableObjectsData.addTorus(torus);
+}
+
+
 
 

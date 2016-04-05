@@ -12,6 +12,7 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     this->setFocusPolicy(Qt::ClickFocus);
 
     camera = Camera();
+    drawableObjectsData.camera = &camera;
 
    // Window& w = Window::getInstance();
    // Ui::Window* ui = w.getUi();

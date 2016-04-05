@@ -101,5 +101,5 @@ void Cursor::draw()
 
 glm::vec4 Cursor::getCursorPos()
 {
-    return glm::vec4(pointCoordinates[0].x+axisLength,pointCoordinates[0].y,pointCoordinates[0].z,1);
+    return glm::vec4(xPos,yPos,zPos,1);
 }

@@ -4,7 +4,7 @@ Drawable::Drawable()
 {
     xPos = 0;
     yPos = 0;
-    zPos = -10.f;
+    zPos = 0.f;
     initTranslationMat();
     initXRotationMat();
     initYRotationMat();

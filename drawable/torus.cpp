@@ -9,8 +9,8 @@ Torus::Torus(){
 Torus::Torus(Camera* camera)
 {
     this->camera = camera;
-    sectionsCount = 60;
-    ringsCount = 60;
+    sectionsCount = 20;
+    ringsCount = 20;
     r1=0.25,
     r0=1.0;
     initTorus();

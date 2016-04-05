@@ -12,6 +12,7 @@
 #include <QSlider>
 #include <RenderWidget/oglwidget.h>
 #include <Dialogs/settingsdialog.h>
+#include "Data/drawableobjectsdata.h"
 
 class DrawerWindow : public QMainWindow
 {
@@ -20,6 +21,7 @@ public:
     explicit DrawerWindow(QWidget *parent = 0);
 
 signals:
+    void drawableDataChanged();
 
 public slots:
 
@@ -27,6 +29,9 @@ protected:
    // void contextMenuEvent(QContextMenuEvent *event) Q_DECL_OVERRIDE;
 
 private:
+
+    DrawableObjectsData& drawableObjectsData = DrawableObjectsData::getInstance();
+
     void createActions();
     void createMenus();
     void initObjects();
@@ -52,6 +57,8 @@ private:
     QHBoxLayout *mainLayout;
 
     void openStereoscopySettingsDialog();
+    void addPoint();
+    void addTorus();
 
 };
 

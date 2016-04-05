@@ -50,8 +50,6 @@ private:
     //last mouse position
     QPoint lastPos;
 
-    std::vector<Drawable*> drawableObjects;
-
     Camera camera;
     DrawableObjectsData& drawableObjectsData = DrawableObjectsData::getInstance();
 

@@ -5,6 +5,7 @@
 #include "drawable/point.h"
 #include "drawable/drawable.h"
 #include "drawable/cursor.h"
+#include "Camera/camera.h"
 #include <algorithm>
 
 class DrawableObjectsData
@@ -15,6 +16,7 @@ public:
 
     std::vector<Drawable*> drawableObjects;
     Cursor* cursor;
+    Camera* camera;
 
     void addTorus(Torus*);
     void addPoint(Point*);
