@@ -10,7 +10,8 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QSlider>
-#include <RenderWidget/oglwidget.h>
+#include <CustomWidgets/oglwidget.h>
+#include <CustomWidgets/objectlistswidget.h>
 #include <Dialogs/settingsdialog.h>
 #include "Data/drawableobjectsdata.h"
 
@@ -47,6 +48,7 @@ private:
     QAction *stereoscopyAct;
 
     OGlWidget *oglWidget;
+    ObjectListsWidget* objectListsWidget;
     SettingsDialog *settingsDialog;
 
     QLabel *scaleLabel;

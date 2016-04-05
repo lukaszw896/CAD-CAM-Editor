@@ -2,7 +2,7 @@
 
 #include <QtWidgets>
 #include "ui_window.h"
-#include "RenderWidget/oglwidget.h"
+#include "CustomWidgets/oglwidget.h"
 
 MyWindow::MyWindow(QWidget *parent) :
     QWidget(parent),

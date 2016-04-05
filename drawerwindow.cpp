@@ -40,6 +40,7 @@ void DrawerWindow::initObjects()
     scaleSlider->setMaximum(100);
     scaleSlider->setMinimum(10);
     oglWidget = new OGlWidget();
+    objectListsWidget = new ObjectListsWidget();
 
     settingsDialog = new SettingsDialog;
 
@@ -56,6 +57,7 @@ void DrawerWindow::initLayout()
     leftLayout->addWidget(oglWidget);
 
     rightLayout = new QVBoxLayout;
+    rightLayout->addWidget(objectListsWidget);
     rightLayout->addWidget(scaleLabel);
     rightLayout->addWidget(scaleSlider);
     rightLayout->addStretch();

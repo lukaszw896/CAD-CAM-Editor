@@ -15,7 +15,6 @@ TEMPLATE = app
 SOURCES += main.cpp\
         window.cpp \
     drawable/torus.cpp \
-    RenderWidget/oglwidget.cpp \
     Camera/camera.cpp \
     drawable/drawable.cpp \
     drawable/point.cpp \
@@ -26,12 +25,13 @@ SOURCES += main.cpp\
     glm/detail/dummy.cpp \
     glm/detail/glm.cpp \
     Data/drawableobjectsdata.cpp \
-    drawable/cursor.cpp
+    drawable/cursor.cpp \
+    CustomWidgets/oglwidget.cpp \
+    CustomWidgets/objectlistswidget.cpp
 
 HEADERS  += window.h \
     edge.h \
     drawable/torus.h \
-    RenderWidget/oglwidget.h \
     Camera/camera.h \
     drawable/drawable.h \
     drawable/point.h \
@@ -182,6 +182,8 @@ HEADERS  += window.h \
     glm/vec4.hpp \
     glm/vector_relational.hpp \
     Data/drawableobjectsdata.h \
-    drawable/cursor.h
+    drawable/cursor.h \
+    CustomWidgets/oglwidget.h \
+    CustomWidgets/objectlistswidget.h
 
 FORMS    += window.ui
