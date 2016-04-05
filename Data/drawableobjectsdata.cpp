@@ -22,6 +22,11 @@ void DrawableObjectsData::addTorus(Torus* torus)
     torusList.push_back(torus);
     drawableObjects.push_back(torus);
 }
+void DrawableObjectsData::addCursor(Cursor * cursor)
+{
+    this->cursor = cursor;
+    drawableObjects.push_back(cursor);
+}
 
 void DrawableObjectsData::removePoint(Point * point)
 {
@@ -50,4 +55,5 @@ void DrawableObjectsData::initDrawableObjectsList()
     {
         drawableObjects.push_back(torusList.at(i));
     }
+    drawableObjects.push_back(cursor);
 }

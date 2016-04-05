@@ -4,6 +4,7 @@
 #include "drawable/torus.h"
 #include "drawable/point.h"
 #include "drawable/drawable.h"
+#include "drawable/cursor.h"
 #include <algorithm>
 
 class DrawableObjectsData
@@ -13,9 +14,11 @@ public:
         static DrawableObjectsData& getInstance();
 
     std::vector<Drawable*> drawableObjects;
+    Cursor* cursor;
 
     void addTorus(Torus*);
     void addPoint(Point*);
+    void addCursor(Cursor*);
 
     void removeTorus(Torus*);
     void removePoint(Point*);

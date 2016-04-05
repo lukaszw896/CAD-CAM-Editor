@@ -3,6 +3,7 @@
 #include "uiaccess.h"
 #include <QListWidgetItem>
 #include "drawable/point.h"
+#include "drawable/cursor.h"
 typedef unsigned char BYTE;
 OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
@@ -19,7 +20,8 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     drawableObjects.push_back(new Point(&camera));*/
     drawableObjectsData.addTorus(new Torus(&camera));
         //drawableObjects.push_back(new Torus(&camera));
-    drawableObjectsData.addPoint(new Point(&camera));
+    //drawableObjectsData.addPoint(new Point(&camera));
+    drawableObjectsData.addCursor(new Cursor(&camera));
     drawableObjectsData.drawableObjects[1]->xPos = -0.7f;
     drawableObjectsData.drawableObjects[1]->updateTranslationMatX();
     drawableObjectsData.drawableObjects[1]->yPos = -0.7f;
@@ -193,6 +195,32 @@ void OGlWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_BracketRight:
 
             break;
+
+    //cursor movement
+    case Qt::Key_W:
+        drawableObjectsData.cursor->yPos += drawableObjectsData.cursor->speedMovement;
+        drawableObjectsData.cursor->updateTranslationMatY();
+        break;
+    case Qt::Key_S:
+        drawableObjectsData.cursor->yPos -= drawableObjectsData.cursor->speedMovement;
+        drawableObjectsData.cursor->updateTranslationMatY();
+        break;
+    case Qt::Key_A:
+        drawableObjectsData.cursor->xPos += drawableObjectsData.cursor->speedMovement;
+        drawableObjectsData.cursor->updateTranslationMatX();
+        break;
+    case Qt::Key_D:
+        drawableObjectsData.cursor->xPos -= drawableObjectsData.cursor->speedMovement;
+        drawableObjectsData.cursor->updateTranslationMatX();
+        break;
+    case Qt::Key_Q:
+        drawableObjectsData.cursor->zPos += drawableObjectsData.cursor->speedMovement;
+        drawableObjectsData.cursor->updateTranslationMatZ();
+        break;
+    case Qt::Key_E:
+        drawableObjectsData.cursor->zPos -= drawableObjectsData.cursor->speedMovement;
+        drawableObjectsData.cursor->updateTranslationMatZ();
+        break;
     }
 }
 
@@ -212,8 +240,8 @@ void OGlWidget::draw()
     glBlendEquation(GL_MAX);
 
     glPointSize(-30/camera.zPos - (5.f-camera.rProjection)/5);
-    glLineWidth(-15/camera.zPos - (5.f-camera.rProjection)/5);
-    //glLineWidth(1);
+    //glLineWidth(-15/camera.zPos - (5.f-camera.rProjection)/5);
+    glLineWidth(1);
 
     for(int i=0; i<drawableObjectsData.drawableObjects.size();i++){
         drawableObjectsData.drawableObjects[i]->draw();
