@@ -33,7 +33,7 @@
 /// dummy.cpp exist only a wordaround for CMake file.
 ///////////////////////////////////////////////////////////////////////////////////
 
-#define GLM_MESSAGES
+/*#define GLM_MESSAGES
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include <limits>
@@ -149,7 +149,7 @@ struct intersection
 	glm::vec4 position;
 	glm::vec3 normal;
 };
-
+*/
 /*
 // Sample 4
 #include <glm/vec3.hpp>// glm::vec3
@@ -191,7 +191,7 @@ glm::vec3 lighting
 }
 */
 
-
+/*
 template <typename T, glm::precision P, template<typename, glm::precision> class vecType>
 T normalizeDotA(vecType<T, P> const & x, vecType<T, P> const & y)
 {
@@ -230,3 +230,4 @@ int main()
 
 	return 0;
 }
+*/

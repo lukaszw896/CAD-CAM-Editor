@@ -11,6 +11,7 @@
 #include <QLabel>
 #include <QSlider>
 #include <RenderWidget/oglwidget.h>
+#include <Dialogs/settingsdialog.h>
 
 class DrawerWindow : public QMainWindow
 {
@@ -41,12 +42,16 @@ private:
     QAction *stereoscopyAct;
 
     OGlWidget *oglWidget;
+    SettingsDialog *settingsDialog;
+
     QLabel *scaleLabel;
     QSlider *scaleSlider;
 
     QVBoxLayout *rightLayout;
     QHBoxLayout *leftLayout;
     QHBoxLayout *mainLayout;
+
+    void openStereoscopySettingsDialog();
 
 };
 

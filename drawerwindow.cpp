@@ -16,6 +16,7 @@ void DrawerWindow::createActions()
     addCurveAct = new QAction(tr("&Curve"),this);
 
     stereoscopyAct = new QAction(tr("&Stereoscopy"),this);
+    connect(stereoscopyAct, &QAction::triggered, this, &DrawerWindow::openStereoscopySettingsDialog);
 }
 
 void DrawerWindow::createMenus()
@@ -38,8 +39,12 @@ void DrawerWindow::initObjects()
     scaleSlider->setMinimum(10);
     oglWidget = new OGlWidget();
 
-    connect(scaleSlider,SIGNAL(valueChanged(int)),oglWidget,SLOT(changeScale(int)));
+    settingsDialog = new SettingsDialog;
 
+
+    connect(scaleSlider,SIGNAL(valueChanged(int)),oglWidget,SLOT(changeScale(int)));
+    connect(settingsDialog,SIGNAL(turnOnOffStereoscopy(bool)),oglWidget,SLOT(checkBoxStateChanged(bool)));
+    connect(settingsDialog,SIGNAL(eyeDistanceValueChanged(int)),oglWidget,SLOT(changeEyeDistance(int)));
 
 }
 
@@ -65,6 +70,11 @@ void DrawerWindow::initLayout()
     this->setCentralWidget( centralWidget );
     centralWidget->setLayout(mainLayout);
 
+}
+
+void DrawerWindow::openStereoscopySettingsDialog()
+{
+    settingsDialog->show();
 }
 
 
