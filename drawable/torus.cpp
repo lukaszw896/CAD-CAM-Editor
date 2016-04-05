@@ -114,13 +114,11 @@ void Torus::transformPoints()
         }
         else
         {
-
                 toursPointsLeftEye[i] = camera->transformationMatrixLeftEye*localTransformationMatrix*torusPoints[i];
                 toursPointsLeftEye[i].x = toursPointsLeftEye[i].x / toursPointsLeftEye[i].w;
                 toursPointsLeftEye[i].y = toursPointsLeftEye[i].y / toursPointsLeftEye[i].w;
                 toursPointsLeftEye[i].x /= camera->xRatio;
                 toursPointsLeftEye[i].y /= camera->yRatio;
-
 
                 torusPointsRightEye[i] = camera->transformationMatrixRightEye*localTransformationMatrix*torusPoints[i];
                 torusPointsRightEye[i].x = torusPointsRightEye[i].x / torusPointsRightEye[i].w;
@@ -128,7 +126,6 @@ void Torus::transformPoints()
                 torusPointsRightEye[i].x /= camera->xRatio;
                 torusPointsRightEye[i].y /= camera->yRatio;
         }
-
     }
 }
 

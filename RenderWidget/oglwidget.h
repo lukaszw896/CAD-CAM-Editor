@@ -13,6 +13,7 @@ typedef unsigned char BYTE;
 #include "drawable/drawable.h"
 #include "Camera/camera.h"
 #include "window.h"
+#include "Data/drawableobjectsdata.h"
 
 using namespace glm;
 
@@ -52,6 +53,7 @@ private:
     std::vector<Drawable*> drawableObjects;
 
     Camera camera;
+    DrawableObjectsData& drawableObjectsData = DrawableObjectsData::getInstance();
 
     Ui::Window* ui;
 

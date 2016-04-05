@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     drawerwindow.cpp \
     Dialogs/settingsdialog.cpp \
     glm/detail/dummy.cpp \
-    glm/detail/glm.cpp
+    glm/detail/glm.cpp \
+    Data/drawableobjectsdata.cpp
 
 HEADERS  += window.h \
     edge.h \
@@ -178,6 +179,7 @@ HEADERS  += window.h \
     glm/vec2.hpp \
     glm/vec3.hpp \
     glm/vec4.hpp \
-    glm/vector_relational.hpp
+    glm/vector_relational.hpp \
+    Data/drawableobjectsdata.h
 
 FORMS    += window.ui

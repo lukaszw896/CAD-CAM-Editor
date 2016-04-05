@@ -2,6 +2,7 @@
 #include <iostream>
 #include "uiaccess.h"
 #include <QListWidgetItem>
+#include "drawable/point.h"
 typedef unsigned char BYTE;
 OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
@@ -13,16 +14,18 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
 
    // Window& w = Window::getInstance();
    // Ui::Window* ui = w.getUi();
-
-    drawableObjects.push_back(new Torus(&camera));
-    drawableObjects.push_back(new Torus(&camera));
-
-    drawableObjects[1]->xPos = -0.7f;
-    drawableObjects[1]->updateTranslationMatX();
-    drawableObjects[1]->yPos = -0.7f;
-    drawableObjects[1]->updateTranslationMatY();
-    drawableObjects[1]->zPos = -13.7f;
-    drawableObjects[1]->updateTranslationMatZ();
+    /*drawableObjects.push_back(new Torus(&camera));
+    //drawableObjects.push_back(new Torus(&camera));
+    drawableObjects.push_back(new Point(&camera));*/
+    drawableObjectsData.addTorus(new Torus(&camera));
+        //drawableObjects.push_back(new Torus(&camera));
+    drawableObjectsData.addPoint(new Point(&camera));
+    drawableObjectsData.drawableObjects[1]->xPos = -0.7f;
+    drawableObjectsData.drawableObjects[1]->updateTranslationMatX();
+    drawableObjectsData.drawableObjects[1]->yPos = -0.7f;
+    drawableObjectsData.drawableObjects[1]->updateTranslationMatY();
+    drawableObjectsData.drawableObjects[1]->zPos = -13.7f;
+    drawableObjectsData.drawableObjects[1]->updateTranslationMatZ();
 
     UiAccess& uiAccess = UiAccess::getInstance();
 
@@ -208,13 +211,14 @@ void OGlWidget::draw()
    // glBlendFunc(GL_SRC_COLOR, GL_ONE);
     glBlendEquation(GL_MAX);
 
+    glPointSize(-30/camera.zPos - (5.f-camera.rProjection)/5);
+    glLineWidth(-15/camera.zPos - (5.f-camera.rProjection)/5);
+    //glLineWidth(1);
 
-    //glLineWidth(-15/camera.zPos - (5.f-camera.rProjection)/5);
-    glLineWidth(1);
-
-    for(int i=0; i<drawableObjects.size();i++){
-        drawableObjects[i]->draw();
+    for(int i=0; i<drawableObjectsData.drawableObjects.size();i++){
+        drawableObjectsData.drawableObjects[i]->draw();
     }
+
 
 }
 
