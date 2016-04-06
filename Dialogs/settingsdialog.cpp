@@ -11,11 +11,11 @@ SettingsDialog::SettingsDialog(QWidget *parent ) :QDialog(parent)
     eyeDistanceSlider->setMaximum(100);
     eyeDistanceSlider->setMinimum(1);
 
-    checkBoxLayout = new QHBoxLayout();
+    checkBoxLayout = new QVBoxLayout();
     checkBoxLayout->addWidget(checkBoxLabel);
     checkBoxLayout->addWidget(stereoscopyCheckBox);
 
-    sliderLayout = new QHBoxLayout();
+    sliderLayout = new QVBoxLayout();
     sliderLayout->addWidget(sliderLabel);
     sliderLayout->addWidget(eyeDistanceSlider);
 

@@ -7,6 +7,7 @@
 #include "drawable/cursor.h"
 #include "Camera/camera.h"
 #include <algorithm>
+#include <string>
 
 class DrawableObjectsData
 {
@@ -22,6 +23,8 @@ public:
     void addPoint(Point*);
     void addCursor(Cursor*);
 
+    void removeTorusByName(std::string);
+    void removePointByName(std::string);
     void removeTorus(Torus*);
     void removePoint(Point*);
 

@@ -23,8 +23,8 @@ private slots:
 
 private:
 
-    QHBoxLayout *checkBoxLayout;
-    QHBoxLayout *sliderLayout;
+    QVBoxLayout *checkBoxLayout;
+    QVBoxLayout *sliderLayout;
     QVBoxLayout *mainLayout;
 
     QLabel *titleLabel;

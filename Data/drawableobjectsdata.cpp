@@ -28,12 +28,35 @@ void DrawableObjectsData::addCursor(Cursor * cursor)
     drawableObjects.push_back(cursor);
 }
 
+void DrawableObjectsData::removeTorusByName(std::string name)
+{
+    for(int i=0; i<torusList.size();i++){
+        if(torusList[i]->name == name)
+        {
+            removeTorus(torusList[i]);
+            break;
+        }
+    }
+}
+
+void DrawableObjectsData::removePointByName(std::string name)
+{
+    for(int i=0; i<pointList.size();i++){
+        if(pointList[i]->name == name)
+        {
+            removePoint(pointList[i]);
+            break;
+        }
+    }
+}
+
 void DrawableObjectsData::removePoint(Point * point)
 {
 
     std::vector<Point*>::iterator position = std::find(pointList.begin(), pointList.end(), point);
         if (position != pointList.end()) // == myVector.end() means the element was not found
             pointList.erase(position);
+        initDrawableObjectsList();
 }
 
 void DrawableObjectsData::removeTorus(Torus* torus)
@@ -41,6 +64,7 @@ void DrawableObjectsData::removeTorus(Torus* torus)
     std::vector<Torus*>::iterator position = std::find(torusList.begin(), torusList.end(), torus);
         if (position != torusList.end()) // == myVector.end() means the element was not found
             torusList.erase(position);
+        initDrawableObjectsList();
 }
 
 void DrawableObjectsData::initDrawableObjectsList()

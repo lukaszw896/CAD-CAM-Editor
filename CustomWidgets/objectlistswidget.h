@@ -7,6 +7,8 @@
 #include <QHBoxLayout>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QAbstractAnimation>
+#include <QPushButton>
 #include "Data/drawableobjectsdata.h"
 
 class ObjectListsWidget : public QWidget
@@ -17,15 +19,27 @@ public:
 
 public slots:
     void updateListsContent();
+    void torusHasBeenSelected();
+    void torusHasBeenDoubleClicked();
+    void pointHasBeenSelected();
+    void pointHasBeenDoubleClicked();
+
+    void deleteTorusButtonClicked();
+    void deletePointButtonClicked();
+    void deleteCurveButtonClicked();
+
+signals:
+
+
 
 private:
 
     DrawableObjectsData& drawableObjectsData = DrawableObjectsData::getInstance();
 
     QVBoxLayout* mainLayout;
-    QHBoxLayout* torusLayout;
-    QHBoxLayout* pointLayout;
-    QHBoxLayout* curveLayout;
+    QVBoxLayout* torusLayout;
+    QVBoxLayout* pointLayout;
+    QVBoxLayout* curveLayout;
 
 
     QGroupBox* torusGroupBox;
@@ -36,9 +50,13 @@ private:
     QListWidget* pointList;
     QListWidget* curveList;
 
-    void setupLists();
+    QPushButton* deleteTorusButton;
+    QPushButton* deletePointButton;
+    QPushButton* deleteCurveButton;
+
     void setupGroupBoxes();
     void setupLayout();
+    void setupButtons();
 };
 
 #endif // OBJECTLISTSWIDGET_H
