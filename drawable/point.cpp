@@ -9,7 +9,12 @@ Point::Point(Camera* camera)
 {
     this->camera = camera;
     pointCoordinates = glm::vec4(0,0,0,1);
+    id++;
+    name = "Point_";
+    name += std::to_string(id);
 }
+
+int Point::id =0;
 
 void Point::computeLocalTransformationMatrix()
 {

@@ -19,7 +19,6 @@ SOURCES += main.cpp\
     drawable/drawable.cpp \
     drawable/point.cpp \
     uiaccess.cpp \
-    transclass.cpp \
     drawerwindow.cpp \
     Dialogs/settingsdialog.cpp \
     glm/detail/dummy.cpp \
@@ -36,7 +35,6 @@ HEADERS  += window.h \
     drawable/drawable.h \
     drawable/point.h \
     uiaccess.h \
-    transclass.h \
     drawerwindow.h \
     Dialogs/settingsdialog.h \
     glm/detail/_features.hpp \

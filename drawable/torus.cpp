@@ -14,7 +14,12 @@ Torus::Torus(Camera* camera)
     r1=0.25,
     r0=1.0;
     initTorus();
+    id++;
+    name =  "Torus_";
+    name += std::to_string(id);
 }
+
+int Torus::id = 0;
 
 void Torus::initTorus()
 {

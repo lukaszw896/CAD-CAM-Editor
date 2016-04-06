@@ -13,6 +13,8 @@ public:
     Point(Camera* camera);
 
 private:
+    static int id;
+
     Camera* camera;
 
     glm::vec4 pointCoordinates;
@@ -28,5 +30,7 @@ private:
     void transform();
     void draw();
 };
+
+
 
 #endif // POINT_H

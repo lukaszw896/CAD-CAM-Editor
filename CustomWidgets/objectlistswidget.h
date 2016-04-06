@@ -4,6 +4,10 @@
 #include <QWidget>
 #include <QGroupBox>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QListWidget>
+#include <QListWidgetItem>
+#include "Data/drawableobjectsdata.h"
 
 class ObjectListsWidget : public QWidget
 {
@@ -11,12 +15,26 @@ class ObjectListsWidget : public QWidget
 public:
     ObjectListsWidget();
 
+public slots:
+    void updateListsContent();
+
 private:
 
+    DrawableObjectsData& drawableObjectsData = DrawableObjectsData::getInstance();
+
     QVBoxLayout* mainLayout;
+    QHBoxLayout* torusLayout;
+    QHBoxLayout* pointLayout;
+    QHBoxLayout* curveLayout;
+
 
     QGroupBox* torusGroupBox;
     QGroupBox* pointGroupBox;
+    QGroupBox* curveGroupBox;
+
+    QListWidget* torusList;
+    QListWidget* pointList;
+    QListWidget* curveList;
 
     void setupLists();
     void setupGroupBoxes();

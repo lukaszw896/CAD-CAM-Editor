@@ -25,10 +25,11 @@ public:
     void removeTorus(Torus*);
     void removePoint(Point*);
 
+    std::vector<Torus*> torusList;
+    std::vector<Point*> pointList;
     private:
 
-        std::vector<Torus*> torusList;
-        std::vector<Point*> pointList;
+
 
         DrawableObjectsData();
 

@@ -41,6 +41,7 @@ void DrawerWindow::initObjects()
     scaleSlider->setMinimum(10);
     oglWidget = new OGlWidget();
     objectListsWidget = new ObjectListsWidget();
+    connect(this,SIGNAL(drawableDataChanged()),objectListsWidget,SLOT(updateListsContent()));
 
     settingsDialog = new SettingsDialog;
 
@@ -92,6 +93,7 @@ void DrawerWindow::addPoint()
     point->zPos = position.z;
     point->updateTranslationMatZ();
     drawableObjectsData.addPoint(point);
+    emit drawableDataChanged();
 }
 
 void DrawerWindow::addTorus()
@@ -105,6 +107,7 @@ void DrawerWindow::addTorus()
     torus->zPos = position.z;
     torus->updateTranslationMatZ();
     drawableObjectsData.addTorus(torus);
+    emit drawableDataChanged();
 }
 
 

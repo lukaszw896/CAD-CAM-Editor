@@ -11,6 +11,9 @@ using namespace std;
 class Torus : public Drawable
 {
 public:
+
+    static int id;
+
     Torus();
     Torus(Camera* camera);
     void initTorus();

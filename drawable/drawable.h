@@ -4,7 +4,7 @@
 
 #include <glm/mat4x4.hpp>
 #include "cmath"
-
+#include <string>
 
 class Drawable
 {
@@ -17,6 +17,7 @@ public:
     void updateYRotationMat();
     void updateZRotationMat();
 
+    std::string name;
 
     int xRot;
     int yRot;
