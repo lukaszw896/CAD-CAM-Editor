@@ -141,8 +141,13 @@ void Torus::draw()
     transformPoints();
 
     glBegin(GL_LINES);
-    if(!camera->isStereoscopic){
+    if(!isSelected){
         glColor4f(1,1.0, 1.0,1.0);
+    }
+    else{
+       glColor4f(0.3,1, 0.3,1.0);
+    }
+    if(!camera->isStereoscopic){
         for(int i=0;i<edges.size();i++){
 
             if(!(edges[i].vertice1->w >=-0.06|| edges[i].vertice2->w >=-0.06)){

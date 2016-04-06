@@ -50,6 +50,42 @@ void DrawableObjectsData::removePointByName(std::string name)
     }
 }
 
+void DrawableObjectsData::selectTorusByName(std::string name)
+{
+    for(int i=0; i<torusList.size();i++){
+        if(torusList[i]->name == name)
+        {
+            torusList[i]->isSelected= true;
+            break;
+        }
+    }
+}
+
+void DrawableObjectsData::selectPointByName(std::string name)
+{
+    for(int i=0; i<pointList.size();i++){
+        if(pointList[i]->name == name)
+        {
+            pointList[i]->isSelected = true;
+            break;
+        }
+    }
+}
+
+void DrawableObjectsData::deselectToruses()
+{
+    for(int i=0; i<torusList.size();i++){
+        torusList[i]->isSelected= false;
+    }
+}
+
+void DrawableObjectsData::deselectPoints()
+{
+    for(int i=0; i<pointList.size();i++){
+        pointList[i]->isSelected = false;
+    }
+}
+
 void DrawableObjectsData::removePoint(Point * point)
 {
 

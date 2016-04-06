@@ -18,6 +18,7 @@ public:
     void updateZRotationMat();
 
     std::string name;
+    bool isSelected;
 
     int xRot;
     int yRot;

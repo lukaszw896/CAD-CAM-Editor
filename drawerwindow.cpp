@@ -84,6 +84,10 @@ void DrawerWindow::openStereoscopySettingsDialog()
 
 void DrawerWindow::addPoint()
 {
+    //items in lists are deseleted while adding new element (?)
+    drawableObjectsData.deselectToruses();
+    drawableObjectsData.deselectPoints();
+
     Point* point = new Point(drawableObjectsData.camera);
     glm::vec4 position = drawableObjectsData.cursor->getCursorPos();
     point->xPos = position.x;
@@ -98,6 +102,10 @@ void DrawerWindow::addPoint()
 
 void DrawerWindow::addTorus()
 {
+    //items in lists are deseleted while adding new element (?)
+    drawableObjectsData.deselectToruses();
+    drawableObjectsData.deselectPoints();
+
     Torus* torus = new Torus(drawableObjectsData.camera);
     glm::vec4 position = drawableObjectsData.cursor->getCursorPos();
     torus->xPos = position.x;

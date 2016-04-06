@@ -5,6 +5,7 @@ Drawable::Drawable()
     xPos = 0;
     yPos = 0;
     zPos = 0.f;
+    isSelected = false;
     initTranslationMat();
     initXRotationMat();
     initYRotationMat();

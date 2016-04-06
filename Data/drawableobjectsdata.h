@@ -25,6 +25,10 @@ public:
 
     void removeTorusByName(std::string);
     void removePointByName(std::string);
+    void selectTorusByName(std::string);
+    void selectPointByName(std::string);
+    void deselectToruses();
+    void deselectPoints();
     void removeTorus(Torus*);
     void removePoint(Point*);
 

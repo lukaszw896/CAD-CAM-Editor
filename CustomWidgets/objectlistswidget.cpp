@@ -16,6 +16,7 @@ void ObjectListsWidget::setupButtons()
    connect(deletePointButton,SIGNAL(clicked(bool)),this,SLOT(deletePointButtonClicked()));
    deleteCurveButton = new QPushButton("Delete");
    connect(deleteCurveButton,SIGNAL(clicked(bool)),this,SLOT(deleteCurveButtonClicked()));
+
 }
 
 void ObjectListsWidget::setupGroupBoxes()
@@ -79,7 +80,11 @@ void ObjectListsWidget::updateListsContent()
 
 void ObjectListsWidget::torusHasBeenSelected()
 {
-
+    drawableObjectsData.deselectToruses();
+    QList<QListWidgetItem *> itemList = torusList->selectedItems();
+    for (int i=0; i<itemList.size(); i++) {
+        drawableObjectsData.selectTorusByName(itemList[i]->text().toStdString());
+    }
 }
 
 void ObjectListsWidget::torusHasBeenDoubleClicked()
@@ -89,7 +94,11 @@ void ObjectListsWidget::torusHasBeenDoubleClicked()
 
 void ObjectListsWidget::pointHasBeenSelected()
 {
-
+    drawableObjectsData.deselectPoints();
+    QList<QListWidgetItem *> itemList = pointList->selectedItems();
+    for (int i=0; i<itemList.size(); i++) {
+        drawableObjectsData.selectPointByName(itemList[i]->text().toStdString());
+    }
 }
 
 void ObjectListsWidget::pointHasBeenDoubleClicked()
@@ -99,6 +108,11 @@ void ObjectListsWidget::pointHasBeenDoubleClicked()
 
 void ObjectListsWidget::deleteTorusButtonClicked()
 {
+    //items in lists are deseleted while deleting element (?)
+    drawableObjectsData.deselectToruses();
+    drawableObjectsData.deselectPoints();
+
+
     QList<QListWidgetItem *> itemList = torusList->selectedItems();
     for (int i=0; i<itemList.size(); i++) {
             drawableObjectsData.removeTorusByName(itemList[i]->text().toStdString());
@@ -109,6 +123,10 @@ void ObjectListsWidget::deleteTorusButtonClicked()
 }
 void ObjectListsWidget::deletePointButtonClicked()
 {
+    //items in lists are deseleted while deleting element (?)
+    drawableObjectsData.deselectToruses();
+    drawableObjectsData.deselectPoints();
+
     QList<QListWidgetItem *> itemList = pointList->selectedItems();
     for (int i=0; i<itemList.size(); i++) {
         drawableObjectsData.removePointByName(itemList[i]->text().toStdString());
@@ -120,6 +138,10 @@ void ObjectListsWidget::deletePointButtonClicked()
 
 void ObjectListsWidget::deleteCurveButtonClicked()
 {
+
+    //items in lists are deseleted while deleting element (?)
+    drawableObjectsData.deselectToruses();
+    drawableObjectsData.deselectPoints();
 
 }
 

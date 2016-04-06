@@ -23,11 +23,11 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
         //drawableObjects.push_back(new Torus(&camera));
     //drawableObjectsData.addPoint(new Point(&camera));
     drawableObjectsData.addCursor(new Cursor(&camera));
-    drawableObjectsData.drawableObjects[1]->xPos = -0.7f;
+    drawableObjectsData.drawableObjects[1]->xPos = 0.f;
     drawableObjectsData.drawableObjects[1]->updateTranslationMatX();
-    drawableObjectsData.drawableObjects[1]->yPos = -0.7f;
+    drawableObjectsData.drawableObjects[1]->yPos = 0.f;
     drawableObjectsData.drawableObjects[1]->updateTranslationMatY();
-    drawableObjectsData.drawableObjects[1]->zPos = -13.7f;
+    drawableObjectsData.drawableObjects[1]->zPos = -2.7f;
     drawableObjectsData.drawableObjects[1]->updateTranslationMatZ();
 
     UiAccess& uiAccess = UiAccess::getInstance();
@@ -240,7 +240,7 @@ void OGlWidget::draw()
    // glBlendFunc(GL_SRC_COLOR, GL_ONE);
     glBlendEquation(GL_MAX);
 
-    glPointSize(-30/camera.zPos - (5.f-camera.rProjection)/5);
+    glPointSize(-50/camera.zPos - (5.f-camera.rProjection)/5);
     //glLineWidth(-15/camera.zPos - (5.f-camera.rProjection)/5);
     glLineWidth(1);
 

@@ -60,7 +60,12 @@ void Point::draw()
 
     glBegin(GL_POINTS);
     if(!camera->isStereoscopic){
-        glColor4f(1,1.0, 1.0,1.0);
+        if(!isSelected){
+            glColor4f(1,1.0, 1.0,1.0);
+        }
+        else{
+           glColor4f(0.3,1, 0.3,1.0);
+        }
         glVertex2f(transPointCoordinates.x,transPointCoordinates.y);
 
     }else

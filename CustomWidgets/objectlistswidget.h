@@ -9,6 +9,8 @@
 #include <QListWidgetItem>
 #include <QAbstractAnimation>
 #include <QPushButton>
+#include "drawable/point.h"
+#include "drawable/torus.h"
 #include "Data/drawableobjectsdata.h"
 
 class ObjectListsWidget : public QWidget
