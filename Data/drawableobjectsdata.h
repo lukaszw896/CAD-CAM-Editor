@@ -8,6 +8,7 @@
 #include "Camera/camera.h"
 #include <algorithm>
 #include <string>
+#include <math.h>
 
 class DrawableObjectsData
 {
@@ -31,6 +32,11 @@ public:
     void deselectPoints();
     void removeTorus(Torus*);
     void removePoint(Point*);
+
+    void moveCursorToTorusByName(std::string);
+    void moveCursorToPointByName(std::string);
+
+    Drawable* findObjectNearCursor();
 
     std::vector<Torus*> torusList;
     std::vector<Point*> pointList;

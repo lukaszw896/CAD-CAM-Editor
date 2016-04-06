@@ -37,12 +37,17 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 
     void timerEvent(QTimerEvent *event);
 
 
 
 private:
+    QSet<int> keysPressed;
+    bool isSpacePressed;
+    Drawable* objectToMove;
+
     int timerId;
 
     void draw();

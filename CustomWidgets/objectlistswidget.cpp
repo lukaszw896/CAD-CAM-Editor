@@ -89,7 +89,12 @@ void ObjectListsWidget::torusHasBeenSelected()
 
 void ObjectListsWidget::torusHasBeenDoubleClicked()
 {
-
+    drawableObjectsData.deselectToruses();
+    QList<QListWidgetItem *> itemList = torusList->selectedItems();
+    for (int i=0; i<itemList.size(); i++) {
+        drawableObjectsData.selectTorusByName(itemList[i]->text().toStdString());
+        drawableObjectsData.moveCursorToTorusByName(itemList[i]->text().toStdString());
+    }
 }
 
 void ObjectListsWidget::pointHasBeenSelected()
@@ -103,7 +108,12 @@ void ObjectListsWidget::pointHasBeenSelected()
 
 void ObjectListsWidget::pointHasBeenDoubleClicked()
 {
-
+    drawableObjectsData.deselectPoints();
+    QList<QListWidgetItem *> itemList = pointList->selectedItems();
+    for (int i=0; i<itemList.size(); i++) {
+        drawableObjectsData.selectPointByName(itemList[i]->text().toStdString());
+        drawableObjectsData.moveCursorToPointByName(itemList[i]->text().toStdString());
+    }
 }
 
 void ObjectListsWidget::deleteTorusButtonClicked()

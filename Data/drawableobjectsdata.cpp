@@ -106,6 +106,7 @@ void DrawableObjectsData::removeTorus(Torus* torus)
 void DrawableObjectsData::initDrawableObjectsList()
 {
     drawableObjects.clear();
+    drawableObjects.push_back(cursor);
     for(int i=0;i<pointList.size();i++)
     {
         drawableObjects.push_back(pointList.at(i));
@@ -115,5 +116,53 @@ void DrawableObjectsData::initDrawableObjectsList()
     {
         drawableObjects.push_back(torusList.at(i));
     }
-    drawableObjects.push_back(cursor);
+
+}
+
+void DrawableObjectsData::moveCursorToTorusByName(std::string name)
+{
+    for(int i=0; i<torusList.size();i++){
+        if(torusList[i]->name == name)
+        {
+            cursor->xPos = torusList[i]->xPos;
+            cursor->yPos = torusList[i]->yPos;
+            cursor->zPos = torusList[i]->zPos;
+            cursor->updateTranslationMatX();
+            cursor->updateTranslationMatY();
+            cursor->updateTranslationMatZ();
+            break;
+        }
+    }
+}
+
+void DrawableObjectsData::moveCursorToPointByName(std::string name)
+{
+    for(int i=0; i<pointList.size();i++){
+        if(pointList[i]->name == name)
+        {
+            cursor->xPos = pointList[i]->xPos;
+            cursor->yPos = pointList[i]->yPos;
+            cursor->zPos = pointList[i]->zPos;
+            cursor->updateTranslationMatX();
+            cursor->updateTranslationMatY();
+            cursor->updateTranslationMatZ();
+            break;
+        }
+    }
+}
+
+Drawable* DrawableObjectsData::findObjectNearCursor()
+{
+    for(int i=1;i<drawableObjects.size();i++)
+    {
+       float distance;
+       distance = sqrt(pow(cursor->xPos-drawableObjects[i]->xPos,2)
+                       +pow(cursor->yPos-drawableObjects[i]->yPos,2)
+                       +pow(cursor->zPos-drawableObjects[i]->zPos,2));
+       if(distance<0.05f)
+       {
+           return drawableObjects[i];
+       }
+    }
+    return NULL;
 }

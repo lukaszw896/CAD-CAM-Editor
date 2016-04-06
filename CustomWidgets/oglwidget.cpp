@@ -19,24 +19,14 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     /*drawableObjects.push_back(new Torus(&camera));
     //drawableObjects.push_back(new Torus(&camera));
     drawableObjects.push_back(new Point(&camera));*/
-    drawableObjectsData.addTorus(new Torus(&camera));
+  //  drawableObjectsData.addTorus(new Torus(&camera));
         //drawableObjects.push_back(new Torus(&camera));
     //drawableObjectsData.addPoint(new Point(&camera));
     drawableObjectsData.addCursor(new Cursor(&camera));
-    drawableObjectsData.drawableObjects[1]->xPos = 0.f;
-    drawableObjectsData.drawableObjects[1]->updateTranslationMatX();
-    drawableObjectsData.drawableObjects[1]->yPos = 0.f;
-    drawableObjectsData.drawableObjects[1]->updateTranslationMatY();
-    drawableObjectsData.drawableObjects[1]->zPos = -2.7f;
-    drawableObjectsData.drawableObjects[1]->updateTranslationMatZ();
 
-    UiAccess& uiAccess = UiAccess::getInstance();
 
-    ui = uiAccess.ui;
-
-       QListWidgetItem item = QListWidgetItem();
-       item.setText("test");
-      // ui->drawableObjectsList->addItem(item);
+    isSpacePressed = false;
+    this->installEventFilter(this);
 }
 
 OGlWidget::~OGlWidget()
@@ -165,64 +155,125 @@ void OGlWidget::mouseMoveEvent(QMouseEvent *event)
 
 void OGlWidget::keyPressEvent(QKeyEvent *event)
 {
-    switch(event->key()){
-        case Qt::Key_Up:
+    keysPressed += event->key();
+
+    if(keysPressed.contains(Qt::Key_Up)){
             camera.yPos -= 0.05f;
             camera.updateTranslationMatY();
-            break;
-        case Qt::Key_Down:
+    }
+    if(keysPressed.contains(Qt::Key_Down)){
             camera.yPos += 0.05f;
              camera.updateTranslationMatY();
-            break;
-    case Qt::Key_Left:
+    }
+    if(keysPressed.contains(Qt::Key_Left)){
         camera.xPos+=0.05f;
         camera.updateTranslationMatX();
-        break;
-    case Qt::Key_Right:
+    }
+    if(keysPressed.contains(Qt::Key_Right)){
         camera.xPos-=0.05f;
         camera.updateTranslationMatX();
-        break;
-    case Qt::Key_Plus:
+    }
+    if(keysPressed.contains(Qt::Key_Plus)){
         camera.zPos+=0.2f;
         camera.updateTranslationMatZ();
-        break;
-    case Qt::Key_Minus:
+    }
+    if(keysPressed.contains(Qt::Key_Minus)){
         camera.zPos-=0.2f;
         camera.updateTranslationMatZ();
-        break;
-    case Qt::Key_BracketLeft:
+    }
+    if(keysPressed.contains(Qt::Key_BracketLeft)){
 
-        break;
-    case Qt::Key_BracketRight:
+    }
+    if(keysPressed.contains(Qt::Key_BracketRight)){
 
-            break;
+    }
 
     //cursor movement
-    case Qt::Key_W:
-        drawableObjectsData.cursor->yPos += drawableObjectsData.cursor->speedMovement;
-        drawableObjectsData.cursor->updateTranslationMatY();
-        break;
-    case Qt::Key_S:
-        drawableObjectsData.cursor->yPos -= drawableObjectsData.cursor->speedMovement;
-        drawableObjectsData.cursor->updateTranslationMatY();
-        break;
-    case Qt::Key_A:
-        drawableObjectsData.cursor->xPos += drawableObjectsData.cursor->speedMovement;
-        drawableObjectsData.cursor->updateTranslationMatX();
-        break;
-    case Qt::Key_D:
-        drawableObjectsData.cursor->xPos -= drawableObjectsData.cursor->speedMovement;
-        drawableObjectsData.cursor->updateTranslationMatX();
-        break;
-    case Qt::Key_Q:
-        drawableObjectsData.cursor->zPos += drawableObjectsData.cursor->speedMovement;
-        drawableObjectsData.cursor->updateTranslationMatZ();
-        break;
-    case Qt::Key_E:
-        drawableObjectsData.cursor->zPos -= drawableObjectsData.cursor->speedMovement;
-        drawableObjectsData.cursor->updateTranslationMatZ();
-        break;
+    if(!keysPressed.contains(Qt::Key_Space)){
+        if(keysPressed.contains(Qt::Key_W)){
+            drawableObjectsData.cursor->yPos += drawableObjectsData.cursor->speedMovement;
+            drawableObjectsData.cursor->updateTranslationMatY();
+        }
+        if(keysPressed.contains(Qt::Key_S)){
+            drawableObjectsData.cursor->yPos -= drawableObjectsData.cursor->speedMovement;
+            drawableObjectsData.cursor->updateTranslationMatY();
+        }
+        if(keysPressed.contains(Qt::Key_A)){
+            drawableObjectsData.cursor->xPos += drawableObjectsData.cursor->speedMovement;
+            drawableObjectsData.cursor->updateTranslationMatX();
+        }
+        if(keysPressed.contains(Qt::Key_D)){
+            drawableObjectsData.cursor->xPos -= drawableObjectsData.cursor->speedMovement;
+            drawableObjectsData.cursor->updateTranslationMatX();
+        }
+        if(keysPressed.contains(Qt::Key_Q)){
+            drawableObjectsData.cursor->zPos += drawableObjectsData.cursor->speedMovement;
+            drawableObjectsData.cursor->updateTranslationMatZ();
+        }
+        if(keysPressed.contains(Qt::Key_E)){
+            drawableObjectsData.cursor->zPos -= drawableObjectsData.cursor->speedMovement;
+            drawableObjectsData.cursor->updateTranslationMatZ();
+        }
     }
+    //object movement
+    else{
+        if(isSpacePressed == false)
+        {
+            isSpacePressed  = true;
+            objectToMove = drawableObjectsData.findObjectNearCursor();
+        }
+        else if(objectToMove != NULL){
+
+            if(keysPressed.contains(Qt::Key_W)){
+                drawableObjectsData.cursor->yPos += drawableObjectsData.cursor->speedMovement;
+                drawableObjectsData.cursor->updateTranslationMatY();
+                objectToMove->yPos += drawableObjectsData.cursor->speedMovement;
+                objectToMove->updateTranslationMatY();
+            }
+            if(keysPressed.contains(Qt::Key_S)){
+                drawableObjectsData.cursor->yPos -= drawableObjectsData.cursor->speedMovement;
+                drawableObjectsData.cursor->updateTranslationMatY();
+                objectToMove->yPos -= drawableObjectsData.cursor->speedMovement;
+                objectToMove->updateTranslationMatY();
+            }
+            if(keysPressed.contains(Qt::Key_A)){
+                drawableObjectsData.cursor->xPos += drawableObjectsData.cursor->speedMovement;
+                drawableObjectsData.cursor->updateTranslationMatX();
+                objectToMove->xPos += drawableObjectsData.cursor->speedMovement;
+                objectToMove->updateTranslationMatX();
+            }
+            if(keysPressed.contains(Qt::Key_D)){
+                drawableObjectsData.cursor->xPos -= drawableObjectsData.cursor->speedMovement;
+                drawableObjectsData.cursor->updateTranslationMatX();
+                objectToMove->xPos -= drawableObjectsData.cursor->speedMovement;
+                objectToMove->updateTranslationMatX();
+            }
+            if(keysPressed.contains(Qt::Key_Q)){
+                drawableObjectsData.cursor->zPos += drawableObjectsData.cursor->speedMovement;
+                drawableObjectsData.cursor->updateTranslationMatZ();
+                objectToMove->zPos += drawableObjectsData.cursor->speedMovement;
+                objectToMove->updateTranslationMatZ();
+            }
+            if(keysPressed.contains(Qt::Key_E)){
+                drawableObjectsData.cursor->zPos -= drawableObjectsData.cursor->speedMovement;
+                drawableObjectsData.cursor->updateTranslationMatZ();
+                objectToMove->zPos -= drawableObjectsData.cursor->speedMovement;
+                objectToMove->updateTranslationMatZ();
+            }
+        }
+    }
+
+
+}
+
+void OGlWidget::keyReleaseEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Space)
+    {
+        isSpacePressed = false;
+        objectToMove = NULL;
+    }
+    keysPressed-= event->key();
 }
 
 void OGlWidget::timerEvent(QTimerEvent *event)
