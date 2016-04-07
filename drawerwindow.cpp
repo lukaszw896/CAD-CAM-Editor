@@ -43,6 +43,10 @@ void DrawerWindow::initObjects()
     objectListsWidget = new ObjectListsWidget();
     connect(this,SIGNAL(drawableDataChanged()),objectListsWidget,SLOT(updateListsContent()));
 
+    //connection between on scene click and item list
+    connect(oglWidget,SIGNAL(pointOnScreenClick(Point*)),objectListsWidget,SLOT(pointOnSceneSelection(Point*)));
+    connect(oglWidget,SIGNAL(pointOnScreenDoubleClick(Point*)),objectListsWidget,SLOT(pointOnSceneDoubleClick(Point*)));
+
     settingsDialog = new SettingsDialog;
 
 

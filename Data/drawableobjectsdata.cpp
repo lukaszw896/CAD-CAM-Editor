@@ -166,3 +166,18 @@ Drawable* DrawableObjectsData::findObjectNearCursor()
     }
     return NULL;
 }
+
+Point* DrawableObjectsData::findPointBySceneClick(QPoint screenPos, QPoint screenSize)
+{
+    double tmpXPos,tmpYPos;
+    for(int i=0;i<pointList.size();i++){
+        tmpXPos = screenSize.x() * (pointList[i]->transPointCoordinates.x+1.0)/2;
+        tmpYPos = screenSize.y() - screenSize.y() * (pointList[i]->transPointCoordinates.y+1.0)/2;
+        float distance = sqrt(pow(screenPos.x() - tmpXPos,2)+pow(screenPos.y() - tmpYPos,2));
+        if(distance < 10)
+        {
+            return pointList[i];
+        }
+    }
+    return NULL;
+}

@@ -34,7 +34,9 @@ protected:
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
+    void mouseDoubleClickEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
@@ -54,6 +56,9 @@ private:
 
     //last mouse position
     QPoint lastPos;
+    QPoint firstPos;
+
+    QPoint screenSize;
 
     Camera camera;
     DrawableObjectsData& drawableObjectsData = DrawableObjectsData::getInstance();
@@ -65,6 +70,8 @@ signals:
     void xRotationChanged(int angle);
     void yRotationChanged(int angle);
     void zRotationChanged(int angle);
+    void pointOnScreenClick(Point*);
+    void pointOnScreenDoubleClick(Point*);
 
 public slots:
     // slots for xyz-rotation slider

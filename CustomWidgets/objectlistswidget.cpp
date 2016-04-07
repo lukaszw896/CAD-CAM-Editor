@@ -155,3 +155,29 @@ void ObjectListsWidget::deleteCurveButtonClicked()
 
 }
 
+void ObjectListsWidget::pointOnSceneSelection(Point* point)
+{
+    for(int i=0;i<pointList->size().rheight();i++)
+    {
+        if(pointList->item(i)->text().toStdString() == point->name)
+        {
+            pointList->item(i)->setSelected(true);
+            pointHasBeenSelected();
+            break;
+        }
+    }
+}
+
+void ObjectListsWidget::pointOnSceneDoubleClick(Point * point)
+{
+    for(int i=0;i<pointList->size().rheight();i++)
+    {
+        if(pointList->item(i)->text().toStdString() == point->name)
+        {
+            pointList->item(i)->setSelected(true);
+            pointHasBeenDoubleClicked();
+            break;
+        }
+    }
+}
+

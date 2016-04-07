@@ -27,6 +27,8 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
 
     isSpacePressed = false;
     this->installEventFilter(this);
+
+    screenSize = QPoint(0,0);
 }
 
 OGlWidget::~OGlWidget()
@@ -120,6 +122,7 @@ void OGlWidget::paintGL()
 
 void OGlWidget::resizeGL(int width, int height)
 {
+    screenSize = QPoint(width,height);
     glViewport(0, 0, width, height);
     if(width>height){
         camera.xRatio = (float)width/(float)height;
@@ -132,9 +135,31 @@ void OGlWidget::resizeGL(int width, int height)
     else{camera.xRatio = 1.0f;camera.yRatio=1.0f;}
 }
 
+void OGlWidget::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    Point* point = drawableObjectsData.findPointBySceneClick(event->pos(), screenSize);
+    if(point != NULL)
+    {
+        emit pointOnScreenDoubleClick(point);
+    }
+}
+
 void OGlWidget::mousePressEvent(QMouseEvent *event)
 {
-    lastPos = event->pos();
+   firstPos = lastPos = event->pos();
+}
+
+void OGlWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    //It was a mouse click
+    if(event->pos() == firstPos)
+    {
+        Point* point = drawableObjectsData.findPointBySceneClick(event->pos(), screenSize);
+        if(point != NULL)
+        {
+            emit pointOnScreenClick(point);
+        }
+    }
 }
 
 void OGlWidget::mouseMoveEvent(QMouseEvent *event)

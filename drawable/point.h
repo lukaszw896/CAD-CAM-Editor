@@ -11,14 +11,14 @@ class Point : public Drawable
 public:
     Point();
     Point(Camera* camera);
-
+    glm::vec4 transPointCoordinates;
 private:
     static int id;
 
     Camera* camera;
 
     glm::vec4 pointCoordinates;
-    glm::vec4 transPointCoordinates;
+
     glm::vec4 leftEyeTransPointCoordinate;
     glm::vec4 rightEyeTransPointCoordinate;
 

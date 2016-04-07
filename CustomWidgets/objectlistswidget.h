@@ -30,6 +30,9 @@ public slots:
     void deletePointButtonClicked();
     void deleteCurveButtonClicked();
 
+    void pointOnSceneSelection(Point*);
+    void pointOnSceneDoubleClick(Point*);
+
 signals:
 
 

@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <string>
 #include <math.h>
+#include <QPoint>
 
 class DrawableObjectsData
 {
@@ -35,6 +36,8 @@ public:
 
     void moveCursorToTorusByName(std::string);
     void moveCursorToPointByName(std::string);
+
+    Point* findPointBySceneClick(QPoint screenPos, QPoint screenSize);
 
     Drawable* findObjectNearCursor();
 
