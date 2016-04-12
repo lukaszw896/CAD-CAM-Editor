@@ -58,6 +58,8 @@ private:
     QPoint lastPos;
     QPoint firstPos;
 
+    int screenWidth;
+    int screenHeight;
     QPoint screenSize;
 
     Camera camera;
@@ -72,6 +74,7 @@ signals:
     void zRotationChanged(int angle);
     void pointOnScreenClick(Point*);
     void pointOnScreenDoubleClick(Point*);
+    void cursorPositionChanged(int screenWidth, int screenHeight);
 
 public slots:
     // slots for xyz-rotation slider

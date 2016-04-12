@@ -5,6 +5,7 @@
 #include "drawable/point.h"
 #include "drawable/drawable.h"
 #include "drawable/cursor.h"
+#include "drawable/beziercurve.h"
 #include "Camera/camera.h"
 #include <algorithm>
 #include <string>
@@ -23,16 +24,24 @@ public:
 
     void addTorus(Torus*);
     void addPoint(Point*);
+    void addBezierCurve(BezierCurve*);
     void addCursor(Cursor*);
 
     void removeTorusByName(std::string);
     void removePointByName(std::string);
+    void removeBezierCurveByName(std::string);
+
     void selectTorusByName(std::string);
     void selectPointByName(std::string);
+    void selectBezierCurveByName(std::string);
+
     void deselectToruses();
     void deselectPoints();
+    void deselectBezierCurves();
+
     void removeTorus(Torus*);
     void removePoint(Point*);
+    void removeBezierCurves(BezierCurve*);
 
     void moveCursorToTorusByName(std::string);
     void moveCursorToPointByName(std::string);
@@ -43,9 +52,8 @@ public:
 
     std::vector<Torus*> torusList;
     std::vector<Point*> pointList;
+    std::vector<BezierCurve*> bezierCurveList;
     private:
-
-
 
         DrawableObjectsData();
 

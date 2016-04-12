@@ -13,6 +13,14 @@ DrawableObjectsData::DrawableObjectsData(){}
 
 void DrawableObjectsData::addPoint(Point* point)
 {
+   for(int i=0;i<bezierCurveList.size();i++)
+   {
+       if(bezierCurveList[i]->isSelected)
+       {
+           bezierCurveList[i]->pointVector.push_back(point);
+       }
+   }
+
    pointList.push_back(point);
    drawableObjects.push_back(point);
 }
@@ -26,6 +34,12 @@ void DrawableObjectsData::addCursor(Cursor * cursor)
 {
     this->cursor = cursor;
     drawableObjects.push_back(cursor);
+}
+
+void DrawableObjectsData::addBezierCurve(BezierCurve* bezierCurve)
+{
+    bezierCurveList.push_back(bezierCurve);
+    drawableObjects.push_back(bezierCurve);
 }
 
 void DrawableObjectsData::removeTorusByName(std::string name)
@@ -45,6 +59,17 @@ void DrawableObjectsData::removePointByName(std::string name)
         if(pointList[i]->name == name)
         {
             removePoint(pointList[i]);
+            break;
+        }
+    }
+}
+
+void DrawableObjectsData::removeBezierCurveByName(std::string name)
+{
+    for(int i=0; i<bezierCurveList.size();i++){
+        if(bezierCurveList[i]->name == name)
+        {
+            removeBezierCurves(bezierCurveList[i]);
             break;
         }
     }
@@ -72,6 +97,17 @@ void DrawableObjectsData::selectPointByName(std::string name)
     }
 }
 
+void DrawableObjectsData::selectBezierCurveByName(std::string name)
+{
+    for(int i=0; i<bezierCurveList.size();i++){
+        if(bezierCurveList[i]->name == name)
+        {
+            bezierCurveList[i]->isSelected = true;
+            break;
+        }
+    }
+}
+
 void DrawableObjectsData::deselectToruses()
 {
     for(int i=0; i<torusList.size();i++){
@@ -83,6 +119,13 @@ void DrawableObjectsData::deselectPoints()
 {
     for(int i=0; i<pointList.size();i++){
         pointList[i]->isSelected = false;
+    }
+}
+
+void DrawableObjectsData::deselectBezierCurves()
+{
+    for(int i=0; i<bezierCurveList.size();i++){
+        bezierCurveList[i]->isSelected = false;
     }
 }
 
@@ -103,6 +146,14 @@ void DrawableObjectsData::removeTorus(Torus* torus)
         initDrawableObjectsList();
 }
 
+void DrawableObjectsData::removeBezierCurves(BezierCurve * bezierCurve)
+{
+    std::vector<BezierCurve*>::iterator position = std::find(bezierCurveList.begin(), bezierCurveList.end(), bezierCurve);
+        if (position != bezierCurveList.end()) // == myVector.end() means the element was not found
+            bezierCurveList.erase(position);
+        initDrawableObjectsList();
+}
+
 void DrawableObjectsData::initDrawableObjectsList()
 {
     drawableObjects.clear();
@@ -115,6 +166,11 @@ void DrawableObjectsData::initDrawableObjectsList()
     for(int i=0;i<torusList.size();i++)
     {
         drawableObjects.push_back(torusList.at(i));
+    }
+
+    for(int i=0;i<bezierCurveList.size();i++)
+    {
+        drawableObjects.push_back(bezierCurveList.at(i));
     }
 
 }

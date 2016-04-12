@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     Data/drawableobjectsdata.cpp \
     drawable/cursor.cpp \
     CustomWidgets/oglwidget.cpp \
-    CustomWidgets/objectlistswidget.cpp
+    CustomWidgets/objectlistswidget.cpp \
+    drawable/beziercurve.cpp
 
 HEADERS  += window.h \
     edge.h \
@@ -182,6 +183,7 @@ HEADERS  += window.h \
     Data/drawableobjectsdata.h \
     drawable/cursor.h \
     CustomWidgets/oglwidget.h \
-    CustomWidgets/objectlistswidget.h
+    CustomWidgets/objectlistswidget.h \
+    drawable/beziercurve.h
 
 FORMS    += window.ui

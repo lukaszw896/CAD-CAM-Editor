@@ -42,16 +42,17 @@ void ObjectListsWidget::setupLayout()
     connect(torusList,SIGNAL(clicked(QModelIndex)),this,SLOT(torusHasBeenSelected()));
     connect(torusList,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(torusHasBeenDoubleClicked()));
     pointList = new QListWidget;
-    //pointList->setSelectionMode(QAbstractItemView::MultiSelection);
+    pointList->setSelectionMode(QAbstractItemView::MultiSelection);
     connect(pointList,SIGNAL(clicked(QModelIndex)),this,SLOT(pointHasBeenSelected()));
     connect(pointList,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(pointHasBeenDoubleClicked()));
-    curveList = new QListWidget;
+    bezierCurveTreeList = new QTreeWidget;
+    connect(bezierCurveTreeList, SIGNAL(clicked(QModelIndex)),this, SLOT(bezierCurveHasBeenClicked()));
 
     torusLayout->addWidget(torusList);
     torusLayout->addWidget(deleteTorusButton);
     pointLayout->addWidget(pointList);
     pointLayout->addWidget(deletePointButton);
-    curveLayout->addWidget(curveList);
+    curveLayout->addWidget(bezierCurveTreeList);
     curveLayout->addWidget(deleteCurveButton);
 
     mainLayout = new QVBoxLayout;
@@ -65,6 +66,7 @@ void ObjectListsWidget::updateListsContent()
 {
     torusList->clear();
     pointList->clear();
+    bezierCurveTreeList->clear();
 
     for(int i=0;i<drawableObjectsData.torusList.size();i++)
     {
@@ -74,6 +76,11 @@ void ObjectListsWidget::updateListsContent()
     for(int i=0; i<drawableObjectsData.pointList.size();i++)
     {
         pointList->addItem(QString::fromStdString(drawableObjectsData.pointList[i]->name));
+    }
+
+    for(int i=0; i<drawableObjectsData.bezierCurveList.size();i++)
+    {
+        addBezierCurveToList(drawableObjectsData.bezierCurveList[i],bezierCurveTreeList,QString::fromStdString(drawableObjectsData.bezierCurveList[i]->name));
     }
 
 }
@@ -116,11 +123,22 @@ void ObjectListsWidget::pointHasBeenDoubleClicked()
     }
 }
 
+void ObjectListsWidget::bezierCurveHasBeenClicked()
+{
+    drawableObjectsData.deselectBezierCurves();
+    QList<QTreeWidgetItem*> itemList = bezierCurveTreeList->selectedItems();
+    for(int i=0; i < itemList.size(); i++)
+    {
+        drawableObjectsData.selectBezierCurveByName(itemList[i]->text(0).toStdString());
+    }
+}
+
 void ObjectListsWidget::deleteTorusButtonClicked()
 {
     //items in lists are deseleted while deleting element (?)
     drawableObjectsData.deselectToruses();
     drawableObjectsData.deselectPoints();
+    drawableObjectsData.deselectBezierCurves();
 
 
     QList<QListWidgetItem *> itemList = torusList->selectedItems();
@@ -181,3 +199,21 @@ void ObjectListsWidget::pointOnSceneDoubleClick(Point * point)
     }
 }
 
+void ObjectListsWidget::addBezierCurveToList(BezierCurve* bezierCurve, QTreeWidget* parent, QString name)
+{
+    QTreeWidgetItem* treeWidgetItem = new QTreeWidgetItem(parent);
+    treeWidgetItem->setText(0, name);
+    for(int i=0;i<bezierCurve->pointVector.size();i++)
+    {
+        addPointToCurve(treeWidgetItem,QString::fromStdString(bezierCurve->pointVector[i]->name));
+    }
+    parent->addTopLevelItem(treeWidgetItem);
+
+}
+
+void ObjectListsWidget::addPointToCurve(QTreeWidgetItem* parent, QString name)
+{
+    QTreeWidgetItem* treeWidgetItem = new QTreeWidgetItem(parent);
+    treeWidgetItem->setText(0, name);
+    parent->addChild(treeWidgetItem);
+}

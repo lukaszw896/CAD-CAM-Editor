@@ -1,11 +1,14 @@
 #ifndef OBJECTLISTSWIDGET_H
 #define OBJECTLISTSWIDGET_H
 
+
+
 #include <QWidget>
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QListWidget>
+#include <QTreeWidget>
 #include <QListWidgetItem>
 #include <QAbstractAnimation>
 #include <QPushButton>
@@ -26,12 +29,15 @@ public slots:
     void pointHasBeenSelected();
     void pointHasBeenDoubleClicked();
 
+    void bezierCurveHasBeenClicked();
+
     void deleteTorusButtonClicked();
     void deletePointButtonClicked();
     void deleteCurveButtonClicked();
 
     void pointOnSceneSelection(Point*);
     void pointOnSceneDoubleClick(Point*);
+
 
 signals:
 
@@ -53,7 +59,7 @@ private:
 
     QListWidget* torusList;
     QListWidget* pointList;
-    QListWidget* curveList;
+    QTreeWidget* bezierCurveTreeList;
 
     QPushButton* deleteTorusButton;
     QPushButton* deletePointButton;
@@ -62,6 +68,9 @@ private:
     void setupGroupBoxes();
     void setupLayout();
     void setupButtons();
+
+    void addBezierCurveToList(BezierCurve* bezierCurve, QTreeWidget* parent, QString name);
+    void addPointToCurve(QTreeWidgetItem* parent, QString name);
 };
 
 #endif // OBJECTLISTSWIDGET_H

@@ -14,13 +14,13 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     camera = Camera();
     drawableObjectsData.camera = &camera;
 
-   // Window& w = Window::getInstance();
-   // Ui::Window* ui = w.getUi();
+    // Window& w = Window::getInstance();
+    // Ui::Window* ui = w.getUi();
     /*drawableObjects.push_back(new Torus(&camera));
     //drawableObjects.push_back(new Torus(&camera));
     drawableObjects.push_back(new Point(&camera));*/
-  //  drawableObjectsData.addTorus(new Torus(&camera));
-        //drawableObjects.push_back(new Torus(&camera));
+    //drawableObjectsData.addTorus(new Torus(&camera));
+    //drawableObjects.push_back(new Torus(&camera));
     //drawableObjectsData.addPoint(new Point(&camera));
     drawableObjectsData.addCursor(new Cursor(&camera));
 
@@ -123,6 +123,8 @@ void OGlWidget::paintGL()
 void OGlWidget::resizeGL(int width, int height)
 {
     screenSize = QPoint(width,height);
+    screenWidth = width;
+    screenHeight = height;
     glViewport(0, 0, width, height);
     if(width>height){
         camera.xRatio = (float)width/(float)height;
@@ -215,6 +217,7 @@ void OGlWidget::keyPressEvent(QKeyEvent *event)
 
     //cursor movement
     if(!keysPressed.contains(Qt::Key_Space)){
+        //emit cursorPositionChanged(screenwidth,screenHeight);
         if(keysPressed.contains(Qt::Key_W)){
             drawableObjectsData.cursor->yPos += drawableObjectsData.cursor->speedMovement;
             drawableObjectsData.cursor->updateTranslationMatY();
@@ -248,6 +251,7 @@ void OGlWidget::keyPressEvent(QKeyEvent *event)
             objectToMove = drawableObjectsData.findObjectNearCursor();
         }
         else if(objectToMove != NULL){
+            //emit cursorPositionChanged(screenwidth,screenHeight);
 
             if(keysPressed.contains(Qt::Key_W)){
                 drawableObjectsData.cursor->yPos += drawableObjectsData.cursor->speedMovement;

@@ -25,6 +25,7 @@ signals:
     void drawableDataChanged();
 
 public slots:
+    void updateCursorInfo(int screenWidth, int screenHeight);
 
 protected:
    // void contextMenuEvent(QContextMenuEvent *event) Q_DECL_OVERRIDE;
@@ -58,9 +59,15 @@ private:
     QHBoxLayout *leftLayout;
     QHBoxLayout *mainLayout;
 
+    QLabel *screenPosition;
+    QLabel *xRealCord;
+    QLabel *yRealCord;
+    QLabel *zRealCord;
+
     void openStereoscopySettingsDialog();
     void addPoint();
     void addTorus();
+    void addBezierCurve();
 
 };
 
