@@ -28,9 +28,11 @@ void Point::computeGlobalTransformationMatrix()
 
 void Point::transform()
 {
+    localTransPointCoordinates = localTransformationMatrix * pointCoordinates;
+
     if(!camera->isStereoscopic)
     {
-        transPointCoordinates = globalTransformationMatrix * pointCoordinates;
+        transPointCoordinates = camera->transformationMatrix * localTransPointCoordinates;
         transPointCoordinates.x = transPointCoordinates.x / transPointCoordinates.w;
         transPointCoordinates.y = transPointCoordinates.y / transPointCoordinates.w;
         transPointCoordinates.x /= camera->xRatio;
@@ -38,13 +40,13 @@ void Point::transform()
     }
     else
     {
-        leftEyeTransPointCoordinate = camera->transformationMatrixLeftEye*localTransformationMatrix* pointCoordinates;
+        leftEyeTransPointCoordinate = camera->transformationMatrixLeftEye*localTransPointCoordinates;
         leftEyeTransPointCoordinate.x = leftEyeTransPointCoordinate.x / leftEyeTransPointCoordinate.w;
         leftEyeTransPointCoordinate.y = leftEyeTransPointCoordinate.y / leftEyeTransPointCoordinate.w;
         leftEyeTransPointCoordinate.x /= camera->xRatio;
         leftEyeTransPointCoordinate.y /= camera->yRatio;
 
-        rightEyeTransPointCoordinate = camera->transformationMatrixRightEye*localTransformationMatrix* pointCoordinates;
+        rightEyeTransPointCoordinate = camera->transformationMatrixRightEye*localTransPointCoordinates;
         rightEyeTransPointCoordinate.x = rightEyeTransPointCoordinate.x / rightEyeTransPointCoordinate.w;
         rightEyeTransPointCoordinate.y = rightEyeTransPointCoordinate.y / rightEyeTransPointCoordinate.w;
         rightEyeTransPointCoordinate.x /= camera->xRatio;

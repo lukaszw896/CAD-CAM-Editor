@@ -125,6 +125,8 @@ void OGlWidget::resizeGL(int width, int height)
     screenSize = QPoint(width,height);
     screenWidth = width;
     screenHeight = height;
+    camera.screenHeight = height;
+    camera.screenWidth = width;
     glViewport(0, 0, width, height);
     if(width>height){
         camera.xRatio = (float)width/(float)height;

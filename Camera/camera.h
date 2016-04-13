@@ -41,6 +41,9 @@ public:
 
     bool isStereoscopic;
 
+    int screenWidth = 500;
+    int screenHeight = 500;
+
 };
 
 #endif // CAMERA_H

@@ -12,6 +12,7 @@ public:
     Point();
     Point(Camera* camera);
     glm::vec4 transPointCoordinates;
+    glm::vec4 localTransPointCoordinates;
 private:
     static int id;
 
