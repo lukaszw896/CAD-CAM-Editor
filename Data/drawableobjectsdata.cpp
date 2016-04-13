@@ -55,6 +55,10 @@ void DrawableObjectsData::removeTorusByName(std::string name)
 
 void DrawableObjectsData::removePointByName(std::string name)
 {
+    for(int i=0;i<bezierCurveList.size();i++)
+    {
+        bezierCurveList[i]->removePointByName(name);
+    }
     for(int i=0; i<pointList.size();i++){
         if(pointList[i]->name == name)
         {

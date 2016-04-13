@@ -322,11 +322,12 @@ void OGlWidget::draw()
    // glBlendFunc(GL_SRC_COLOR, GL_ONE);
     glBlendEquation(GL_MAX);
 
-    glPointSize(-50/camera.zPos - (5.f-camera.rProjection)/5);
+   // glPointSize(-50/camera.zPos - (5.f-camera.rProjection)/5);
     //glLineWidth(-15/camera.zPos - (5.f-camera.rProjection)/5);
     glLineWidth(1);
 
     for(int i=0; i<drawableObjectsData.drawableObjects.size();i++){
+        glPointSize(-50/camera.zPos - (5.f-camera.rProjection)/5);
         drawableObjectsData.drawableObjects[i]->draw();
     }
 
