@@ -250,17 +250,32 @@ void ObjectListsWidget::showPointsContextMenu(const QPoint &pos)
 
 void ObjectListsWidget::showBezierCurvesContextMenu(const QPoint &pos)
 {
+    QList<QTreeWidgetItem*> itemList = bezierCurveTreeList->selectedItems();
+    if(itemList.size()>0){
+    string name = itemList.at(0)->text(0).toStdString();
+
     // Handle global position
         QPoint globalPos = bezierCurveTreeList->mapToGlobal(pos);
 
         // Create menu and insert some actions
         QMenu myMenu;
+        if(name[0] == 'B')
+        {
+            myMenu.addAction("RemoveCurve", this, SLOT(removeBezierCurve()));
+            myMenu.addAction("Turn on/off polygon", this, SLOT(turnOnOffPolygon()));
 
-        myMenu.addAction("Insert", this, SLOT(addBezierCurveListItem()));
-        myMenu.addAction("Erase",  this, SLOT(eraseBezierCurveListItem()));
+          //  myMenu.addAction("Erase",  this, SLOT(eraseBezierCurveListItem()));
+        }
+        else
+        {
+            string parentName = itemList.at(0)->parent()->text(0).toStdString();
+            myMenu.addAction("Remove point", this, SLOT(removePointFromBezierCurve()));
+        }
+
 
         // Show context menu at handling position
         myMenu.exec(globalPos);
+    }
 }
 
 void ObjectListsWidget::drawableHasBeenRenamed()
@@ -314,9 +329,49 @@ void ObjectListsWidget::addBezierCurveListItem()
 
 }
 
-void ObjectListsWidget::eraseBezierCurveListItem()
+void ObjectListsWidget::removeBezierCurve()
 {
+    QList<QTreeWidgetItem*> itemList = bezierCurveTreeList->selectedItems();
+    string name = itemList.at(0)->text(0).toStdString();
 
+    drawableObjectsData.removeBezierCurveByName(name);
+    updateListsContent();
+}
+
+void ObjectListsWidget::removePointFromBezierCurve()
+{
+    QList<QTreeWidgetItem*> itemList = bezierCurveTreeList->selectedItems();
+    string name = itemList.at(0)->text(0).toStdString();
+    string parentName = itemList.at(0)->parent()->text(0).toStdString();
+
+
+    BezierCurve* bezierCurve = drawableObjectsData.getBezierCurveByName(parentName);
+    std::vector<Point*>::iterator position = bezierCurve->pointVector.begin();
+    for(int i=0;i<bezierCurve->pointVector.size();i++)
+    {
+
+        if(bezierCurve->pointVector[i]->name == name)
+        {
+            position = position + i;
+            bezierCurve->pointVector.erase(position);
+        }
+    }
+    updateListsContent();
+}
+
+void ObjectListsWidget::turnOnOffPolygon()
+{
+    QList<QTreeWidgetItem*> itemList = bezierCurveTreeList->selectedItems();
+    string name = itemList.at(0)->text(0).toStdString();
+    BezierCurve* bezierCurve = drawableObjectsData.getBezierCurveByName(name);
+    if(bezierCurve->drawPolygon == true)
+    {
+        bezierCurve->drawPolygon = false;
+    }
+    else
+    {
+        bezierCurve->drawPolygon = true;
+    }
 }
 
 ///NORMAL METHODS

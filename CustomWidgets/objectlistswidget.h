@@ -52,7 +52,9 @@ public slots:
 
     //BEZIER CURVE TREE WIDGET SLOTS
     void addBezierCurveListItem();
-    void eraseBezierCurveListItem();
+    void removeBezierCurve();
+    void removePointFromBezierCurve();
+    void turnOnOffPolygon();
 
 signals:
 

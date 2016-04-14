@@ -18,10 +18,11 @@ public:
     BezierCurve(Camera* camera);
     vector<Point*> pointVector;
     void removePointByName(string name);
+    bool drawPolygon;
 private:
 
     static int id;
-    bool drawPolygon;
+
 
     Camera* camera;
 
