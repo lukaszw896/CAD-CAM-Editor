@@ -118,6 +118,7 @@ void OGlWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     draw();
+    emit cursorPositionChanged();
 }
 
 void OGlWidget::resizeGL(int width, int height)

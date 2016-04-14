@@ -52,12 +52,20 @@ void DrawerWindow::initObjects()
     //connection between on scene click and item list
     connect(oglWidget,SIGNAL(pointOnScreenClick(Point*)),objectListsWidget,SLOT(pointOnSceneSelection(Point*)));
     connect(oglWidget,SIGNAL(pointOnScreenDoubleClick(Point*)),objectListsWidget,SLOT(pointOnSceneDoubleClick(Point*)));
+    connect(oglWidget,SIGNAL(cursorPositionChanged()),this,SLOT(updateCursorInfo()));
 
     settingsDialog = new SettingsDialog;
 
     connect(scaleSlider,SIGNAL(valueChanged(int)),oglWidget,SLOT(changeScale(int)));
     connect(settingsDialog,SIGNAL(turnOnOffStereoscopy(bool)),oglWidget,SLOT(checkBoxStateChanged(bool)));
     connect(settingsDialog,SIGNAL(eyeDistanceValueChanged(int)),oglWidget,SLOT(changeEyeDistance(int)));
+
+    cordsBox = new QGroupBox(tr("Cords"));
+
+    screenPosition = new QLabel();
+    xRealCord = new QLabel();
+    yRealCord = new QLabel();
+    zRealCord = new QLabel();
 
 }
 
@@ -67,6 +75,7 @@ void DrawerWindow::initLayout()
     leftLayout->addWidget(oglWidget);
 
     rightLayout = new QVBoxLayout;
+    rightLayout->addWidget(cordsBox);
     rightLayout->addWidget(objectListsWidget);
     rightLayout->addWidget(scaleLabel);
     rightLayout->addWidget(scaleSlider);
@@ -83,6 +92,14 @@ void DrawerWindow::initLayout()
     centralWidget = new QWidget(this);
     this->setCentralWidget( centralWidget );
     centralWidget->setLayout(mainLayout);
+
+    cordsLayout = new QVBoxLayout;
+    cordsLayout->addWidget(screenPosition);
+    cordsLayout->addWidget(xRealCord);
+    cordsLayout->addWidget(yRealCord);
+    cordsLayout->addWidget(zRealCord);
+    cordsBox->setLayout(cordsLayout);
+
 
 }
 
@@ -143,8 +160,17 @@ void DrawerWindow::addBezierCurve()
     emit drawableDataChanged();
 }
 
-void DrawerWindow::updateCursorInfo(int screenWidth, int screenHeight)
+void DrawerWindow::updateCursorInfo()
 {
+    int screenXPos = (1.f+drawableObjectsData.cursor->centerOnScreenPos.x)/2*drawableObjectsData.camera->screenWidth;
+    int screenYPos = (1.f+drawableObjectsData.cursor->centerOnScreenPos.y)/2*(-drawableObjectsData.camera->screenHeight)
+                        +drawableObjectsData.camera->screenHeight;
+    vec4 realPosition = drawableObjectsData.cursor->getCursorPos();
+
+    screenPosition->setText(QString::fromStdString("ScrPos:"+std::to_string(screenXPos)+"::"+std::to_string(screenYPos)));
+    xRealCord->setText(QString::fromStdString("Real X: "+ std::to_string(realPosition.x)));
+    yRealCord->setText(QString::fromStdString("Real Y: "+ std::to_string(realPosition.y)));
+    zRealCord->setText(QString::fromStdString("Real Z: "+ std::to_string(realPosition.z)));
 
 }
 

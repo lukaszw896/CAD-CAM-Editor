@@ -13,11 +13,12 @@ public:
     Cursor(Camera* camera);
     float speedMovement;
     glm::vec4 getCursorPos();
+    glm::vec4 centerOnScreenPos;
 private:
     float axisLength;
 
     Camera* camera;
-
+    glm::vec4 centerPos;
     std::vector<glm::vec4> pointCoordinates;
     std::vector<glm::vec4> transPointCoordinates;
     std::vector<glm::vec4> leftEyeTransPointCoordinate;

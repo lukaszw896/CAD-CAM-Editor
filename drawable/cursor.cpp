@@ -16,12 +16,15 @@ Cursor::Cursor(Camera* camera)
     leftEyeTransPointCoordinate.resize(6);
     rightEyeTransPointCoordinate.resize(6);
 
+
     pointCoordinates[0] = glm::vec4(-axisLength,0,0,1);
     pointCoordinates[1] = glm::vec4(axisLength,0,0,1);
     pointCoordinates[2] = glm::vec4(0,-axisLength,0,1);
     pointCoordinates[3] = glm::vec4(0,axisLength,0,1);
     pointCoordinates[4] = glm::vec4(0,0,-axisLength,1);
     pointCoordinates[5] = glm::vec4(0,0,axisLength,1);
+
+    centerPos = glm::vec4(0,0,0,1);
 }
 
 void Cursor::computeLocalTransformationMatrix()
@@ -36,6 +39,11 @@ void Cursor::computeGlobalTransformationMatrix()
 
 void Cursor::transform()
 {
+    centerOnScreenPos = globalTransformationMatrix * centerPos;
+    centerOnScreenPos.x = centerOnScreenPos.x / centerOnScreenPos.w;
+    centerOnScreenPos.y = centerOnScreenPos.y / centerOnScreenPos.w;
+    centerOnScreenPos.x /= camera->xRatio;
+    centerOnScreenPos.y /= camera->yRatio;
     if(!camera->isStereoscopic)
     {
         for(int i=0;i<6;i++){

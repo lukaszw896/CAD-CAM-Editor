@@ -25,7 +25,7 @@ signals:
     void drawableDataChanged();
 
 public slots:
-    void updateCursorInfo(int screenWidth, int screenHeight);
+    void updateCursorInfo();
 
 protected:
    // void contextMenuEvent(QContextMenuEvent *event) Q_DECL_OVERRIDE;
@@ -49,12 +49,14 @@ private:
     QAction *stereoscopyAct;
 
     OGlWidget *oglWidget;
+    QGroupBox* cordsBox;
     ObjectListsWidget* objectListsWidget;
     SettingsDialog *settingsDialog;
 
     QLabel *scaleLabel;
     QSlider *scaleSlider;
 
+    QVBoxLayout *cordsLayout;
     QVBoxLayout *rightLayout;
     QHBoxLayout *leftLayout;
     QHBoxLayout *mainLayout;

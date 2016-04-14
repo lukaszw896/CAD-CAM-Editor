@@ -74,7 +74,7 @@ signals:
     void zRotationChanged(int angle);
     void pointOnScreenClick(Point*);
     void pointOnScreenDoubleClick(Point*);
-    void cursorPositionChanged(int screenWidth, int screenHeight);
+    void cursorPositionChanged();
 
 public slots:
     // slots for xyz-rotation slider
