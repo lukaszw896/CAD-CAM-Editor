@@ -16,6 +16,7 @@
 #include "drawable/point.h"
 #include "drawable/torus.h"
 #include "Data/drawableobjectsdata.h"
+#include "Dialogs/namechangedialog.h"
 
 class ObjectListsWidget : public QWidget
 {
@@ -42,9 +43,12 @@ public slots:
     void showPointsContextMenu(const QPoint&);
     void showBezierCurvesContextMenu(const QPoint&);
 
+    void drawableHasBeenRenamed();
+
     //POINT LIST SLOTS
 
     void addToCurve(QAction*);
+    void renamePoint();
 
     //BEZIER CURVE TREE WIDGET SLOTS
     void addBezierCurveListItem();
@@ -75,6 +79,9 @@ private:
     QPushButton* deleteTorusButton;
     QPushButton* deletePointButton;
     QPushButton* deleteCurveButton;
+
+    NameChangeDialog* nameChangeDialog;
+
 
     void setupGroupBoxes();
     void setupLayout();

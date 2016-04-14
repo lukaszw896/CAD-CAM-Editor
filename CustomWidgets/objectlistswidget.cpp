@@ -12,6 +12,9 @@ ObjectListsWidget::ObjectListsWidget()
 
     bezierCurveTreeList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(bezierCurveTreeList,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showBezierCurvesContextMenu(QPoint)));
+
+    nameChangeDialog = new NameChangeDialog();
+    connect(nameChangeDialog,SIGNAL(nameHasBeenChanged()),this,SLOT(drawableHasBeenRenamed()));
 }
 
 void ObjectListsWidget::setupButtons()
@@ -238,7 +241,7 @@ void ObjectListsWidget::showPointsContextMenu(const QPoint &pos)
         }
         if(itemList.count() == 1)
         {
-            myMenu.addAction("Rename point", this, SLOT(addBezierCurveListItem()));
+            myMenu.addAction("Rename point", this, SLOT(renamePoint()));
         }
 
         // Show context menu at handling position
@@ -258,6 +261,11 @@ void ObjectListsWidget::showBezierCurvesContextMenu(const QPoint &pos)
 
         // Show context menu at handling position
         myMenu.exec(globalPos);
+}
+
+void ObjectListsWidget::drawableHasBeenRenamed()
+{
+    updateListsContent();
 }
 
 ///POINT LIST SLOTS
@@ -290,6 +298,14 @@ void ObjectListsWidget::addToCurve(QAction * act)
      drawableObjectsData.deselectPoints();
      drawableObjectsData.deselectBezierCurves();
      updateListsContent();
+}
+
+void ObjectListsWidget::renamePoint()
+{
+    QList<QListWidgetItem*> itemList = pointList->selectedItems();
+    Point* point = drawableObjectsData.getPointByName(itemList.at(0)->text().toStdString());
+    nameChangeDialog->setDrawable(point);
+    nameChangeDialog->show();
 }
 
 //BEZIER CURVE TREE WIDGET SLOTS

@@ -34,6 +34,7 @@ SettingsDialog::SettingsDialog(QWidget *parent ) :QDialog(parent)
 void SettingsDialog::checkBoxChecked(bool value)
 {
     emit turnOnOffStereoscopy(value);
+
 }
 
 void SettingsDialog::eyeDistanceSliderValueChanged(int value)
