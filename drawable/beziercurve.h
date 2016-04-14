@@ -66,6 +66,8 @@ private:
 
     void threeDimBezier0C(Point* p1, Point* p2, Point* p3, Point* p4, int pointNum);
 
+    void drawSingleOGLPoint(vec4* point);
+
     void transform();
     void draw();
 };

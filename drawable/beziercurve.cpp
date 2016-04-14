@@ -197,12 +197,13 @@ void BezierCurve::oneDimBezier0C(Point* p1, Point* p2, int pointNum)
            float z = (p1->localTransPointCoordinates.z * (1-t)) + (p2->localTransPointCoordinates.z * t);
 
            pointToDraw = vec4(x,y,z,1);
-           pointToDraw = camera->transformationMatrix * pointToDraw;
+           drawSingleOGLPoint(&pointToDraw);
+          /* pointToDraw = camera->transformationMatrix * pointToDraw;
            pointToDraw.x /= pointToDraw.w;
            pointToDraw.y /= pointToDraw.w;
            pointToDraw.x /= camera->xRatio;
            pointToDraw.y /= camera->yRatio;
-           glVertex2f(pointToDraw.x,pointToDraw.y);
+           glVertex2f(pointToDraw.x,pointToDraw.y);*/
            t += distanceT;
     }
 
@@ -226,13 +227,15 @@ void BezierCurve::twoDimBezier0C(Point* p1, Point* p2, Point* p3, int pointNum)
             float y = (p1->localTransPointCoordinates.y * B0) + (p2->localTransPointCoordinates.y* B1) + (p3->localTransPointCoordinates.y * B2);
             float z = (p1->localTransPointCoordinates.z * B0) + (p2->localTransPointCoordinates.z * B1) + (p3->localTransPointCoordinates.z * B2);
 
+
            pointToDraw = vec4(x,y,z,1);
-           pointToDraw = camera->transformationMatrix * pointToDraw;
+           drawSingleOGLPoint(&pointToDraw);
+          /* pointToDraw = camera->transformationMatrix * pointToDraw;
            pointToDraw.x /= pointToDraw.w;
            pointToDraw.y /= pointToDraw.w;
            pointToDraw.x /= camera->xRatio;
            pointToDraw.y /= camera->yRatio;
-           glVertex2f(pointToDraw.x,pointToDraw.y);
+           glVertex2f(pointToDraw.x,pointToDraw.y);*/
            t += distanceT;
     }
 }
@@ -261,12 +264,53 @@ void BezierCurve::threeDimBezier0C(Point* p1, Point* p2, Point* p3, Point* p4, i
                           t*t*t*p4->localTransPointCoordinates.z;
 
                pointToDraw = vec4(x,y,z,1);
-               pointToDraw = camera->transformationMatrix * pointToDraw;
+               drawSingleOGLPoint(&pointToDraw);
+               /*pointToDraw = camera->transformationMatrix * pointToDraw;
                pointToDraw.x /= pointToDraw.w;
                pointToDraw.y /= pointToDraw.w;
                pointToDraw.x /= camera->xRatio;
                pointToDraw.y /= camera->yRatio;
-               glVertex2f(pointToDraw.x,pointToDraw.y);
+               glVertex2f(pointToDraw.x,pointToDraw.y);*/
                t += distanceT;
         }
 }
+
+void BezierCurve::drawSingleOGLPoint(vec4* pointToDraw)
+{
+
+    if(!camera->isStereoscopic){
+
+        *pointToDraw = camera->transformationMatrix * *pointToDraw;
+        if(!(pointToDraw->w >=-0.06)){
+            pointToDraw->x /= pointToDraw->w;
+            pointToDraw->y /= pointToDraw->w;
+            pointToDraw->x /= camera->xRatio;
+            pointToDraw->y /= camera->yRatio;
+            glVertex2f(pointToDraw->x,pointToDraw->y);
+        }
+    }
+    else
+    {
+        vec4 tmp = vec4(*pointToDraw);
+        glColor3f(0.4,0.0, 0.0);
+        *pointToDraw = camera->transformationMatrixLeftEye * *pointToDraw;
+        if(!(pointToDraw->w >=-0.06)){
+            pointToDraw->x /= pointToDraw->w;
+            pointToDraw->y /= pointToDraw->w;
+            pointToDraw->x /= camera->xRatio;
+            pointToDraw->y /= camera->yRatio;
+            glVertex2f(pointToDraw->x,pointToDraw->y);
+        }
+        glColor3f(0, 0.5, 0.5);
+        tmp = camera->transformationMatrixRightEye * tmp;
+        if(!(tmp.w >=-0.06)){
+            tmp.x /= tmp.w;
+            tmp.y /= pointToDraw->w;
+            tmp.x /= camera->xRatio;
+            tmp.y /= camera->yRatio;
+            glVertex2f(tmp.x,tmp.y);
+        }
+    }
+}
+
+

@@ -81,6 +81,7 @@ void Cursor::draw()
     glBegin(GL_LINES);
     glLineWidth(2);
     if(!camera->isStereoscopic){
+        if(!(transPointCoordinates[0].w>=-0.06)){
         glColor4f(1,0,0,1.0);
         glVertex2f(transPointCoordinates[0].x,transPointCoordinates[0].y);
         glVertex2f(transPointCoordinates[1].x,transPointCoordinates[1].y);
@@ -90,18 +91,21 @@ void Cursor::draw()
         glColor4f(0,0,1,1.0);
         glVertex2f(transPointCoordinates[4].x,transPointCoordinates[4].y);
         glVertex2f(transPointCoordinates[5].x,transPointCoordinates[5].y);
-
+        }
 
     }else
     {
         glColor3f(0.4,0.0, 0.0);
-        for(int i=0;i<6;i++){
-            glVertex2f(leftEyeTransPointCoordinate[i].x,leftEyeTransPointCoordinate[i].y);
-        }
+        if(!(leftEyeTransPointCoordinate[0].w>=-0.06)){
+            for(int i=0;i<6;i++){
 
-        glColor3f(0, 0.5, 0.5);
-        for(int i=0;i<6;i++){
-            glVertex2f(rightEyeTransPointCoordinate[i].x,rightEyeTransPointCoordinate[i].y);
+                glVertex2f(leftEyeTransPointCoordinate[i].x,leftEyeTransPointCoordinate[i].y);
+            }
+
+            glColor3f(0, 0.5, 0.5);
+            for(int i=0;i<6;i++){
+                glVertex2f(rightEyeTransPointCoordinate[i].x,rightEyeTransPointCoordinate[i].y);
+            }
         }
     }
     glEnd();
