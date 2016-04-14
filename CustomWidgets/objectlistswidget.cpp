@@ -6,6 +6,12 @@ ObjectListsWidget::ObjectListsWidget()
     setupGroupBoxes();
     setupLayout();
     updateListsContent();
+
+    pointList->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(pointList,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showPointsContextMenu(QPoint)));
+
+    bezierCurveTreeList->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(bezierCurveTreeList,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showBezierCurvesContextMenu(QPoint)));
 }
 
 void ObjectListsWidget::setupButtons()
@@ -42,7 +48,7 @@ void ObjectListsWidget::setupLayout()
     connect(torusList,SIGNAL(clicked(QModelIndex)),this,SLOT(torusHasBeenSelected()));
     connect(torusList,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(torusHasBeenDoubleClicked()));
     pointList = new QListWidget;
-    pointList->setSelectionMode(QAbstractItemView::MultiSelection);
+    pointList->setSelectionMode(QAbstractItemView::ExtendedSelection);
     connect(pointList,SIGNAL(clicked(QModelIndex)),this,SLOT(pointHasBeenSelected()));
     connect(pointList,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(pointHasBeenDoubleClicked()));
     bezierCurveTreeList = new QTreeWidget;
@@ -61,6 +67,8 @@ void ObjectListsWidget::setupLayout()
     mainLayout->addWidget(curveGroupBox);
     setLayout(mainLayout);
 }
+
+///SLOTS
 
 void ObjectListsWidget::updateListsContent()
 {
@@ -198,6 +206,104 @@ void ObjectListsWidget::pointOnSceneDoubleClick(Point * point)
         }
     }
 }
+
+void ObjectListsWidget::showPointsContextMenu(const QPoint &pos)
+{
+        QList<QListWidgetItem *> itemList = pointList->selectedItems();
+    // Handle global position
+        QPoint globalPos = pointList->mapToGlobal(pos);
+
+        // Create menu and insert some actions
+        QMenu myMenu;
+        if(itemList.count()>0)
+        {
+            QMenu* addToCurveMenu = new QMenu("Add to curve");
+            ///
+            QString ch_name ;
+            for(int j=0; j<bezierCurveTreeList->topLevelItemCount(); j++){
+                ch_name = bezierCurveTreeList->topLevelItem(j)->text(0);
+                QAction *subMenuAct = addToCurveMenu->addAction(ch_name);
+                subMenuAct->setData(ch_name);
+            }
+            QAction *subMenuAct = addToCurveMenu->addAction(tr("Create New Bezier"));
+            subMenuAct->setData(ch_name);
+
+            connect(addToCurveMenu, SIGNAL(triggered(QAction *)),
+                    this, SLOT(addToCurve(QAction *)), Qt::UniqueConnection);
+
+            ///
+
+            myMenu.addMenu(addToCurveMenu);
+            myMenu.addAction("Delete", this, SLOT(deletePointButtonClicked()));
+        }
+        if(itemList.count() == 1)
+        {
+            myMenu.addAction("Rename point", this, SLOT(addBezierCurveListItem()));
+        }
+
+        // Show context menu at handling position
+        myMenu.exec(globalPos);
+}
+
+void ObjectListsWidget::showBezierCurvesContextMenu(const QPoint &pos)
+{
+    // Handle global position
+        QPoint globalPos = bezierCurveTreeList->mapToGlobal(pos);
+
+        // Create menu and insert some actions
+        QMenu myMenu;
+
+        myMenu.addAction("Insert", this, SLOT(addBezierCurveListItem()));
+        myMenu.addAction("Erase",  this, SLOT(eraseBezierCurveListItem()));
+
+        // Show context menu at handling position
+        myMenu.exec(globalPos);
+}
+
+///POINT LIST SLOTS
+
+void ObjectListsWidget::addToCurve(QAction * act)
+{
+    QList<QListWidgetItem*> listItem = pointList->selectedItems();
+    Point* point = drawableObjectsData.getPointByName(listItem.at(0)->text().toStdString());
+    string curveName = act->text().toStdString();
+    if(curveName != "Create New Bezier")
+    {
+        BezierCurve* bezierCurve = drawableObjectsData.getBezierCurveByName(curveName);
+        for(int i=0;i<listItem.count();i++)
+        {
+            point = drawableObjectsData.getPointByName(listItem.at(i)->text().toStdString());
+            drawableObjectsData.addPointToBezierCurve(bezierCurve,point);
+        }
+    }
+    else
+    {
+        BezierCurve* bezierCurve = new BezierCurve(drawableObjectsData.camera);
+        drawableObjectsData.addBezierCurve(bezierCurve);
+        for(int i=0;i<listItem.count();i++)
+        {
+            point = drawableObjectsData.getPointByName(listItem.at(i)->text().toStdString());
+            drawableObjectsData.addPointToBezierCurve(bezierCurve,point);
+        }
+    }
+     drawableObjectsData.deselectToruses();
+     drawableObjectsData.deselectPoints();
+     drawableObjectsData.deselectBezierCurves();
+     updateListsContent();
+}
+
+//BEZIER CURVE TREE WIDGET SLOTS
+void ObjectListsWidget::addBezierCurveListItem()
+{
+
+}
+
+void ObjectListsWidget::eraseBezierCurveListItem()
+{
+
+}
+
+///NORMAL METHODS
 
 void ObjectListsWidget::addBezierCurveToList(BezierCurve* bezierCurve, QTreeWidget* parent, QString name)
 {

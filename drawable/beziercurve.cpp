@@ -179,7 +179,7 @@ int BezierCurve::twoPointsDist(Point* p1, Point* p2)
         inPixVal = camera->screenWidth;
     }
 
-    return inPixVal /1.3f *sqrt(pow(p1->transPointCoordinates.x - p2->transPointCoordinates.x,2) +
+    return inPixVal *sqrt(pow(p1->transPointCoordinates.x - p2->transPointCoordinates.x,2) +
                           pow(p1->transPointCoordinates.y - p2->transPointCoordinates.y,2) +
                           pow(p1->transPointCoordinates.z - p2->transPointCoordinates.z,2) );
 }

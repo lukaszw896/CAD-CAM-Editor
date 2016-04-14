@@ -8,6 +8,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QListWidget>
+#include <QMenu>
 #include <QTreeWidget>
 #include <QListWidgetItem>
 #include <QAbstractAnimation>
@@ -38,6 +39,16 @@ public slots:
     void pointOnSceneSelection(Point*);
     void pointOnSceneDoubleClick(Point*);
 
+    void showPointsContextMenu(const QPoint&);
+    void showBezierCurvesContextMenu(const QPoint&);
+
+    //POINT LIST SLOTS
+
+    void addToCurve(QAction*);
+
+    //BEZIER CURVE TREE WIDGET SLOTS
+    void addBezierCurveListItem();
+    void eraseBezierCurveListItem();
 
 signals:
 

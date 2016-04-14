@@ -25,6 +25,7 @@ public:
     void addTorus(Torus*);
     void addPoint(Point*);
     void addBezierCurve(BezierCurve*);
+    void addPointToBezierCurve(BezierCurve*, Point*);
     void addCursor(Cursor*);
 
     void removeTorusByName(std::string);
@@ -34,6 +35,9 @@ public:
     void selectTorusByName(std::string);
     void selectPointByName(std::string);
     void selectBezierCurveByName(std::string);
+
+    Point* getPointByName(string);
+    BezierCurve* getBezierCurveByName(std::string);
 
     void deselectToruses();
     void deselectPoints();
