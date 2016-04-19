@@ -42,6 +42,12 @@ void DrawableObjectsData::addBezierCurve(BezierCurve* bezierCurve)
     drawableObjects.push_back(bezierCurve);
 }
 
+void DrawableObjectsData::addBSpline(BSpline * bSpline)
+{
+    bSplineList.push_back(bSpline);
+    drawableObjects.push_back(bSpline);
+}
+
 void DrawableObjectsData::addPointToBezierCurve(BezierCurve * bezierCurve, Point * point)
 {
     bool add = true;
@@ -55,6 +61,22 @@ void DrawableObjectsData::addPointToBezierCurve(BezierCurve * bezierCurve, Point
     if(add)
     {
         bezierCurve->pointVector.push_back(point);
+    }
+}
+
+void DrawableObjectsData::addPointToBSpline(BSpline * bSpline, Point * point)
+{
+    bool add = true;
+    for(int i=0;i<bSpline->deBoorPoints.size();i++)
+    {
+        if(bSpline->deBoorPoints[i]->name == point->name)
+        {
+            add = false;
+        }
+    }
+    if(add)
+    {
+        bSpline->deBoorPoints.push_back(point);
     }
 }
 
@@ -75,6 +97,12 @@ void DrawableObjectsData::removePointByName(std::string name)
     {
         bezierCurveList[i]->removePointByName(name);
     }
+
+    for(int i=0; i<bSplineList.size();i++)
+    {
+        bSplineList[i]->removePointByName(name);
+    }
+
     for(int i=0; i<pointList.size();i++){
         if(pointList[i]->name == name)
         {
@@ -90,6 +118,17 @@ void DrawableObjectsData::removeBezierCurveByName(std::string name)
         if(bezierCurveList[i]->name == name)
         {
             removeBezierCurves(bezierCurveList[i]);
+            break;
+        }
+    }
+}
+
+void DrawableObjectsData::removeBSplineByName(std::string name)
+{
+    for(int i=0; i<bSplineList.size();i++){
+        if(bSplineList[i]->name == name)
+        {
+            removeBSpline(bSplineList[i]);
             break;
         }
     }
@@ -128,6 +167,17 @@ void DrawableObjectsData::selectBezierCurveByName(std::string name)
     }
 }
 
+void DrawableObjectsData::selectBSplineByName(std::string name)
+{
+    for(int i=0; i<bSplineList.size();i++){
+        if(bSplineList[i]->name == name)
+        {
+            bSplineList[i]->isSelected = true;
+            break;
+        }
+    }
+}
+
 Point* DrawableObjectsData::getPointByName(string name)
 {
     for(int i=0; i<pointList.size();i++){
@@ -144,6 +194,16 @@ BezierCurve* DrawableObjectsData::getBezierCurveByName(string name)
         if(bezierCurveList[i]->name == name)
         {
             return bezierCurveList[i];
+        }
+    }
+}
+
+BSpline* DrawableObjectsData::getBSplineByName(std::string name)
+{
+    for(int i=0; i<bSplineList.size();i++){
+        if(bSplineList[i]->name == name)
+        {
+            return bSplineList[i];
         }
     }
 }
@@ -166,6 +226,13 @@ void DrawableObjectsData::deselectBezierCurves()
 {
     for(int i=0; i<bezierCurveList.size();i++){
         bezierCurveList[i]->isSelected = false;
+    }
+}
+
+void DrawableObjectsData::deselectBSplines()
+{
+    for(int i=0; i<bSplineList.size();i++){
+        bSplineList[i]->isSelected = false;
     }
 }
 
@@ -194,6 +261,14 @@ void DrawableObjectsData::removeBezierCurves(BezierCurve * bezierCurve)
         initDrawableObjectsList();
 }
 
+void DrawableObjectsData::removeBSpline(BSpline * bSpline)
+{
+    std::vector<BSpline*>::iterator position = std::find(bSplineList.begin(), bSplineList.end(), bSpline);
+        if (position != bSplineList.end()) // == myVector.end() means the element was not found
+            bSplineList.erase(position);
+            initDrawableObjectsList();
+}
+
 void DrawableObjectsData::initDrawableObjectsList()
 {
     drawableObjects.clear();
@@ -211,6 +286,11 @@ void DrawableObjectsData::initDrawableObjectsList()
     for(int i=0;i<bezierCurveList.size();i++)
     {
         drawableObjects.push_back(bezierCurveList.at(i));
+    }
+
+    for(int i=0;i<bSplineList.size();i++)
+    {
+        drawableObjects.push_back(bSplineList.at(i));
     }
 
 }

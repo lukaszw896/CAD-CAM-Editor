@@ -2,8 +2,6 @@
 
 ObjectListsWidget::ObjectListsWidget()
 {
-    setupButtons();
-    setupGroupBoxes();
     setupLayout();
     updateListsContent();
 
@@ -13,28 +11,11 @@ ObjectListsWidget::ObjectListsWidget()
     bezierCurveTreeList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(bezierCurveTreeList,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showBezierCurvesContextMenu(QPoint)));
 
+    bSplineCurveTreeList->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(bSplineCurveTreeList,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showBSplineContextMenu(QPoint)));
+
     nameChangeDialog = new NameChangeDialog();
     connect(nameChangeDialog,SIGNAL(nameHasBeenChanged()),this,SLOT(drawableHasBeenRenamed()));
-}
-
-void ObjectListsWidget::setupButtons()
-{
-   deleteTorusButton = new QPushButton("Delete");
-   connect(deleteTorusButton,SIGNAL(clicked(bool)),this,SLOT(deleteTorusButtonClicked()));
-   deletePointButton = new QPushButton("Delete");
-   connect(deletePointButton,SIGNAL(clicked(bool)),this,SLOT(deletePointButtonClicked()));
-   deleteCurveButton = new QPushButton("Delete");
-   connect(deleteCurveButton,SIGNAL(clicked(bool)),this,SLOT(deleteCurveButtonClicked()));
-
-}
-
-void ObjectListsWidget::setupGroupBoxes()
-{
-    torusGroupBox = new QGroupBox(tr("Tours List"));
-
-    pointGroupBox = new QGroupBox(tr("Point List"));
-
-    curveGroupBox = new QGroupBox(tr("Curve List"));
 }
 
 void ObjectListsWidget::setupLayout()
@@ -42,10 +23,11 @@ void ObjectListsWidget::setupLayout()
     torusLayout = new QVBoxLayout;
     pointLayout = new QVBoxLayout;
     curveLayout = new QVBoxLayout;
-
-    torusGroupBox->setLayout(torusLayout);
-    pointGroupBox->setLayout(pointLayout);
-    curveGroupBox->setLayout(curveLayout);
+    bSplineLayout = new QVBoxLayout;
+    torusLayout->setMargin(0);
+    pointLayout->setMargin(0);
+    curveLayout->setMargin(0);
+    bSplineLayout->setMargin(0);
 
     torusList = new QListWidget;
     connect(torusList,SIGNAL(clicked(QModelIndex)),this,SLOT(torusHasBeenSelected()));
@@ -57,17 +39,27 @@ void ObjectListsWidget::setupLayout()
     bezierCurveTreeList = new QTreeWidget;
     connect(bezierCurveTreeList, SIGNAL(clicked(QModelIndex)),this, SLOT(bezierCurveHasBeenClicked()));
 
+    bSplineCurveTreeList = new QTreeWidget;
+    connect(bSplineCurveTreeList,SIGNAL(clicked(QModelIndex)),this,SLOT(bSplineHasBeenClicked()));
+    //connect
+
+
+
     torusLayout->addWidget(torusList);
-    torusLayout->addWidget(deleteTorusButton);
+
     pointLayout->addWidget(pointList);
-    pointLayout->addWidget(deletePointButton);
+
     curveLayout->addWidget(bezierCurveTreeList);
-    curveLayout->addWidget(deleteCurveButton);
+
+    bSplineLayout->addWidget(bSplineCurveTreeList);
+
 
     mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(torusGroupBox);
-    mainLayout->addWidget(pointGroupBox);
-    mainLayout->addWidget(curveGroupBox);
+    mainLayout->addLayout(torusLayout);
+    mainLayout->addLayout(pointLayout);
+    mainLayout->addLayout(curveLayout);
+    mainLayout->addLayout(bSplineLayout);
+
     setLayout(mainLayout);
 }
 
@@ -78,6 +70,7 @@ void ObjectListsWidget::updateListsContent()
     torusList->clear();
     pointList->clear();
     bezierCurveTreeList->clear();
+    bSplineCurveTreeList->clear();
 
     for(int i=0;i<drawableObjectsData.torusList.size();i++)
     {
@@ -92,6 +85,11 @@ void ObjectListsWidget::updateListsContent()
     for(int i=0; i<drawableObjectsData.bezierCurveList.size();i++)
     {
         addBezierCurveToList(drawableObjectsData.bezierCurveList[i],bezierCurveTreeList,QString::fromStdString(drawableObjectsData.bezierCurveList[i]->name));
+    }
+
+    for(int i=0; i<drawableObjectsData.bSplineList.size(); i++)
+    {
+        addBSplineTolist(drawableObjectsData.bSplineList[i],bSplineCurveTreeList,QString::fromStdString(drawableObjectsData.bSplineList[i]->name));
     }
 
 }
@@ -144,6 +142,16 @@ void ObjectListsWidget::bezierCurveHasBeenClicked()
     }
 }
 
+void ObjectListsWidget::bSplineHasBeenClicked()
+{
+    drawableObjectsData.deselectBSplines();
+    QList<QTreeWidgetItem*> itemList = bSplineCurveTreeList->selectedItems();
+    for(int i=0; i < itemList.size(); i++)
+    {
+        drawableObjectsData.selectBSplineByName(itemList[i]->text(0).toStdString());
+    }
+}
+
 void ObjectListsWidget::deleteTorusButtonClicked()
 {
     //items in lists are deseleted while deleting element (?)
@@ -181,6 +189,11 @@ void ObjectListsWidget::deleteCurveButtonClicked()
     //items in lists are deseleted while deleting element (?)
     drawableObjectsData.deselectToruses();
     drawableObjectsData.deselectPoints();
+
+}
+
+void ObjectListsWidget::deleteBSplineButtonClicked()
+{
 
 }
 
@@ -234,9 +247,21 @@ void ObjectListsWidget::showPointsContextMenu(const QPoint &pos)
             connect(addToCurveMenu, SIGNAL(triggered(QAction *)),
                     this, SLOT(addToCurve(QAction *)), Qt::UniqueConnection);
 
+            QMenu* addToBSplineMenu = new QMenu("Add to BSpline");
+            for(int j=0; j<bSplineCurveTreeList->topLevelItemCount(); j++){
+                ch_name = bSplineCurveTreeList->topLevelItem(j)->text(0);
+                QAction *subMenuAct = addToBSplineMenu->addAction(ch_name);
+                subMenuAct->setData(ch_name);
+            }
+            QAction* subMenu2Act = addToBSplineMenu->addAction(tr("Create new BSpline"));
+            subMenu2Act->setData(ch_name);
+
+            connect(addToBSplineMenu,SIGNAL(triggered(QAction*)),this,SLOT(addToBSpline(QAction*)), Qt::UniqueConnection);
+
             ///
 
             myMenu.addMenu(addToCurveMenu);
+            myMenu.addMenu(addToBSplineMenu);
             myMenu.addAction("Delete", this, SLOT(deletePointButtonClicked()));
         }
         if(itemList.count() == 1)
@@ -262,7 +287,7 @@ void ObjectListsWidget::showBezierCurvesContextMenu(const QPoint &pos)
         if(name[0] == 'B')
         {
             myMenu.addAction("RemoveCurve", this, SLOT(removeBezierCurve()));
-            myMenu.addAction("Turn on/off polygon", this, SLOT(turnOnOffPolygon()));
+            myMenu.addAction("Turn on/off polygon", this, SLOT(turnOnOffBezierPolygon()));
 
           //  myMenu.addAction("Erase",  this, SLOT(eraseBezierCurveListItem()));
         }
@@ -270,6 +295,36 @@ void ObjectListsWidget::showBezierCurvesContextMenu(const QPoint &pos)
         {
             string parentName = itemList.at(0)->parent()->text(0).toStdString();
             myMenu.addAction("Remove point", this, SLOT(removePointFromBezierCurve()));
+        }
+
+
+        // Show context menu at handling position
+        myMenu.exec(globalPos);
+    }
+}
+
+void ObjectListsWidget::showBSplineContextMenu(const QPoint &pos)
+{
+    QList<QTreeWidgetItem*> itemList = bSplineCurveTreeList->selectedItems();
+    if(itemList.size()>0){
+    string name = itemList.at(0)->text(0).toStdString();
+
+    // Handle global position
+        QPoint globalPos = bSplineCurveTreeList->mapToGlobal(pos);
+
+        // Create menu and insert some actions
+        QMenu myMenu;
+        if(name[0] == 'B')
+        {
+            myMenu.addAction("Remove BSpline", this, SLOT(removeBSpline()));
+            myMenu.addAction("Turn on/off polygon", this, SLOT(turnOnOffBSplinePolygon()));
+
+          //  myMenu.addAction("Erase",  this, SLOT(eraseBezierCurveListItem()));
+        }
+        else
+        {
+            string parentName = itemList.at(0)->parent()->text(0).toStdString();
+            myMenu.addAction("Remove point", this, SLOT(removePointFromBSpline()));
         }
 
 
@@ -312,6 +367,37 @@ void ObjectListsWidget::addToCurve(QAction * act)
      drawableObjectsData.deselectToruses();
      drawableObjectsData.deselectPoints();
      drawableObjectsData.deselectBezierCurves();
+     updateListsContent();
+}
+
+void ObjectListsWidget::addToBSpline(QAction * act)
+{
+    QList<QListWidgetItem*> listItem = pointList->selectedItems();
+    Point* point = drawableObjectsData.getPointByName(listItem.at(0)->text().toStdString());
+    string bSplineName = act->text().toStdString();
+    if(bSplineName != "Create New Bezier")
+    {
+        BSpline * bSpline = drawableObjectsData.getBSplineByName(bSplineName);
+        for(int i=0;i<listItem.count();i++)
+        {
+            point = drawableObjectsData.getPointByName(listItem.at(i)->text().toStdString());
+            drawableObjectsData.addPointToBSpline(bSpline,point);
+        }
+    }
+    else
+    {
+        BSpline* bSpline= new BSpline(drawableObjectsData.camera);
+        drawableObjectsData.addBSpline(bSpline);
+        for(int i=0;i<listItem.count();i++)
+        {
+            point = drawableObjectsData.getPointByName(listItem.at(i)->text().toStdString());
+            drawableObjectsData.addPointToBSpline(bSpline,point);
+        }
+    }
+     drawableObjectsData.deselectToruses();
+     drawableObjectsData.deselectPoints();
+     drawableObjectsData.deselectBezierCurves();
+     drawableObjectsData.deselectBSplines();
      updateListsContent();
 }
 
@@ -359,7 +445,7 @@ void ObjectListsWidget::removePointFromBezierCurve()
     updateListsContent();
 }
 
-void ObjectListsWidget::turnOnOffPolygon()
+void ObjectListsWidget::turnOnOffBezierPolygon()
 {
     QList<QTreeWidgetItem*> itemList = bezierCurveTreeList->selectedItems();
     string name = itemList.at(0)->text(0).toStdString();
@@ -373,6 +459,57 @@ void ObjectListsWidget::turnOnOffPolygon()
         bezierCurve->drawPolygon = true;
     }
 }
+//BSPLINE TREE WIDGET SLOTS
+
+void ObjectListsWidget::addBSplineListItem()
+{
+
+}
+
+void ObjectListsWidget::removeBSpline()
+{
+    QList<QTreeWidgetItem*> itemList = bSplineCurveTreeList->selectedItems();
+    string name = itemList.at(0)->text(0).toStdString();
+
+    drawableObjectsData.removeBSplineByName(name);
+    updateListsContent();
+}
+
+void ObjectListsWidget::removePointFromBSpline()
+{
+    QList<QTreeWidgetItem*> itemList = bSplineCurveTreeList->selectedItems();
+    string name = itemList.at(0)->text(0).toStdString();
+    string parentName = itemList.at(0)->parent()->text(0).toStdString();
+
+
+    BSpline* bSpline = drawableObjectsData.getBSplineByName(parentName);
+    std::vector<Point*>::iterator position = bSpline->deBoorPoints.begin();
+    for(int i=0;i<bSpline->deBoorPoints.size();i++)
+    {
+
+        if(bSpline->deBoorPoints[i]->name == name)
+        {
+            position = position + i;
+            bSpline->deBoorPoints.erase(position);
+        }
+    }
+    updateListsContent();
+}
+void ObjectListsWidget::turnOnOffBSplinePolygon()
+{
+    QList<QTreeWidgetItem*> itemList = bSplineCurveTreeList->selectedItems();
+    string name = itemList.at(0)->text(0).toStdString();
+    BSpline* bSpline = drawableObjectsData.getBSplineByName(name);
+    if(bSpline->drawPolygon == true)
+    {
+        bSpline->drawPolygon = false;
+    }
+    else
+    {
+        bSpline->drawPolygon = true;
+    }
+}
+
 
 ///NORMAL METHODS
 
@@ -394,3 +531,20 @@ void ObjectListsWidget::addPointToCurve(QTreeWidgetItem* parent, QString name)
     treeWidgetItem->setText(0, name);
     parent->addChild(treeWidgetItem);
 }
+
+
+void ObjectListsWidget::addBSplineTolist(BSpline *bSpline, QTreeWidget *parent, QString name)
+{
+    QTreeWidgetItem* treeWidgetItem = new QTreeWidgetItem(parent);
+    treeWidgetItem->setText(0, name);
+    for(int i=0;i<bSpline->deBoorPoints.size();i++)
+    {
+        addPointToCurve(treeWidgetItem,QString::fromStdString(bSpline->deBoorPoints[i]->name));
+    }
+    parent->addTopLevelItem(treeWidgetItem);
+}
+
+
+
+
+

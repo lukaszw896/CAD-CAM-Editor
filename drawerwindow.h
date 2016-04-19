@@ -46,6 +46,7 @@ private:
     QAction *addTorusAct;
     QAction *addPointAct;
     QAction *addCurveAct;
+    QAction *addBSplineAct;
     QAction *stereoscopyAct;
 
     OGlWidget *oglWidget;
@@ -70,6 +71,7 @@ private:
     void addPoint();
     void addTorus();
     void addBezierCurve();
+    void addBSpline();
 
 };
 

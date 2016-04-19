@@ -1,8 +1,6 @@
 #ifndef OBJECTLISTSWIDGET_H
 #define OBJECTLISTSWIDGET_H
 
-
-
 #include <QWidget>
 #include <QGroupBox>
 #include <QVBoxLayout>
@@ -32,29 +30,39 @@ public slots:
     void pointHasBeenDoubleClicked();
 
     void bezierCurveHasBeenClicked();
+    void bSplineHasBeenClicked();
 
     void deleteTorusButtonClicked();
     void deletePointButtonClicked();
     void deleteCurveButtonClicked();
+    void deleteBSplineButtonClicked();
 
     void pointOnSceneSelection(Point*);
     void pointOnSceneDoubleClick(Point*);
 
     void showPointsContextMenu(const QPoint&);
     void showBezierCurvesContextMenu(const QPoint&);
+    void showBSplineContextMenu(const QPoint&);
 
     void drawableHasBeenRenamed();
 
     //POINT LIST SLOTS
 
     void addToCurve(QAction*);
+    void addToBSpline(QAction*);
     void renamePoint();
 
     //BEZIER CURVE TREE WIDGET SLOTS
     void addBezierCurveListItem();
     void removeBezierCurve();
     void removePointFromBezierCurve();
-    void turnOnOffPolygon();
+    void turnOnOffBezierPolygon();
+
+    //BSPLINE TREE WIDGET SLOTS
+    void addBSplineListItem();
+    void removeBSpline();
+    void removePointFromBSpline();
+    void turnOnOffBSplinePolygon();
 
 signals:
 
@@ -68,29 +76,22 @@ private:
     QVBoxLayout* torusLayout;
     QVBoxLayout* pointLayout;
     QVBoxLayout* curveLayout;
-
-
-    QGroupBox* torusGroupBox;
-    QGroupBox* pointGroupBox;
-    QGroupBox* curveGroupBox;
+    QVBoxLayout* bSplineLayout;
 
     QListWidget* torusList;
     QListWidget* pointList;
     QTreeWidget* bezierCurveTreeList;
-
-    QPushButton* deleteTorusButton;
-    QPushButton* deletePointButton;
-    QPushButton* deleteCurveButton;
+    QTreeWidget* bSplineCurveTreeList;
 
     NameChangeDialog* nameChangeDialog;
 
-
-    void setupGroupBoxes();
     void setupLayout();
-    void setupButtons();
 
     void addBezierCurveToList(BezierCurve* bezierCurve, QTreeWidget* parent, QString name);
     void addPointToCurve(QTreeWidgetItem* parent, QString name);
+
+    void addBSplineTolist(BSpline* bSpline, QTreeWidget* parent, QString name);
+    void addPointToBSpline(QTreeWidgetItem* parent, QString name);
 };
 
 #endif // OBJECTLISTSWIDGET_H

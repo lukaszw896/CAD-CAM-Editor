@@ -6,6 +6,7 @@
 #include "drawable/drawable.h"
 #include "drawable/cursor.h"
 #include "drawable/beziercurve.h"
+#include "drawable/bspline.h"
 #include "Camera/camera.h"
 #include <algorithm>
 #include <string>
@@ -25,27 +26,35 @@ public:
     void addTorus(Torus*);
     void addPoint(Point*);
     void addBezierCurve(BezierCurve*);
+    void addBSpline(BSpline*);
+
     void addPointToBezierCurve(BezierCurve*, Point*);
+    void addPointToBSpline(BSpline*, Point*);
     void addCursor(Cursor*);
 
     void removeTorusByName(std::string);
     void removePointByName(std::string);
     void removeBezierCurveByName(std::string);
+    void removeBSplineByName(std::string);
 
     void selectTorusByName(std::string);
     void selectPointByName(std::string);
     void selectBezierCurveByName(std::string);
+    void selectBSplineByName(std::string);
 
     Point* getPointByName(string);
     BezierCurve* getBezierCurveByName(std::string);
+    BSpline* getBSplineByName(std::string);
 
     void deselectToruses();
     void deselectPoints();
     void deselectBezierCurves();
+    void deselectBSplines();
 
     void removeTorus(Torus*);
     void removePoint(Point*);
     void removeBezierCurves(BezierCurve*);
+    void removeBSpline(BSpline*);
 
     void moveCursorToTorusByName(std::string);
     void moveCursorToPointByName(std::string);
@@ -57,6 +66,7 @@ public:
     std::vector<Torus*> torusList;
     std::vector<Point*> pointList;
     std::vector<BezierCurve*> bezierCurveList;
+    std::vector<BSpline*> bSplineList;
     private:
 
         DrawableObjectsData();

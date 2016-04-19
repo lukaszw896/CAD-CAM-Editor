@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     CustomWidgets/oglwidget.cpp \
     CustomWidgets/objectlistswidget.cpp \
     drawable/beziercurve.cpp \
-    Dialogs/namechangedialog.cpp
+    Dialogs/namechangedialog.cpp \
+    drawable/bspline.cpp
 
 HEADERS  += window.h \
     edge.h \
@@ -186,6 +187,7 @@ HEADERS  += window.h \
     CustomWidgets/oglwidget.h \
     CustomWidgets/objectlistswidget.h \
     drawable/beziercurve.h \
-    Dialogs/namechangedialog.h
+    Dialogs/namechangedialog.h \
+    drawable/bspline.h
 
 FORMS    += window.ui
