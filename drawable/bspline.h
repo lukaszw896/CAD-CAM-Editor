@@ -20,11 +20,15 @@ public:
     vector<Point*> deBoorPoints;
     void removePointByName(string name);
     bool drawPolygon;
+    vector<float> knotVector;
 
 private:
     static int id;
     Camera* camera;
 
+    vec4 computeBSpline(const vector<float>& knotVector,float t, int n);
+    vector<vec4> calculateBezierPoints();
+    float bsplineRecurive(float t, int n, int i,const vector<float>& knotVector);
     void draw();
 
 };
