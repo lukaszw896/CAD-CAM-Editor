@@ -19,6 +19,8 @@ void DrawerWindow::createActions()
     connect(addCurveAct, &QAction::triggered, this, &DrawerWindow::addBezierCurve);
     addBSplineAct = new QAction(tr("&BSpline"),this);
     connect(addBSplineAct, &QAction::triggered, this, &DrawerWindow::addBSpline);
+    addInterBSplineAct = new QAction(tr("&InterBSpline"),this);
+    connect(addInterBSplineAct,&QAction::triggered,this,&DrawerWindow::addInterBSpline);
 
     stereoscopyAct = new QAction(tr("&Stereoscopy"),this);
     connect(stereoscopyAct, &QAction::triggered, this, &DrawerWindow::openStereoscopySettingsDialog);
@@ -31,6 +33,7 @@ void DrawerWindow::createMenus()
     addMenu->addAction(addPointAct);
     addMenu->addAction(addCurveAct);
     addMenu->addAction(addBSplineAct);
+    addMenu->addAction(addInterBSplineAct);
 
     settingsMenu = menuBar()->addMenu(tr("&Settings"));
     settingsMenu->addAction(stereoscopyAct);
@@ -172,6 +175,18 @@ void DrawerWindow::addBSpline()
 
     BSpline* bSpline = new BSpline(drawableObjectsData.camera);
     drawableObjectsData.addBSpline(bSpline);
+    emit drawableDataChanged();
+}
+
+void DrawerWindow::addInterBSpline()
+{
+    //items in lists are deseleted while adding new element (?)
+    drawableObjectsData.deselectToruses();
+    drawableObjectsData.deselectPoints();
+    drawableObjectsData.deselectBezierCurves();
+
+    InterBSpline* interBSpline = new InterBSpline(drawableObjectsData.camera);
+    drawableObjectsData.addInterBSpline(interBSpline);
     emit drawableDataChanged();
 }
 

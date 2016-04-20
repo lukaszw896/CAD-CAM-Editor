@@ -31,11 +31,13 @@ public slots:
 
     void bezierCurveHasBeenClicked();
     void bSplineHasBeenClicked();
+    void interBSplineHasBeenClicked();
 
     void deleteTorusButtonClicked();
     void deletePointButtonClicked();
     void deleteCurveButtonClicked();
     void deleteBSplineButtonClicked();
+    void deleteInterBSplineButtonClicked();
 
     void pointOnSceneSelection(Point*);
     void pointOnSceneDoubleClick(Point*);
@@ -43,6 +45,7 @@ public slots:
     void showPointsContextMenu(const QPoint&);
     void showBezierCurvesContextMenu(const QPoint&);
     void showBSplineContextMenu(const QPoint&);
+    void showInterBSplineContextMenu(const QPoint&);
 
     void drawableHasBeenRenamed();
 
@@ -50,6 +53,7 @@ public slots:
 
     void addToCurve(QAction*);
     void addToBSpline(QAction*);
+    void addToInterBSpline(QAction*);
     void renamePoint();
 
     //BEZIER CURVE TREE WIDGET SLOTS
@@ -64,6 +68,12 @@ public slots:
     void removePointFromBSpline();
     void turnOnOffBSplinePolygon();
 
+    //INTERPLATED BSPLINE TREE WIDGET SLOTS
+    void addInterBSplineListItem();
+    void removeInterBSpline();
+    void removePointFromInterBSpline();
+    void turnOnOffInterBSplinePolygon();
+
 signals:
 
 
@@ -77,11 +87,13 @@ private:
     QVBoxLayout* pointLayout;
     QVBoxLayout* curveLayout;
     QVBoxLayout* bSplineLayout;
+    QVBoxLayout* interBSplineLayout;
 
     QListWidget* torusList;
     QListWidget* pointList;
     QTreeWidget* bezierCurveTreeList;
     QTreeWidget* bSplineCurveTreeList;
+    QTreeWidget* interBSplineCurveTreeList;
 
     NameChangeDialog* nameChangeDialog;
 
@@ -92,6 +104,9 @@ private:
 
     void addBSplineTolist(BSpline* bSpline, QTreeWidget* parent, QString name);
     void addPointToBSpline(QTreeWidgetItem* parent, QString name);
+
+    void addInterBSplineTolist(InterBSpline* interBSpline, QTreeWidget* parent, QString name);
+    void addPointToInterBSpline(QTreeWidgetItem* parent, QString name);
 };
 
 #endif // OBJECTLISTSWIDGET_H

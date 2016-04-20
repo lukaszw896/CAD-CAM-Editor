@@ -48,6 +48,12 @@ void DrawableObjectsData::addBSpline(BSpline * bSpline)
     drawableObjects.push_back(bSpline);
 }
 
+void DrawableObjectsData::addInterBSpline(InterBSpline * interBSpline)
+{
+    interBSplineList.push_back(interBSpline);
+    drawableObjects.push_back(interBSpline);
+}
+
 void DrawableObjectsData::addPointToBezierCurve(BezierCurve * bezierCurve, Point * point)
 {
     bool add = true;
@@ -80,6 +86,22 @@ void DrawableObjectsData::addPointToBSpline(BSpline * bSpline, Point * point)
     }
 }
 
+void DrawableObjectsData::addPointToInterBSpline(InterBSpline * interBSpline, Point * point)
+{
+    bool add = true;
+    for(int i=0;i<interBSpline->deBoorPoints.size();i++)
+    {
+        if(interBSpline->deBoorPoints[i]->name == point->name)
+        {
+            add = false;
+        }
+    }
+    if(add)
+    {
+        interBSpline->deBoorPoints.push_back(point);
+    }
+}
+
 void DrawableObjectsData::removeTorusByName(std::string name)
 {
     for(int i=0; i<torusList.size();i++){
@@ -101,6 +123,11 @@ void DrawableObjectsData::removePointByName(std::string name)
     for(int i=0; i<bSplineList.size();i++)
     {
         bSplineList[i]->removePointByName(name);
+    }
+
+    for(int i=0; i<interBSplineList.size();i++)
+    {
+        interBSplineList[i]->removePointByName(name);
     }
 
     for(int i=0; i<pointList.size();i++){
@@ -129,6 +156,17 @@ void DrawableObjectsData::removeBSplineByName(std::string name)
         if(bSplineList[i]->name == name)
         {
             removeBSpline(bSplineList[i]);
+            break;
+        }
+    }
+}
+
+void DrawableObjectsData::removeInterBSplineByName(std::string name)
+{
+    for(int i=0; i<interBSplineList.size();i++){
+        if(interBSplineList[i]->name == name)
+        {
+            removeInterBSpline(interBSplineList[i]);
             break;
         }
     }
@@ -178,6 +216,17 @@ void DrawableObjectsData::selectBSplineByName(std::string name)
     }
 }
 
+void DrawableObjectsData::selectInterBSplineByName(std::string name)
+{
+    for(int i=0; i<interBSplineList.size();i++){
+        if(interBSplineList[i]->name == name)
+        {
+            interBSplineList[i]->isSelected = true;
+            break;
+        }
+    }
+}
+
 Point* DrawableObjectsData::getPointByName(string name)
 {
     for(int i=0; i<pointList.size();i++){
@@ -208,6 +257,16 @@ BSpline* DrawableObjectsData::getBSplineByName(std::string name)
     }
 }
 
+InterBSpline* DrawableObjectsData::getInterBSplineByName(std::string name)
+{
+    for(int i=0; i<interBSplineList.size();i++){
+        if(interBSplineList[i]->name == name)
+        {
+            return interBSplineList[i];
+        }
+    }
+}
+
 void DrawableObjectsData::deselectToruses()
 {
     for(int i=0; i<torusList.size();i++){
@@ -233,6 +292,13 @@ void DrawableObjectsData::deselectBSplines()
 {
     for(int i=0; i<bSplineList.size();i++){
         bSplineList[i]->isSelected = false;
+    }
+}
+
+void DrawableObjectsData::deselectInterBSplines()
+{
+    for(int i=0; i<interBSplineList.size();i++){
+        interBSplineList[i]->isSelected = false;
     }
 }
 
@@ -269,6 +335,14 @@ void DrawableObjectsData::removeBSpline(BSpline * bSpline)
             initDrawableObjectsList();
 }
 
+void DrawableObjectsData::removeInterBSpline(InterBSpline * interBSpline)
+{
+    std::vector<InterBSpline*>::iterator position = std::find(interBSplineList.begin(), interBSplineList.end(), interBSpline);
+        if (position != interBSplineList.end()) // == myVector.end() means the element was not found
+            interBSplineList.erase(position);
+            initDrawableObjectsList();
+}
+
 void DrawableObjectsData::initDrawableObjectsList()
 {
     drawableObjects.clear();
@@ -291,6 +365,11 @@ void DrawableObjectsData::initDrawableObjectsList()
     for(int i=0;i<bSplineList.size();i++)
     {
         drawableObjects.push_back(bSplineList.at(i));
+    }
+
+    for(int i=0;i<interBSplineList.size();i++)
+    {
+        drawableObjects.push_back(interBSplineList.at(i));
     }
 
 }
