@@ -21,6 +21,22 @@ void DrawableObjectsData::addPoint(Point* point)
        }
    }
 
+   for(int i=0;i<bSplineList.size();i++)
+   {
+       if(bSplineList[i]->isSelected)
+       {
+           bSplineList[i]->deBoorPoints.push_back(point);
+       }
+   }
+
+   for(int i=0;i<interBSplineList.size();i++)
+   {
+       if(interBSplineList[i]->isSelected)
+       {
+           interBSplineList[i]->deBoorPoints.push_back(point);
+       }
+   }
+
    pointList.push_back(point);
    drawableObjects.push_back(point);
 }

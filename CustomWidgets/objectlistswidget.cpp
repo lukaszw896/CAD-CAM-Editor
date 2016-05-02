@@ -23,6 +23,15 @@ ObjectListsWidget::ObjectListsWidget()
 
 void ObjectListsWidget::setupLayout()
 {
+    scrollArea = new QScrollArea;
+
+    torusListLabel = new QLabel(tr("Torus List"));
+    pointListLabel = new QLabel(tr("Point List"));
+    bezierListLabel = new QLabel(tr("Bezier List"));
+    bSplineListLabel = new QLabel(tr("BSpline List"));
+    interBSplineListLabel = new QLabel(tr("InterBSpline List"));
+
+    widgetContainerLayout = new QVBoxLayout;
     torusLayout = new QVBoxLayout;
     pointLayout = new QVBoxLayout;
     curveLayout = new QVBoxLayout;
@@ -51,26 +60,42 @@ void ObjectListsWidget::setupLayout()
     interBSplineCurveTreeList = new QTreeWidget;
     connect(interBSplineCurveTreeList,SIGNAL(clicked(QModelIndex)),this,SLOT(interBSplineHasBeenClicked()));
     //connect
-
-
-
+    torusLayout->addWidget(torusListLabel);
     torusLayout->addWidget(torusList);
 
+    pointLayout->addWidget(pointListLabel);
     pointLayout->addWidget(pointList);
 
+    curveLayout->addWidget(bezierListLabel);
     curveLayout->addWidget(bezierCurveTreeList);
 
+    bSplineLayout->addWidget(bSplineListLabel);
     bSplineLayout->addWidget(bSplineCurveTreeList);
 
+    interBSplineLayout->addWidget(interBSplineListLabel);
     interBSplineLayout->addWidget(interBSplineCurveTreeList);
 
 
     mainLayout = new QVBoxLayout;
+
+
+
     mainLayout->addLayout(torusLayout);
     mainLayout->addLayout(pointLayout);
     mainLayout->addLayout(curveLayout);
     mainLayout->addLayout(bSplineLayout);
     mainLayout->addLayout(interBSplineLayout);
+    /*scrollArea->setLayout(widgetContainerLayout);
+    scrollArea->setWidgetResizable(true);
+    QSizePolicy policy = scrollArea->sizePolicy();
+
+    policy.setVerticalStretch(1);
+    policy.setHorizontalStretch(1);
+
+    scrollArea->minimumSize().setHeight(500);
+    mainLayout->minimumSize().setHeight(500);
+
+    mainLayout->addWidget(scrollArea);*/
 
     setLayout(mainLayout);
 }
@@ -388,7 +413,7 @@ void ObjectListsWidget::showInterBSplineContextMenu(const QPoint &pos)
 
         // Create menu and insert some actions
         QMenu myMenu;
-        if(name[0] == 'B')
+        if(name[0] == 'I')
         {
             myMenu.addAction("Remove BSpline", this, SLOT(removeInterBSpline()));
             myMenu.addAction("Turn on/off polygon", this, SLOT(turnOnOffInterBSplinePolygon()));
@@ -449,7 +474,7 @@ void ObjectListsWidget::addToBSpline(QAction * act)
     QList<QListWidgetItem*> listItem = pointList->selectedItems();
     Point* point = drawableObjectsData.getPointByName(listItem.at(0)->text().toStdString());
     string bSplineName = act->text().toStdString();
-    if(bSplineName != "Create New BSpline")
+    if(bSplineName != "Create new BSpline")
     {
         BSpline * bSpline = drawableObjectsData.getBSplineByName(bSplineName);
         for(int i=0;i<listItem.count();i++)
@@ -480,7 +505,7 @@ void ObjectListsWidget::addToInterBSpline(QAction * act)
     QList<QListWidgetItem*> listItem = pointList->selectedItems();
     Point* point = drawableObjectsData.getPointByName(listItem.at(0)->text().toStdString());
     string interBSplineName = act->text().toStdString();
-    if(interBSplineName != "Create New InterBSpline")
+    if(interBSplineName != "Create new InterBSpline")
     {
         InterBSpline * interBSpline = drawableObjectsData.getInterBSplineByName(interBSplineName);
         for(int i=0;i<listItem.count();i++)

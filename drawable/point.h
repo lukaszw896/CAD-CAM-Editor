@@ -13,6 +13,8 @@ public:
     Point(Camera* camera);
     glm::vec4 transPointCoordinates;
     glm::vec4 localTransPointCoordinates;
+    glm::vec4 leftEyeTransPointCoordinate;
+    glm::vec4 rightEyeTransPointCoordinate;
 private:
     static int id;
 
@@ -20,8 +22,7 @@ private:
 
     glm::vec4 pointCoordinates;
 
-    glm::vec4 leftEyeTransPointCoordinate;
-    glm::vec4 rightEyeTransPointCoordinate;
+
 
     glm::mat4 localTransformationMatrix;
     glm::mat4 globalTransformationMatrix;

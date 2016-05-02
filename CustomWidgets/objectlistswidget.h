@@ -10,6 +10,7 @@
 #include <QTreeWidget>
 #include <QListWidgetItem>
 #include <QAbstractAnimation>
+#include <QScrollArea>
 #include <QPushButton>
 #include "drawable/point.h"
 #include "drawable/torus.h"
@@ -82,12 +83,22 @@ private:
 
     DrawableObjectsData& drawableObjectsData = DrawableObjectsData::getInstance();
 
+    QScrollArea* scrollArea;
+
     QVBoxLayout* mainLayout;
+    QVBoxLayout* widgetContainerLayout;
     QVBoxLayout* torusLayout;
     QVBoxLayout* pointLayout;
     QVBoxLayout* curveLayout;
     QVBoxLayout* bSplineLayout;
     QVBoxLayout* interBSplineLayout;
+
+
+    QLabel* torusListLabel;
+    QLabel* pointListLabel;
+    QLabel* bezierListLabel;
+    QLabel* bSplineListLabel;
+    QLabel* interBSplineListLabel;
 
     QListWidget* torusList;
     QListWidget* pointList;

@@ -190,6 +190,8 @@ HEADERS  += window.h \
     drawable/beziercurve.h \
     Dialogs/namechangedialog.h \
     drawable/bspline.h \
-    drawable/interbspline.h
+    drawable/interbspline.h \
+    bandiag.h \
+    Math/bandiag.h
 
 FORMS    += window.ui
