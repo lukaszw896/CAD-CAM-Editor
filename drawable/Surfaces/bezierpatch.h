@@ -17,10 +17,11 @@ class BezierPatch: public Drawable
 public:
     BezierPatch();
     BezierPatch(Camera* camera);
+    Point* controlPoints[4][4];
     void draw();
 private:
     Camera* camera;
-    Point* controlPoints[4][4];
+
     vec4 tmp;
     vec4 pointToDraw;
 

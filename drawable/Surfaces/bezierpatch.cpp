@@ -7,14 +7,15 @@ BezierPatch::BezierPatch()
 
 BezierPatch::BezierPatch(Camera *camera)
 {
+    this->camera = camera;
     width = 0.2f;
     height = 0.2f;
-    u=0.1f;
-    v=0.1f;
+    u=0.25f;
+    v=0.25f;
 
-    float widthDT = width / 3;
+  /*  float widthDT = width / 3;
     float heightDT = height / 3;
-    this->camera = camera;
+
     int m=0,n=0;
     for(float i = -(width/(float)2);i< width/(float)2+widthDT/2;i+=widthDT,m++)
     {
@@ -27,7 +28,7 @@ BezierPatch::BezierPatch(Camera *camera)
             controlPoints[m][n]->yPos = j;
             controlPoints[m][n]->updateTranslationMatY();
         }
-    }
+    }*/
 }
 
 void BezierPatch::draw()
@@ -39,12 +40,12 @@ void BezierPatch::draw()
             controlPoints[i][j]->draw();
         }
     }
-    float dt=0.002;
+    float dt=0.01;
     glPointSize(1);
     glBegin(GL_POINTS);
 
     //draw columns
-    for(float i=0;i<1.f+u;i+=u)
+    for(float i=0;i<1.01f;i+=u)
     {
         for(float j=0;j<1.f;j+=dt)
         {
@@ -58,7 +59,7 @@ void BezierPatch::draw()
         }
     }
 
-    for(float i=0;i<1.f+v;i+=v)
+    for(float i=0;i<1.01f;i+=v)
     {
         for(float j=0;j<1.f;j+=dt)
         {

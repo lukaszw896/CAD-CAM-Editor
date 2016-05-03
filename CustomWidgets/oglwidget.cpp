@@ -4,6 +4,7 @@
 #include <QListWidgetItem>
 #include "drawable/point.h"
 #include "drawable/cursor.h"
+
 typedef unsigned char BYTE;
 OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
@@ -23,9 +24,11 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     //drawableObjects.push_back(new Torus(&camera));
     //drawableObjectsData.addPoint(new Point(&camera));
     drawableObjectsData.addCursor(new Cursor(&camera));
-    bezierPatch = new BezierPatch(&camera);
+   /* bezierPatch = new BezierPatch(&camera);
     bezierPatch->zPos = -3.f;
-    bezierPatch->updateTranslationMatZ();
+    bezierPatch->updateTranslationMatZ();*/
+
+    bezierSurface = new BezierSurface(&camera);
 
 
     isSpacePressed = false;
@@ -335,7 +338,8 @@ void OGlWidget::draw()
         drawableObjectsData.drawableObjects[i]->draw();
     }
 
-    bezierPatch->draw();
+    //bezierPatch->draw();
+    bezierSurface->draw();
 
 
 

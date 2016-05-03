@@ -18,10 +18,20 @@ class BezierSurface: public Drawable
 public:
     BezierSurface();
     BezierSurface(Camera* camera);
+    Camera * camera;
+    int verNumOfPatches;
+    int horNumOfPatches;
+
+    int horNumOfConPoints;
+    int verNumOfConPoints;
+
+    void initControlPoints();
+    void initPatches();
     void draw();
 
 private:
-    vector<BezierPatch> patches;
+    vector<BezierPatch*> patches;
+    vector<Point*> controlPoints;
 };
 
 #endif // BEZIERSURFACE_H

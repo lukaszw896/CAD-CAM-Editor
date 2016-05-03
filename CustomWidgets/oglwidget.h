@@ -15,6 +15,7 @@ typedef unsigned char BYTE;
 #include "window.h"
 #include "Data/drawableobjectsdata.h"
 #include "drawable/Surfaces/bezierpatch.h"
+#include "drawable/Surfaces/beziersurface.h"
 
 using namespace glm;
 
@@ -66,7 +67,7 @@ private:
     Camera camera;
     DrawableObjectsData& drawableObjectsData = DrawableObjectsData::getInstance();
     BezierPatch* bezierPatch;
-
+    BezierSurface* bezierSurface;
 
     Ui::Window* ui;
 
