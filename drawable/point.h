@@ -15,6 +15,7 @@ public:
     glm::vec4 localTransPointCoordinates;
     glm::vec4 leftEyeTransPointCoordinate;
     glm::vec4 rightEyeTransPointCoordinate;
+    void draw();
 private:
     static int id;
 
@@ -30,7 +31,7 @@ private:
     void computeLocalTransformationMatrix();
     void computeGlobalTransformationMatrix();
     void transform();
-    void draw();
+
 };
 
 

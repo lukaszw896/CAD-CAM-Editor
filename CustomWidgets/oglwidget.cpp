@@ -23,6 +23,9 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     //drawableObjects.push_back(new Torus(&camera));
     //drawableObjectsData.addPoint(new Point(&camera));
     drawableObjectsData.addCursor(new Cursor(&camera));
+    bezierPatch = new BezierPatch(&camera);
+    bezierPatch->zPos = -3.f;
+    bezierPatch->updateTranslationMatZ();
 
 
     isSpacePressed = false;
@@ -331,6 +334,9 @@ void OGlWidget::draw()
         glPointSize(-50/camera.zPos - (5.f-camera.rProjection)/5);
         drawableObjectsData.drawableObjects[i]->draw();
     }
+
+    bezierPatch->draw();
+
 
 
 }

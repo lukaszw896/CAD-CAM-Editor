@@ -30,7 +30,9 @@ SOURCES += main.cpp\
     drawable/beziercurve.cpp \
     Dialogs/namechangedialog.cpp \
     drawable/bspline.cpp \
-    drawable/interbspline.cpp
+    drawable/interbspline.cpp \
+    drawable/Surfaces/bezierpatch.cpp \
+    drawable/Surfaces/beziersurface.cpp
 
 HEADERS  += window.h \
     edge.h \
@@ -192,6 +194,8 @@ HEADERS  += window.h \
     drawable/bspline.h \
     drawable/interbspline.h \
     bandiag.h \
-    Math/bandiag.h
+    Math/bandiag.h \
+    drawable/Surfaces/bezierpatch.h \
+    drawable/Surfaces/beziersurface.h
 
 FORMS    += window.ui
