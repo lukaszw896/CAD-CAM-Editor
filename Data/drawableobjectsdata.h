@@ -58,18 +58,24 @@ public:
     BezierCurve* getBezierCurveByName(std::string);
     BSpline* getBSplineByName(std::string);
     InterBSpline* getInterBSplineByName(std::string);
+    //
+    BezierSurface* getBezierSurfaceByName(std::string);
 
     void deselectToruses();
     void deselectPoints();
     void deselectBezierCurves();
     void deselectBSplines();
     void deselectInterBSplines();
+    //
+    void deselectBezierSurface();
 
     void removeTorus(Torus*);
     void removePoint(Point*);
     void removeBezierCurves(BezierCurve*);
     void removeBSpline(BSpline*);
     void removeInterBSpline(InterBSpline*);
+    //
+    void removeBezierSurface(BezierSurface*);
 
     void moveCursorToTorusByName(std::string);
     void moveCursorToPointByName(std::string);
@@ -83,6 +89,7 @@ public:
     std::vector<BezierCurve*> bezierCurveList;
     std::vector<BSpline*> bSplineList;
     std::vector<InterBSpline*> interBSplineList;
+    vector<BezierSurface*> bezierSurfaceList;
 
     private:
 

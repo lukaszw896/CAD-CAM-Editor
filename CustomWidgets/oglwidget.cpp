@@ -29,7 +29,7 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     bezierPatch->updateTranslationMatZ();*/
 
     bezierSurface = new BezierSurface(&camera);
-
+    drawableObjectsData.addBezierSurface(bezierSurface);
 
     isSpacePressed = false;
     this->installEventFilter(this);
@@ -339,7 +339,7 @@ void OGlWidget::draw()
     }
 
     //bezierPatch->draw();
-    bezierSurface->draw();
+   // bezierSurface->draw();
 
 
 

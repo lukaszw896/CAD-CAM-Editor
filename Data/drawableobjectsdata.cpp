@@ -70,6 +70,18 @@ void DrawableObjectsData::addInterBSpline(InterBSpline * interBSpline)
     drawableObjects.push_back(interBSpline);
 }
 
+void DrawableObjectsData::addBezierSurface(BezierSurface * bezierSurface)
+{
+    bezierSurfaceList.push_back(bezierSurface);
+    drawableObjects.push_back(bezierSurface);
+
+    for(int i=0;i<bezierSurface->controlPoints.size();i++)
+    {
+        pointList.push_back(bezierSurface->controlPoints[i]);
+        drawableObjects.push_back(bezierSurface->controlPoints[i]);
+    }
+}
+
 void DrawableObjectsData::addPointToBezierCurve(BezierCurve * bezierCurve, Point * point)
 {
     bool add = true;
@@ -188,6 +200,17 @@ void DrawableObjectsData::removeInterBSplineByName(std::string name)
     }
 }
 
+void DrawableObjectsData::removeBezierSurfaceByName(std::string name)
+{
+    for(int i=0; i<bezierSurfaceList.size();i++){
+        if(bezierSurfaceList[i]->name == name)
+        {
+            removeBezierSurface(bezierSurfaceList[i]);
+            break;
+        }
+    }
+}
+
 void DrawableObjectsData::selectTorusByName(std::string name)
 {
     for(int i=0; i<torusList.size();i++){
@@ -243,6 +266,17 @@ void DrawableObjectsData::selectInterBSplineByName(std::string name)
     }
 }
 
+void DrawableObjectsData::selectBezierSurfaceByName(std::string name)
+{
+    for(int i=0; i<bezierSurfaceList.size();i++){
+        if(bezierSurfaceList[i]->name == name)
+        {
+            bezierSurfaceList[i]->isSelected = true;
+            break;
+        }
+    }
+}
+
 Point* DrawableObjectsData::getPointByName(string name)
 {
     for(int i=0; i<pointList.size();i++){
@@ -283,6 +317,16 @@ InterBSpline* DrawableObjectsData::getInterBSplineByName(std::string name)
     }
 }
 
+BezierSurface* DrawableObjectsData::getBezierSurfaceByName(std::string name)
+{
+    for(int i=0; i<bezierSurfaceList.size();i++){
+        if(bezierSurfaceList[i]->name == name)
+        {
+            return bezierSurfaceList[i];
+        }
+    }
+}
+
 void DrawableObjectsData::deselectToruses()
 {
     for(int i=0; i<torusList.size();i++){
@@ -315,6 +359,13 @@ void DrawableObjectsData::deselectInterBSplines()
 {
     for(int i=0; i<interBSplineList.size();i++){
         interBSplineList[i]->isSelected = false;
+    }
+}
+
+void DrawableObjectsData::deselectBezierSurface()
+{
+    for(int i=0; i<bezierSurfaceList.size();i++){
+        bezierSurfaceList[i]->isSelected = false;
     }
 }
 
@@ -359,6 +410,14 @@ void DrawableObjectsData::removeInterBSpline(InterBSpline * interBSpline)
             initDrawableObjectsList();
 }
 
+void DrawableObjectsData::removeBezierSurface(BezierSurface * bezierSurface)
+{
+    std::vector<BezierSurface*>::iterator position = std::find(bezierSurfaceList.begin(), bezierSurfaceList.end(), bezierSurface);
+        if (position != bezierSurfaceList.end()) // == myVector.end() means the element was not found
+            bezierSurfaceList.erase(position);
+            initDrawableObjectsList();
+}
+
 void DrawableObjectsData::initDrawableObjectsList()
 {
     drawableObjects.clear();
@@ -386,6 +445,11 @@ void DrawableObjectsData::initDrawableObjectsList()
     for(int i=0;i<interBSplineList.size();i++)
     {
         drawableObjects.push_back(interBSplineList.at(i));
+    }
+
+    for(int i=0;i<bezierCurveList.size();i++)
+    {
+        drawableObjects.push_back(bezierSurfaceList.at(i));
     }
 
 }

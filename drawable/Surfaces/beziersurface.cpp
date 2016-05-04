@@ -9,8 +9,8 @@ BezierSurface::BezierSurface(Camera* camera)
 {
     this->camera = camera;
     isFlatSurface = false;
-    verNumOfPatches = 5;
-    horNumOfPatches = 5;
+    verNumOfPatches = 3;
+    horNumOfPatches = 3;
 
     if(isFlatSurface)horNumOfConPoints = horNumOfPatches*3+1;
     else horNumOfConPoints = horNumOfPatches*3;
@@ -28,8 +28,8 @@ BezierSurface::BezierSurface(Camera* camera)
 void BezierSurface::initControlPoints()
 {
     //flat surface
-    float width = 0.3f;
-    float height = 0.3f;
+    float width = 0.4f;
+    float height = 0.4f;
     float totalWidth = width*horNumOfPatches;
     float totalHeight = height*verNumOfPatches;
 

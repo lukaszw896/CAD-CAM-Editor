@@ -29,10 +29,10 @@ public:
     void initControlPoints();
     void initPatches();
     void draw();
-
+    vector<Point*> controlPoints;
 private:
     vector<BezierPatch*> patches;
-    vector<Point*> controlPoints;
+
 };
 
 #endif // BEZIERSURFACE_H
