@@ -19,12 +19,16 @@ public:
     bool isFlatSurface;
     BezierSurface();
     BezierSurface(Camera* camera);
+    BezierSurface(Camera *camera,float totalWidth,float totalHeight, int verNumOfPatches, int horNumOfPatches);
     Camera * camera;
     int verNumOfPatches;
     int horNumOfPatches;
 
     int horNumOfConPoints;
     int verNumOfConPoints;
+
+    float totalWidth;
+    float totalHeight;
 
     void initControlPoints();
     void initPatches();

@@ -13,6 +13,7 @@
 #include <CustomWidgets/oglwidget.h>
 #include <CustomWidgets/objectlistswidget.h>
 #include <Dialogs/settingsdialog.h>
+#include <Dialogs/addc0flatsurfacedialog.h>
 #include "Data/drawableobjectsdata.h"
 
 class DrawerWindow : public QMainWindow
@@ -43,17 +44,21 @@ private:
 
     QMenu *addMenu;
     QMenu *settingsMenu;
+    QMenu *addBezierSurfaceMenu;
     QAction *addTorusAct;
     QAction *addPointAct;
     QAction *addCurveAct;
     QAction *addBSplineAct;
     QAction *addInterBSplineAct;
+    QAction *addBezierFlatSurface;
+    QAction *addBezierCylinderSurface;
     QAction *stereoscopyAct;
 
     OGlWidget *oglWidget;
     QGroupBox* cordsBox;
     ObjectListsWidget* objectListsWidget;
     SettingsDialog *settingsDialog;
+    AddC0FlatSurfaceDialog *addC0FlatSurfaceDialog;
 
     QLabel *scaleLabel;
     QSlider *scaleSlider;
@@ -69,11 +74,13 @@ private:
     QLabel *zRealCord;
 
     void openStereoscopySettingsDialog();
+    void openAddC0FlatSurfaceDialog();
     void addPoint();
     void addTorus();
     void addBezierCurve();
     void addBSpline();
     void addInterBSpline();
+   // void addBezierSurface();
 
 };
 

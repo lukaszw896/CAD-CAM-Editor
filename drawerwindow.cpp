@@ -22,6 +22,10 @@ void DrawerWindow::createActions()
     addInterBSplineAct = new QAction(tr("&InterBSpline"),this);
     connect(addInterBSplineAct,&QAction::triggered,this,&DrawerWindow::addInterBSpline);
 
+    addBezierFlatSurface = new QAction(tr("&Flat surface"),this);
+    connect(addBezierFlatSurface,&QAction::triggered,this,&DrawerWindow::openAddC0FlatSurfaceDialog);
+    addBezierCylinderSurface = new QAction(tr("&Cylinder surface"),this);
+
     stereoscopyAct = new QAction(tr("&Stereoscopy"),this);
     connect(stereoscopyAct, &QAction::triggered, this, &DrawerWindow::openStereoscopySettingsDialog);
 }
@@ -34,6 +38,10 @@ void DrawerWindow::createMenus()
     addMenu->addAction(addCurveAct);
     addMenu->addAction(addBSplineAct);
     addMenu->addAction(addInterBSplineAct);
+    addBezierSurfaceMenu = new QMenu(tr("&Add surface"));
+    addMenu->addMenu(addBezierSurfaceMenu);
+    addBezierSurfaceMenu->addAction(addBezierFlatSurface);
+    addBezierSurfaceMenu->addAction(addBezierCylinderSurface);
 
     settingsMenu = menuBar()->addMenu(tr("&Settings"));
     settingsMenu->addAction(stereoscopyAct);
@@ -60,7 +68,9 @@ void DrawerWindow::initObjects()
     connect(oglWidget,SIGNAL(pointOnScreenDoubleClick(Point*)),objectListsWidget,SLOT(pointOnSceneDoubleClick(Point*)));
     connect(oglWidget,SIGNAL(cursorPositionChanged()),this,SLOT(updateCursorInfo()));
 
-    settingsDialog = new SettingsDialog;
+    settingsDialog = new SettingsDialog(this);
+    addC0FlatSurfaceDialog = new AddC0FlatSurfaceDialog(this);
+    connect(addC0FlatSurfaceDialog,SIGNAL(bezFlatSurfAdded()),objectListsWidget,SLOT(updateListsContent()));
 
     connect(scaleSlider,SIGNAL(valueChanged(int)),oglWidget,SLOT(changeScale(int)));
     connect(settingsDialog,SIGNAL(turnOnOffStereoscopy(bool)),oglWidget,SLOT(checkBoxStateChanged(bool)));
@@ -112,6 +122,11 @@ void DrawerWindow::initLayout()
 void DrawerWindow::openStereoscopySettingsDialog()
 {
     settingsDialog->show();
+}
+
+void DrawerWindow::openAddC0FlatSurfaceDialog()
+{
+    addC0FlatSurfaceDialog->show();
 }
 
 void DrawerWindow::addPoint()

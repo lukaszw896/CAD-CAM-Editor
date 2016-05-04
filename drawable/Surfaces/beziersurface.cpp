@@ -11,6 +11,8 @@ BezierSurface::BezierSurface(Camera* camera)
     isFlatSurface = false;
     verNumOfPatches = 3;
     horNumOfPatches = 3;
+    totalWidth = 1.0f;
+    totalHeight = 1.0f;
 
     if(isFlatSurface)horNumOfConPoints = horNumOfPatches*3+1;
     else horNumOfConPoints = horNumOfPatches*3;
@@ -21,17 +23,31 @@ BezierSurface::BezierSurface(Camera* camera)
 
     initControlPoints();
     initPatches();
-
-
 }
+
+BezierSurface::BezierSurface(Camera *camera, float totalWidth, float totalHeight, int verNumOfPatches, int horNumOfPatches)
+{
+    this->camera = camera;
+    isFlatSurface = true;
+    this->verNumOfPatches = verNumOfPatches;
+    this->horNumOfPatches = horNumOfPatches;
+    this->totalWidth = totalWidth;
+    this->totalHeight = totalHeight;
+
+    horNumOfConPoints = horNumOfPatches*3+1;
+    verNumOfConPoints = verNumOfPatches*3+1;
+
+    controlPoints.resize(verNumOfConPoints*horNumOfConPoints);
+    patches.resize(verNumOfPatches*horNumOfPatches);
+
+    initControlPoints();
+    initPatches();
+}
+
 
 void BezierSurface::initControlPoints()
 {
     //flat surface
-    float width = 0.4f;
-    float height = 0.4f;
-    float totalWidth = width*horNumOfPatches;
-    float totalHeight = height*verNumOfPatches;
 
     float widthDT = totalWidth / (horNumOfConPoints-1);
     float heightDT = totalHeight / (verNumOfConPoints-1);

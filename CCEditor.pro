@@ -32,7 +32,9 @@ SOURCES += main.cpp\
     drawable/bspline.cpp \
     drawable/interbspline.cpp \
     drawable/Surfaces/bezierpatch.cpp \
-    drawable/Surfaces/beziersurface.cpp
+    drawable/Surfaces/beziersurface.cpp \
+    Dialogs/addc0cylindersurfacedialog.cpp \
+    Dialogs/addc0flatsurfacedialog.cpp
 
 HEADERS  += window.h \
     edge.h \
@@ -196,6 +198,8 @@ HEADERS  += window.h \
     bandiag.h \
     Math/bandiag.h \
     drawable/Surfaces/bezierpatch.h \
-    drawable/Surfaces/beziersurface.h
+    drawable/Surfaces/beziersurface.h \
+    Dialogs/addc0cylindersurfacedialog.h \
+    Dialogs/addc0flatsurfacedialog.h
 
 FORMS    += window.ui

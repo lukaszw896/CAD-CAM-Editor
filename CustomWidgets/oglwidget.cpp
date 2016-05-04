@@ -28,8 +28,8 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
     bezierPatch->zPos = -3.f;
     bezierPatch->updateTranslationMatZ();*/
 
-    bezierSurface = new BezierSurface(&camera);
-    drawableObjectsData.addBezierSurface(bezierSurface);
+   // bezierSurface = new BezierSurface(&camera);
+    //drawableObjectsData.addBezierSurface(bezierSurface);
 
     isSpacePressed = false;
     this->installEventFilter(this);
