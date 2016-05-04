@@ -51,6 +51,30 @@ BezierSurface::BezierSurface(Camera *camera, float totalWidth, float totalHeight
     initControlPoints();
     initPatches();
 }
+BezierSurface::BezierSurface(Camera *camera, float radius, float totalHeight, int verNumOfPatches, int horNumOfPatches,bool tmp)
+{
+    id++;
+    name = "BezierCylinderSurface_";
+    name += std::to_string(id);
+    drawBezierNet = false;
+
+    this->camera = camera;
+    isFlatSurface = false;
+    this->verNumOfPatches = verNumOfPatches;
+    this->horNumOfPatches = horNumOfPatches;
+    this->totalWidth = 1.0f;
+    this->totalHeight = totalHeight;
+    this->radius = radius;
+
+    horNumOfConPoints = horNumOfPatches*3;
+    verNumOfConPoints = verNumOfPatches*3+1;
+
+    controlPoints.resize(verNumOfConPoints*horNumOfConPoints);
+    patches.resize(verNumOfPatches*horNumOfPatches);
+
+    initControlPoints();
+    initPatches();
+}
 
 
 void BezierSurface::initControlPoints()
@@ -84,11 +108,11 @@ void BezierSurface::initControlPoints()
         {
             t= i/totalWidth;
             controlPoints[n*horNumOfConPoints + m] = new Point(camera);
-            controlPoints[n*horNumOfConPoints + m]->xPos = 0.3f*cos(6.28*t);
+            controlPoints[n*horNumOfConPoints + m]->xPos = radius*cos(6.28*t);
             controlPoints[n*horNumOfConPoints + m]->updateTranslationMatX();
             controlPoints[n*horNumOfConPoints + m]->yPos = -totalHeight/4 + j/2;
             controlPoints[n*horNumOfConPoints + m]->updateTranslationMatY();
-            controlPoints[n*horNumOfConPoints + m]->zPos = 0.3f*sin(6.28*t);
+            controlPoints[n*horNumOfConPoints + m]->zPos = radius*sin(6.28*t);
             controlPoints[n*horNumOfConPoints + m]->updateTranslationMatZ();
            // printf("Control point init pos : %d , x: %lf, y: %lf \n",m*verNumOfConPoints + n,i,j);
             printf("%lf \n",t);

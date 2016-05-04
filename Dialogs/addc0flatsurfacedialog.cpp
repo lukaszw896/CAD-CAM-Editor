@@ -2,6 +2,7 @@
 
 AddC0FlatSurfaceDialog::AddC0FlatSurfaceDialog(QWidget* parent): QDialog(parent)
 {
+    isAddingFlat = true;
     setupLayout();
 }
 
@@ -64,9 +65,15 @@ void AddC0FlatSurfaceDialog::addFlatBezierSurface()
     float totalHeight = heightInput->text().toFloat();
     int verNumOfPatches = verPatchesInput->text().toInt();
     int horNumOfPatches = horPatchesInput->text().toInt();
-
-    BezierSurface* bezierSurface = new BezierSurface(data.camera,totalWidth,totalHeight,
-                                                     verNumOfPatches,horNumOfPatches);
+    BezierSurface* bezierSurface;
+    if(isAddingFlat){
+        bezierSurface = new BezierSurface(data.camera,totalWidth,totalHeight,
+                                          verNumOfPatches,horNumOfPatches);
+    }
+    else{
+        bezierSurface = new BezierSurface(data.camera,totalWidth,totalHeight,
+                                          verNumOfPatches,horNumOfPatches,true);
+    }
     data.addBezierSurface(bezierSurface);
     emit bezFlatSurfAdded();
     close();
@@ -75,4 +82,12 @@ void AddC0FlatSurfaceDialog::addFlatBezierSurface()
 void AddC0FlatSurfaceDialog::cancelButtonClicked()
 {
     close();
+}
+
+void AddC0FlatSurfaceDialog::show()
+{
+    if(isAddingFlat) widthLabel->setText("Width");
+    else widthLabel->setText("Radius");
+
+    QDialog::show();
 }

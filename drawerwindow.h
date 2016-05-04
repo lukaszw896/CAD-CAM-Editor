@@ -75,6 +75,7 @@ private:
 
     void openStereoscopySettingsDialog();
     void openAddC0FlatSurfaceDialog();
+    void openAddC0CylinderSurfaceDialog();
     void addPoint();
     void addTorus();
     void addBezierCurve();

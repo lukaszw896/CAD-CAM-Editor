@@ -25,6 +25,7 @@ void DrawerWindow::createActions()
     addBezierFlatSurface = new QAction(tr("&Flat surface"),this);
     connect(addBezierFlatSurface,&QAction::triggered,this,&DrawerWindow::openAddC0FlatSurfaceDialog);
     addBezierCylinderSurface = new QAction(tr("&Cylinder surface"),this);
+    connect(addBezierCylinderSurface,&QAction::triggered,this,&DrawerWindow::openAddC0CylinderSurfaceDialog);
 
     stereoscopyAct = new QAction(tr("&Stereoscopy"),this);
     connect(stereoscopyAct, &QAction::triggered, this, &DrawerWindow::openStereoscopySettingsDialog);
@@ -126,8 +127,15 @@ void DrawerWindow::openStereoscopySettingsDialog()
 
 void DrawerWindow::openAddC0FlatSurfaceDialog()
 {
+    addC0FlatSurfaceDialog->isAddingFlat = true;
     addC0FlatSurfaceDialog->show();
 }
+
+void DrawerWindow::openAddC0CylinderSurfaceDialog(){
+    addC0FlatSurfaceDialog->isAddingFlat = false;
+    addC0FlatSurfaceDialog->show();
+}
+
 
 void DrawerWindow::addPoint()
 {

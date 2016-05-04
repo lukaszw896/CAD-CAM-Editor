@@ -20,7 +20,10 @@ public:
     bool drawBezierNet;
     BezierSurface();
     BezierSurface(Camera* camera);
-    BezierSurface(Camera *camera,float totalWidth,float totalHeight, int verNumOfPatches, int horNumOfPatches);
+    BezierSurface(Camera *camera,float totalWidth,float totalHeight,
+                  int verNumOfPatches, int horNumOfPatches);
+    BezierSurface(Camera *camera, float radius, float totalHeight,
+                  int verNumOfPatches, int horNumOfPatches,bool tmp);
     Camera * camera;
     int verNumOfPatches;
     int horNumOfPatches;
@@ -30,11 +33,13 @@ public:
 
     float totalWidth;
     float totalHeight;
+    float radius;
 
     void initControlPoints();
     void initPatches();
     void draw();
     vector<Point*> controlPoints;
+
 private:
     static int id;
     vector<BezierPatch*> patches;

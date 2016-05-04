@@ -16,6 +16,8 @@ class AddC0FlatSurfaceDialog : public QDialog
     Q_OBJECT
 public:
     AddC0FlatSurfaceDialog(QWidget* parent = 0);
+    bool isAddingFlat;
+    void show();
 
 signals:
     void bezFlatSurfAdded();
