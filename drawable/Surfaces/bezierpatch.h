@@ -22,13 +22,14 @@ public:
 private:
     Camera* camera;
 
-    vec4 tmp;
+    vec3 tmp;
     vec4 pointToDraw;
+    vec4 pointToDraw2;
 
     float width,height,u,v;
 
     float berBasis(int i, float u);
-    vec4 computePoint(float u, float v);
+    vec3 computePoint(float u, float v);
 
 };
 

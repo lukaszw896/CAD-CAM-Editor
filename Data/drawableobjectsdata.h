@@ -8,6 +8,7 @@
 #include "drawable/beziercurve.h"
 #include "drawable/bspline.h"
 #include "drawable/interbspline.h"
+#include "drawable/Surfaces/beziersurface.h"
 #include "Camera/camera.h"
 #include <algorithm>
 #include <string>
@@ -29,6 +30,8 @@ public:
     void addBezierCurve(BezierCurve*);
     void addBSpline(BSpline*);
     void addInterBSpline(InterBSpline*);
+    //
+    void addBezierSurface(BezierSurface*);
 
     void addPointToBezierCurve(BezierCurve*, Point*);
     void addPointToBSpline(BSpline*, Point*);
@@ -40,12 +43,16 @@ public:
     void removeBezierCurveByName(std::string);
     void removeBSplineByName(std::string);
     void removeInterBSplineByName(std::string);
+    //
+    void removeBezierSurfaceByName(std::string);
 
     void selectTorusByName(std::string);
     void selectPointByName(std::string);
     void selectBezierCurveByName(std::string);
     void selectBSplineByName(std::string);
     void selectInterBSplineByName(std::string);
+    //
+    void selectBezierSurfaceByName(std::string);
 
     Point* getPointByName(string);
     BezierCurve* getBezierCurveByName(std::string);

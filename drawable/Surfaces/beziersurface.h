@@ -16,6 +16,7 @@ using namespace glm;
 class BezierSurface: public Drawable
 {
 public:
+    bool isFlatSurface;
     BezierSurface();
     BezierSurface(Camera* camera);
     Camera * camera;

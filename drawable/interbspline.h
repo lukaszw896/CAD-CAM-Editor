@@ -46,7 +46,7 @@ private:
 
     void computeChordParameters();
     void computeKnotVector();
-    float euclideanDistance(vec4& point1, vec4& point2);
+    float euclideanDistance(vec3& point1, vec3& point2);
     void computeControlPoints();
     void draw();
     void printMat(float** a, int n, int m);

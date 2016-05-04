@@ -87,7 +87,7 @@ vec4 InterBSpline::computeBSpline(
     return vec4(x,y,z,1);
 }
 
-float InterBSpline::euclideanDistance(vec4& point1, vec4& point2)
+float InterBSpline::euclideanDistance(vec3& point1, vec3& point2)
 {
     return sqrt(pow(point1.x-point2.x,2)+pow(point1.y-point2.y,2)+pow(point1.z-point2.z,2));
 }

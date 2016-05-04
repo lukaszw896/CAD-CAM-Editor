@@ -28,11 +28,11 @@ void Point::computeGlobalTransformationMatrix()
 
 void Point::transform()
 {
-    localTransPointCoordinates = localTransformationMatrix * pointCoordinates;
+    localTransPointCoordinates = vec3(localTransformationMatrix * pointCoordinates);
 
     if(!camera->isStereoscopic)
     {
-        transPointCoordinates = camera->transformationMatrix * localTransPointCoordinates;
+        transPointCoordinates = camera->transformationMatrix * vec4(localTransPointCoordinates,1);
         transPointCoordinates.x = transPointCoordinates.x / transPointCoordinates.w;
         transPointCoordinates.y = transPointCoordinates.y / transPointCoordinates.w;
         transPointCoordinates.x /= camera->xRatio;
@@ -40,13 +40,13 @@ void Point::transform()
     }
     else
     {
-        leftEyeTransPointCoordinate = camera->transformationMatrixLeftEye*localTransPointCoordinates;
+        leftEyeTransPointCoordinate = camera->transformationMatrixLeftEye*vec4(localTransPointCoordinates,1);
         leftEyeTransPointCoordinate.x = leftEyeTransPointCoordinate.x / leftEyeTransPointCoordinate.w;
         leftEyeTransPointCoordinate.y = leftEyeTransPointCoordinate.y / leftEyeTransPointCoordinate.w;
         leftEyeTransPointCoordinate.x /= camera->xRatio;
         leftEyeTransPointCoordinate.y /= camera->yRatio;
 
-        rightEyeTransPointCoordinate = camera->transformationMatrixRightEye*localTransPointCoordinates;
+        rightEyeTransPointCoordinate = camera->transformationMatrixRightEye*vec4(localTransPointCoordinates,1);
         rightEyeTransPointCoordinate.x = rightEyeTransPointCoordinate.x / rightEyeTransPointCoordinate.w;
         rightEyeTransPointCoordinate.y = rightEyeTransPointCoordinate.y / rightEyeTransPointCoordinate.w;
         rightEyeTransPointCoordinate.x /= camera->xRatio;
@@ -75,8 +75,8 @@ void Point::draw()
         glColor3f(0.4,0.0, 0.0);
         glVertex2f(leftEyeTransPointCoordinate.x,leftEyeTransPointCoordinate.y);
 
-    //glColor3f(0, 0, 1);
-     glColor3f(0, 0.5, 0.5);
+        //glColor3f(0, 0, 1);
+        glColor3f(0, 0.5, 0.5);
         glVertex2f(rightEyeTransPointCoordinate.x,rightEyeTransPointCoordinate.y);
     }
     glEnd();

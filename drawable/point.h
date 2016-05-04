@@ -3,8 +3,10 @@
 #include "drawable/drawable.h"
 #include "Camera/camera.h"
 #include "glm/vec4.hpp"
+#include "glm/vec3.hpp"
 #include "glm/mat4x4.hpp"
 
+using namespace glm;
 
 class Point : public Drawable
 {
@@ -12,7 +14,7 @@ public:
     Point();
     Point(Camera* camera);
     glm::vec4 transPointCoordinates;
-    glm::vec4 localTransPointCoordinates;
+    glm::vec3 localTransPointCoordinates;
     glm::vec4 leftEyeTransPointCoordinate;
     glm::vec4 rightEyeTransPointCoordinate;
     void draw();

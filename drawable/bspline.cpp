@@ -96,15 +96,15 @@ vector<vec4> BSpline::calculateBezierPoints(){
     int segmentCount = deBoorPoints.size() - 3;
     vector<vec4> bezierPoints;
     for(int i = 0; i < segmentCount; i++){
-        const vec4& pos0 = deBoorPoints[i+0]->localTransPointCoordinates;
-        const vec4& pos1 = deBoorPoints[i+1]->localTransPointCoordinates;
-        const vec4& pos2 = deBoorPoints[i+2]->localTransPointCoordinates;
-        const vec4& pos3 = deBoorPoints[i+3]->localTransPointCoordinates;
+        const vec3& pos0 = deBoorPoints[i+0]->localTransPointCoordinates;
+        const vec3& pos1 = deBoorPoints[i+1]->localTransPointCoordinates;
+        const vec3& pos2 = deBoorPoints[i+2]->localTransPointCoordinates;
+        const vec3& pos3 = deBoorPoints[i+3]->localTransPointCoordinates;
 
-        bezierPoints.push_back(vec4((pos0 + pos1*4.0f + pos2)/6.0f));
-        bezierPoints.push_back(vec4((pos1*4.0f + pos2*2.0f)/6.0f));
-        bezierPoints.push_back(vec4((pos1*2.0f + pos2*4.0f)/6.0f));
-        bezierPoints.push_back(vec4((pos1 + pos2*4.0f + pos3)/6.0f));
+        bezierPoints.push_back(vec4((pos0 + pos1*4.0f + pos2)/6.0f,1));
+        bezierPoints.push_back(vec4((pos1*4.0f + pos2*2.0f)/6.0f,1));
+        bezierPoints.push_back(vec4((pos1*2.0f + pos2*4.0f)/6.0f,1));
+        bezierPoints.push_back(vec4((pos1 + pos2*4.0f + pos3)/6.0f,1));
     }
     return bezierPoints;
 }
@@ -118,7 +118,7 @@ vec4 BSpline::computeBSpline(
     for(unsigned int i = 0; i < deBoorPoints.size(); i++){
         float bsplineBasisValue = bsplineRecurive(t, n, i, knotVector);
 
-        const vec4& pos = deBoorPoints[i]->localTransPointCoordinates;
+        const vec3& pos = deBoorPoints[i]->localTransPointCoordinates;
         x += pos.x * bsplineBasisValue;
         y += pos.y * bsplineBasisValue;
         z += pos.z * bsplineBasisValue;
