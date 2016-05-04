@@ -202,9 +202,14 @@ void DrawableObjectsData::removeInterBSplineByName(std::string name)
 
 void DrawableObjectsData::removeBezierSurfaceByName(std::string name)
 {
+
     for(int i=0; i<bezierSurfaceList.size();i++){
         if(bezierSurfaceList[i]->name == name)
         {
+            for(int j=0;j<bezierSurfaceList[i]->controlPoints.size();j++)
+            {
+                removePoint(bezierSurfaceList[i]->controlPoints[j]);
+            }
             removeBezierSurface(bezierSurfaceList[i]);
             break;
         }
@@ -447,7 +452,7 @@ void DrawableObjectsData::initDrawableObjectsList()
         drawableObjects.push_back(interBSplineList.at(i));
     }
 
-    for(int i=0;i<bezierCurveList.size();i++)
+    for(int i=0;i<bezierSurfaceList.size();i++)
     {
         drawableObjects.push_back(bezierSurfaceList.at(i));
     }

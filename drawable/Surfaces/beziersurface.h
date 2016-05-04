@@ -17,6 +17,7 @@ class BezierSurface: public Drawable
 {
 public:
     bool isFlatSurface;
+    bool drawBezierNet;
     BezierSurface();
     BezierSurface(Camera* camera);
     BezierSurface(Camera *camera,float totalWidth,float totalHeight, int verNumOfPatches, int horNumOfPatches);
@@ -35,6 +36,7 @@ public:
     void draw();
     vector<Point*> controlPoints;
 private:
+    static int id;
     vector<BezierPatch*> patches;
 
 };

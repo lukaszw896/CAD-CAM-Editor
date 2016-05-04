@@ -17,6 +17,9 @@ ObjectListsWidget::ObjectListsWidget()
     interBSplineCurveTreeList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(interBSplineCurveTreeList,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showInterBSplineContextMenu(QPoint)));
 
+    bezierSurfaceTreeList->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(bezierSurfaceTreeList,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showBezierSurfaceContextMenu(QPoint)));
+
     nameChangeDialog = new NameChangeDialog();
     connect(nameChangeDialog,SIGNAL(nameHasBeenChanged()),this,SLOT(drawableHasBeenRenamed()));
 }
@@ -30,6 +33,7 @@ void ObjectListsWidget::setupLayout()
     bezierListLabel = new QLabel(tr("Bezier List"));
     bSplineListLabel = new QLabel(tr("BSpline List"));
     interBSplineListLabel = new QLabel(tr("InterBSpline List"));
+    bezierSurfaceListLabel = new QLabel(tr("Bezier Surface List"));
 
     widgetContainerLayout = new QVBoxLayout;
     torusLayout = new QVBoxLayout;
@@ -37,6 +41,7 @@ void ObjectListsWidget::setupLayout()
     curveLayout = new QVBoxLayout;
     bSplineLayout = new QVBoxLayout;
     interBSplineLayout = new QVBoxLayout;
+    bezierSurfaceLayout = new QVBoxLayout;
     torusLayout->setMargin(0);
     pointLayout->setMargin(0);
     curveLayout->setMargin(0);
@@ -52,13 +57,13 @@ void ObjectListsWidget::setupLayout()
     connect(pointList,SIGNAL(clicked(QModelIndex)),this,SLOT(pointHasBeenSelected()));
     connect(pointList,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(pointHasBeenDoubleClicked()));
     bezierCurveTreeList = new QTreeWidget;
-    connect(bezierCurveTreeList, SIGNAL(clicked(QModelIndex)),this, SLOT(bezierCurveHasBeenClicked()));
-
-
+    connect(bezierCurveTreeList, SIGNAL(clicked(QModelIndex)),this, SLOT(bezierCurveHasBeenClicked()));  
     bSplineCurveTreeList = new QTreeWidget;
     connect(bSplineCurveTreeList,SIGNAL(clicked(QModelIndex)),this,SLOT(bSplineHasBeenClicked()));
     interBSplineCurveTreeList = new QTreeWidget;
     connect(interBSplineCurveTreeList,SIGNAL(clicked(QModelIndex)),this,SLOT(interBSplineHasBeenClicked()));
+    bezierSurfaceTreeList = new QTreeWidget;
+    connect(bezierSurfaceTreeList,SIGNAL(clicked(QModelIndex)),this,SLOT(bezierSurfaceHasBeenClicked()));
     //connect
     torusLayout->addWidget(torusListLabel);
     torusLayout->addWidget(torusList);
@@ -75,6 +80,8 @@ void ObjectListsWidget::setupLayout()
     interBSplineLayout->addWidget(interBSplineListLabel);
     interBSplineLayout->addWidget(interBSplineCurveTreeList);
 
+    bezierSurfaceLayout->addWidget(bezierSurfaceListLabel);
+    bezierSurfaceLayout->addWidget(bezierSurfaceTreeList);
 
     mainLayout = new QVBoxLayout;
 
@@ -85,6 +92,7 @@ void ObjectListsWidget::setupLayout()
     mainLayout->addLayout(curveLayout);
     mainLayout->addLayout(bSplineLayout);
     mainLayout->addLayout(interBSplineLayout);
+    mainLayout->addLayout(bezierSurfaceLayout);
     /*scrollArea->setLayout(widgetContainerLayout);
     scrollArea->setWidgetResizable(true);
     QSizePolicy policy = scrollArea->sizePolicy();
@@ -109,6 +117,7 @@ void ObjectListsWidget::updateListsContent()
     bezierCurveTreeList->clear();
     bSplineCurveTreeList->clear();
     interBSplineCurveTreeList->clear();
+    bezierSurfaceTreeList->clear();
 
     for(int i=0;i<drawableObjectsData.torusList.size();i++)
     {
@@ -122,17 +131,26 @@ void ObjectListsWidget::updateListsContent()
 
     for(int i=0; i<drawableObjectsData.bezierCurveList.size();i++)
     {
-        addBezierCurveToList(drawableObjectsData.bezierCurveList[i],bezierCurveTreeList,QString::fromStdString(drawableObjectsData.bezierCurveList[i]->name));
+        addBezierCurveToList(drawableObjectsData.bezierCurveList[i],bezierCurveTreeList,
+                             QString::fromStdString(drawableObjectsData.bezierCurveList[i]->name));
     }
 
     for(int i=0; i<drawableObjectsData.bSplineList.size(); i++)
     {
-        addBSplineTolist(drawableObjectsData.bSplineList[i],bSplineCurveTreeList,QString::fromStdString(drawableObjectsData.bSplineList[i]->name));
+        addBSplineTolist(drawableObjectsData.bSplineList[i],bSplineCurveTreeList,
+                         QString::fromStdString(drawableObjectsData.bSplineList[i]->name));
     }
 
     for(int i=0; i<drawableObjectsData.interBSplineList.size(); i++)
     {
-        addInterBSplineTolist(drawableObjectsData.interBSplineList[i],interBSplineCurveTreeList,QString::fromStdString(drawableObjectsData.interBSplineList[i]->name));
+        addInterBSplineTolist(drawableObjectsData.interBSplineList[i],interBSplineCurveTreeList,
+                              QString::fromStdString(drawableObjectsData.interBSplineList[i]->name));
+    }
+
+    for(int i=0; i<drawableObjectsData.bezierSurfaceList.size();i++)
+    {
+        addBezierSurfaceTolist(drawableObjectsData.bezierSurfaceList[i],bezierSurfaceTreeList,
+                               QString::fromStdString(drawableObjectsData.bezierSurfaceList[i]->name));
     }
 
 }
@@ -205,6 +223,16 @@ void ObjectListsWidget::interBSplineHasBeenClicked()
     }
 }
 
+void ObjectListsWidget::bezierSurfaceHasBeenClicked()
+{
+    drawableObjectsData.deselectBezierSurface();
+    QList<QTreeWidgetItem*> itemList = bezierSurfaceTreeList->selectedItems();
+    for(int i=0; i < itemList.size(); i++)
+    {
+        drawableObjectsData.selectBezierSurfaceByName(itemList[i]->text(0).toStdString());
+    }
+}
+
 void ObjectListsWidget::deleteTorusButtonClicked()
 {
     //items in lists are deseleted while deleting element (?)
@@ -251,6 +279,11 @@ void ObjectListsWidget::deleteBSplineButtonClicked()
 }
 
 void ObjectListsWidget::deleteInterBSplineButtonClicked()
+{
+
+}
+
+void ObjectListsWidget::deleteBezierSurfaceHasBeenClicked()
 {
 
 }
@@ -425,6 +458,36 @@ void ObjectListsWidget::showInterBSplineContextMenu(const QPoint &pos)
             string parentName = itemList.at(0)->parent()->text(0).toStdString();
             myMenu.addAction("Remove point", this, SLOT(removePointFromInterBSpline()));
         }
+
+
+        // Show context menu at handling position
+        myMenu.exec(globalPos);
+    }
+}
+
+void ObjectListsWidget::showBezierSurfaceContextMenu(const QPoint &pos)
+{
+    QList<QTreeWidgetItem*> itemList = bezierSurfaceTreeList->selectedItems();
+    if(itemList.size()>0){
+    string name = itemList.at(0)->text(0).toStdString();
+
+    // Handle global position
+        QPoint globalPos = bezierSurfaceTreeList->mapToGlobal(pos);
+
+        // Create menu and insert some actions
+        QMenu myMenu;
+        if(name[0] == 'B')
+        {
+            myMenu.addAction("Remove Bezier Surface", this, SLOT(removeBezierSurface()));
+            myMenu.addAction("Turn on/off Bezier Net", this, SLOT(turnOnBezierNet()));
+
+          //  myMenu.addAction("Erase",  this, SLOT(eraseBezierCurveListItem()));
+        }
+       /* else
+        {
+            string parentName = itemList.at(0)->parent()->text(0).toStdString();
+            myMenu.addAction("Remove point", this, SLOT(removePointFromInterBSpline()));
+        }*/
 
 
         // Show context menu at handling position
@@ -691,7 +754,31 @@ void ObjectListsWidget::turnOnOffInterBSplinePolygon()
         interBSpline->drawPolygon = true;
     }
 }
+//BEZIER SURFACE TREE WIDGET SLOTS
 
+void ObjectListsWidget::removeBezierSurface()
+{
+    QList<QTreeWidgetItem*> itemList = bezierSurfaceTreeList->selectedItems();
+    string name = itemList.at(0)->text(0).toStdString();
+
+    drawableObjectsData.removeBezierSurfaceByName(name);
+    updateListsContent();
+}
+
+void ObjectListsWidget::turnOnBezierNet()
+{
+    QList<QTreeWidgetItem*> itemList = bezierSurfaceTreeList->selectedItems();
+    string name = itemList.at(0)->text(0).toStdString();
+    BezierSurface* bezierSurface = drawableObjectsData.getBezierSurfaceByName(name);
+    if(bezierSurface->drawBezierNet == true)
+    {
+        bezierSurface->drawBezierNet = false;
+    }
+    else
+    {
+        bezierSurface->drawBezierNet = true;
+    }
+}
 
 ///NORMAL METHODS
 
@@ -733,6 +820,17 @@ void ObjectListsWidget::addInterBSplineTolist(InterBSpline *interBSpline, QTreeW
     for(int i=0;i<interBSpline->deBoorPoints.size();i++)
     {
         addPointToCurve(treeWidgetItem,QString::fromStdString(interBSpline->deBoorPoints[i]->name));
+    }
+    parent->addTopLevelItem(treeWidgetItem);
+}
+
+void ObjectListsWidget::addBezierSurfaceTolist(BezierSurface* bezierSurface, QTreeWidget* parent, QString name)
+{
+    QTreeWidgetItem* treeWidgetItem = new QTreeWidgetItem(parent);
+    treeWidgetItem->setText(0, name);
+    for(int i=0;i<bezierSurface->controlPoints.size();i++)
+    {
+        addPointToCurve(treeWidgetItem,QString::fromStdString(bezierSurface->controlPoints[i]->name));
     }
     parent->addTopLevelItem(treeWidgetItem);
 }

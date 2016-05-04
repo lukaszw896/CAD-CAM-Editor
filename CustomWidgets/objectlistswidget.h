@@ -33,12 +33,14 @@ public slots:
     void bezierCurveHasBeenClicked();
     void bSplineHasBeenClicked();
     void interBSplineHasBeenClicked();
+    void bezierSurfaceHasBeenClicked();
 
     void deleteTorusButtonClicked();
     void deletePointButtonClicked();
     void deleteCurveButtonClicked();
     void deleteBSplineButtonClicked();
     void deleteInterBSplineButtonClicked();
+    void deleteBezierSurfaceHasBeenClicked();
 
     void pointOnSceneSelection(Point*);
     void pointOnSceneDoubleClick(Point*);
@@ -47,6 +49,7 @@ public slots:
     void showBezierCurvesContextMenu(const QPoint&);
     void showBSplineContextMenu(const QPoint&);
     void showInterBSplineContextMenu(const QPoint&);
+    void showBezierSurfaceContextMenu(const QPoint&);
 
     void drawableHasBeenRenamed();
 
@@ -75,6 +78,10 @@ public slots:
     void removePointFromInterBSpline();
     void turnOnOffInterBSplinePolygon();
 
+    //BEZIER SURFACE TREE WIDGET SLOTS
+    void removeBezierSurface();
+    void turnOnBezierNet();
+
 signals:
 
 
@@ -92,6 +99,7 @@ private:
     QVBoxLayout* curveLayout;
     QVBoxLayout* bSplineLayout;
     QVBoxLayout* interBSplineLayout;
+    QVBoxLayout* bezierSurfaceLayout;
 
 
     QLabel* torusListLabel;
@@ -99,12 +107,14 @@ private:
     QLabel* bezierListLabel;
     QLabel* bSplineListLabel;
     QLabel* interBSplineListLabel;
+    QLabel* bezierSurfaceListLabel;
 
     QListWidget* torusList;
     QListWidget* pointList;
     QTreeWidget* bezierCurveTreeList;
     QTreeWidget* bSplineCurveTreeList;
     QTreeWidget* interBSplineCurveTreeList;
+    QTreeWidget* bezierSurfaceTreeList;
 
     NameChangeDialog* nameChangeDialog;
 
@@ -118,6 +128,9 @@ private:
 
     void addInterBSplineTolist(InterBSpline* interBSpline, QTreeWidget* parent, QString name);
     void addPointToInterBSpline(QTreeWidgetItem* parent, QString name);
+
+    void addBezierSurfaceTolist(BezierSurface* bezierSurface, QTreeWidget* parent, QString name);
+  //  void addPointToBezierSurface(QTreeWidgetItem* parent, QString name);
 };
 
 #endif // OBJECTLISTSWIDGET_H

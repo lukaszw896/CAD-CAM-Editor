@@ -5,8 +5,11 @@ BezierSurface::BezierSurface()
 
 }
 
+int BezierSurface::id = 0;
+
 BezierSurface::BezierSurface(Camera* camera)
 {
+
     this->camera = camera;
     isFlatSurface = false;
     verNumOfPatches = 3;
@@ -27,6 +30,11 @@ BezierSurface::BezierSurface(Camera* camera)
 
 BezierSurface::BezierSurface(Camera *camera, float totalWidth, float totalHeight, int verNumOfPatches, int horNumOfPatches)
 {
+    id++;
+    name = "BezierFlatSurface_";
+    name += std::to_string(id);
+    drawBezierNet = false;
+
     this->camera = camera;
     isFlatSurface = true;
     this->verNumOfPatches = verNumOfPatches;
@@ -126,6 +134,40 @@ void BezierSurface::initPatches()
 
 void BezierSurface::draw()
 {
+    if(drawBezierNet)
+    {
+        glBegin(GL_LINES);
+        for(int i=0;i<horNumOfConPoints-1;i++){
+            for(int j=0;j<verNumOfConPoints-1;j++)
+            {
+                glVertex2f(controlPoints[j*horNumOfConPoints + i]->transPointCoordinates.x,
+                        controlPoints[j*horNumOfConPoints + i]->transPointCoordinates.y);
+                glVertex2f(controlPoints[j*horNumOfConPoints + i +1]->transPointCoordinates.x,
+                        controlPoints[j*horNumOfConPoints + i +1]->transPointCoordinates.y);
+
+                glVertex2f(controlPoints[j*horNumOfConPoints + i]->transPointCoordinates.x,
+                        controlPoints[j*horNumOfConPoints + i]->transPointCoordinates.y);
+                glVertex2f(controlPoints[(j+1)*horNumOfConPoints + i]->transPointCoordinates.x,
+                        controlPoints[(j+1)*horNumOfConPoints + i]->transPointCoordinates.y);
+            }
+        }
+        for(int i=0;i<horNumOfConPoints-1;i++){
+            {
+                glVertex2f(controlPoints[(verNumOfConPoints-1)*horNumOfConPoints + i]->transPointCoordinates.x,
+                        controlPoints[(verNumOfConPoints-1)*horNumOfConPoints + i]->transPointCoordinates.y);
+                glVertex2f(controlPoints[(verNumOfConPoints-1)*horNumOfConPoints + i +1]->transPointCoordinates.x,
+                        controlPoints[(verNumOfConPoints-1)*horNumOfConPoints + i +1]->transPointCoordinates.y);
+            }
+        }
+        for(int j=0;j<verNumOfConPoints-1;j++)
+        {
+            glVertex2f(controlPoints[j*horNumOfConPoints + horNumOfConPoints-1]->transPointCoordinates.x,
+                    controlPoints[j*horNumOfConPoints + horNumOfConPoints-1]->transPointCoordinates.y);
+            glVertex2f(controlPoints[(j+1)*horNumOfConPoints + horNumOfConPoints-1]->transPointCoordinates.x,
+                    controlPoints[(j+1)*horNumOfConPoints + horNumOfConPoints-1]->transPointCoordinates.y);
+        }
+        glEnd();
+    }
     for(int i=0;i<patches.size();i++)
     {
             patches[i]->draw();
