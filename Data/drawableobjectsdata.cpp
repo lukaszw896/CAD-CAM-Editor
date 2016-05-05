@@ -77,6 +77,7 @@ void DrawableObjectsData::addBezierSurface(BezierSurface * bezierSurface)
 
     for(int i=0;i<bezierSurface->controlPoints.size();i++)
     {
+        bezierSurface->controlPoints[i]->isRemovable = false;
         pointList.push_back(bezierSurface->controlPoints[i]);
         drawableObjects.push_back(bezierSurface->controlPoints[i]);
     }
@@ -208,6 +209,7 @@ void DrawableObjectsData::removeBezierSurfaceByName(std::string name)
         {
             for(int j=0;j<bezierSurfaceList[i]->controlPoints.size();j++)
             {
+                bezierSurfaceList[i]->controlPoints[j]->isRemovable = true;
                 removePoint(bezierSurfaceList[i]->controlPoints[j]);
             }
             removeBezierSurface(bezierSurfaceList[i]);
@@ -376,13 +378,13 @@ void DrawableObjectsData::deselectBezierSurface()
 
 void DrawableObjectsData::removePoint(Point * point)
 {
-
+    if(point->isRemovable){
     std::vector<Point*>::iterator position = std::find(pointList.begin(), pointList.end(), point);
         if (position != pointList.end()) // == myVector.end() means the element was not found
             pointList.erase(position);
         initDrawableObjectsList();
+    }
 }
-
 void DrawableObjectsData::removeTorus(Torus* torus)
 {
     std::vector<Torus*>::iterator position = std::find(torusList.begin(), torusList.end(), torus);

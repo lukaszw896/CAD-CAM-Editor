@@ -200,6 +200,7 @@ HEADERS  += window.h \
     drawable/Surfaces/bezierpatch.h \
     drawable/Surfaces/beziersurface.h \
     Dialogs/addc0cylindersurfacedialog.h \
-    Dialogs/addc0flatsurfacedialog.h
+    Dialogs/addc0flatsurfacedialog.h \
+    Math/general.h
 
 FORMS    += window.ui

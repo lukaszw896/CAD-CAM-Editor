@@ -60,6 +60,11 @@ void DrawerWindow::initObjects()
     scaleSlider = new QSlider(Qt::Horizontal);
     scaleSlider->setMaximum(100);
     scaleSlider->setMinimum(10);
+
+    patchParamSlider = new QSlider(Qt::Horizontal);
+    patchParamSlider->setMaximum(10);
+    patchParamSlider->setMinimum(4);
+
     oglWidget = new OGlWidget();
     objectListsWidget = new ObjectListsWidget();
     connect(this,SIGNAL(drawableDataChanged()),objectListsWidget,SLOT(updateListsContent()));
@@ -74,6 +79,7 @@ void DrawerWindow::initObjects()
     connect(addC0FlatSurfaceDialog,SIGNAL(bezFlatSurfAdded()),objectListsWidget,SLOT(updateListsContent()));
 
     connect(scaleSlider,SIGNAL(valueChanged(int)),oglWidget,SLOT(changeScale(int)));
+    connect(patchParamSlider,SIGNAL(valueChanged(int)),this,SLOT(updatePatchParam(int)));
     connect(settingsDialog,SIGNAL(turnOnOffStereoscopy(bool)),oglWidget,SLOT(checkBoxStateChanged(bool)));
     connect(settingsDialog,SIGNAL(eyeDistanceValueChanged(int)),oglWidget,SLOT(changeEyeDistance(int)));
 
@@ -96,6 +102,7 @@ void DrawerWindow::initLayout()
     rightLayout->addWidget(objectListsWidget);
     rightLayout->addWidget(scaleLabel);
     rightLayout->addWidget(scaleSlider);
+    rightLayout->addWidget(patchParamSlider);
     rightLayout->addStretch();
 
     QWidget *rightContainer = new QWidget();
@@ -225,6 +232,11 @@ void DrawerWindow::updateCursorInfo()
     yRealCord->setText(QString::fromStdString("Real Y: "+ std::to_string(realPosition.y)));
     zRealCord->setText(QString::fromStdString("Real Z: "+ std::to_string(realPosition.z)));
 
+}
+
+void DrawerWindow::updatePatchParam(int n)
+{
+    drawableObjectsData.updatePatchParam(n);
 }
 
 

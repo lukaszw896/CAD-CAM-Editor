@@ -17,7 +17,6 @@
 
 class DrawableObjectsData
 {
-
 public:
         static DrawableObjectsData& getInstance();
 
@@ -90,6 +89,18 @@ public:
     std::vector<BSpline*> bSplineList;
     std::vector<InterBSpline*> interBSplineList;
     vector<BezierSurface*> bezierSurfaceList;
+
+    void updatePatchParam(int n)
+    {
+        for(int i=0;i<bezierSurfaceList.size();i++)
+        {
+            for(int j=0;j<bezierSurfaceList[i]->patches.size();j++)
+            {
+                bezierSurfaceList[i]->patches[j]->u = 1.0f/n;
+                bezierSurfaceList[i]->patches[j]->v = 1.0f/n;
+            }
+        }
+    }
 
     private:
 

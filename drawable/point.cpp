@@ -12,6 +12,7 @@ Point::Point(Camera* camera)
     id++;
     name = "Point_";
     name += std::to_string(id);
+    isRemovable = true;
 }
 
 int Point::id =0;

@@ -39,10 +39,29 @@ public:
     void initPatches();
     void draw();
     vector<Point*> controlPoints;
-
-private:
-    static int id;
     vector<BezierPatch*> patches;
+private:
+   /* float getMaxLength()
+    {
+        float max = 0;
+        float tmpRow =0;
+        for(int i=0;i<horNumOfConPoints;i++)
+        {
+            for(int j=0;j<verNumOfConPoints-1;j++)
+            {
+                tmpRow += euclideanDistance2(controlPoints[j*horNumOfConPoints+i]->localTransPointCoordinates,controlPoints[(j+1)*horNumOfConPoints+i]->localTransPointCoordinates);
+            }
+            if(tmpRow>max)max=tmpRow;
+            tmpRow=0;
+        }
+    }
+    float euclideanDistance2(vec3& point1, vec3& point2)
+    {
+        return sqrt(pow(point1.x-point2.x,2)+pow(point1.y-point2.y,2)+pow(point1.z-point2.z,2));
+    }*/
+
+    static int id;
+
 
 };
 

@@ -17,6 +17,7 @@ public:
     glm::vec3 localTransPointCoordinates;
     glm::vec4 leftEyeTransPointCoordinate;
     glm::vec4 rightEyeTransPointCoordinate;
+    bool isRemovable;
     void draw();
 private:
     static int id;

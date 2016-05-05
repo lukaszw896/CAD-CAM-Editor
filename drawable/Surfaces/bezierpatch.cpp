@@ -25,22 +25,57 @@ void BezierPatch::draw()
             controlPoints[i][j]->draw();
         }
     }
-    float dt=0.008;
+    float dt=0.003;
+    /*float pixNum;
+    if(camera->screenWidth > camera->screenHeight){
+        pixNum = camera->screenHeight;
+    }
+    else{
+        pixNum = camera->screenWidth;
+    }
+    float length = getMaxLength();
+    dt = 1.0f/pixNum/length/2;*/
     glPointSize(1);
     glBegin(GL_POINTS);
 
     //draw columns
     for(float i=0;i<1.01f;i+=u)
     {
+
+
         for(float j=0;j<1.f;j+=dt)
         {
             pointToDraw = vec4(computePoint(i,j),1);
-            pointToDraw = camera->transformationMatrix* pointToDraw;
-            pointToDraw.x = pointToDraw.x / pointToDraw.w;
-            pointToDraw.y = pointToDraw.y / pointToDraw.w;
-            pointToDraw.x /= camera->xRatio;
-            pointToDraw.y /= camera->yRatio;
-            glVertex2f(pointToDraw.x,pointToDraw.y);
+            if(!camera->isStereoscopic){
+                pointToDraw = camera->transformationMatrix* pointToDraw;
+                pointToDraw.x = pointToDraw.x / pointToDraw.w;
+                pointToDraw.y = pointToDraw.y / pointToDraw.w;
+                pointToDraw.x /= camera->xRatio;
+                pointToDraw.y /= camera->yRatio;
+                glVertex2f(pointToDraw.x,pointToDraw.y);
+            }
+            else{
+                vec4 point2 = vec4(pointToDraw);
+                glColor3f(0.4,0.0, 0.0);
+                pointToDraw = camera->transformationMatrixLeftEye * pointToDraw;
+                pointToDraw.x /= pointToDraw.w;
+                pointToDraw.y /= pointToDraw.w;
+                pointToDraw.x /= camera->xRatio;
+                pointToDraw.y /= camera->yRatio;
+
+                if(!(pointToDraw.w >=-0.06)) // clip
+                    glVertex2f(pointToDraw.x, pointToDraw.y);
+
+                glColor3f(0, 0.5, 0.5);
+                point2 = camera->transformationMatrixRightEye * point2;
+                point2.x /= point2.w;
+                point2.y /= point2.w;
+                point2.x /= camera->xRatio;
+                point2.y /= camera->yRatio;
+
+                if(!(point2.w >=-0.06)) // clip
+                    glVertex2f(point2.x, point2.y);
+            }
         }
     }
 
@@ -49,12 +84,36 @@ void BezierPatch::draw()
         for(float j=0;j<1.f;j+=dt)
         {
             pointToDraw = vec4(computePoint(j,i),1);
-            pointToDraw = camera->transformationMatrix* pointToDraw;
-            pointToDraw.x = pointToDraw.x / pointToDraw.w;
-            pointToDraw.y = pointToDraw.y / pointToDraw.w;
-            pointToDraw.x /= camera->xRatio;
-            pointToDraw.y /= camera->yRatio;
-            glVertex2f(pointToDraw.x,pointToDraw.y);
+                if(!camera->isStereoscopic){
+                    pointToDraw = camera->transformationMatrix* pointToDraw;
+                    pointToDraw.x = pointToDraw.x / pointToDraw.w;
+                    pointToDraw.y = pointToDraw.y / pointToDraw.w;
+                    pointToDraw.x /= camera->xRatio;
+                    pointToDraw.y /= camera->yRatio;
+                    glVertex2f(pointToDraw.x,pointToDraw.y);
+                }
+                else{
+                    vec4 point2 = vec4(pointToDraw);
+                    glColor3f(0.4,0.0, 0.0);
+                    pointToDraw = camera->transformationMatrixLeftEye * pointToDraw;
+                    pointToDraw.x /= pointToDraw.w;
+                    pointToDraw.y /= pointToDraw.w;
+                    pointToDraw.x /= camera->xRatio;
+                    pointToDraw.y /= camera->yRatio;
+
+                    if(!(pointToDraw.w >=-0.06)) // clip
+                        glVertex2f(pointToDraw.x, pointToDraw.y);
+
+                    glColor3f(0, 0.5, 0.5);
+                    point2 = camera->transformationMatrixRightEye * point2;
+                    point2.x /= point2.w;
+                    point2.y /= point2.w;
+                    point2.x /= camera->xRatio;
+                    point2.y /= camera->yRatio;
+
+                    if(!(point2.w >=-0.06)) // clip
+                        glVertex2f(point2.x, point2.y);
+                }
         }
     }
 

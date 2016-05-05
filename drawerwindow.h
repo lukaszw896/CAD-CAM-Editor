@@ -27,6 +27,7 @@ signals:
 
 public slots:
     void updateCursorInfo();
+    void updatePatchParam(int);
 
 protected:
    // void contextMenuEvent(QContextMenuEvent *event) Q_DECL_OVERRIDE;
@@ -62,6 +63,7 @@ private:
 
     QLabel *scaleLabel;
     QSlider *scaleSlider;
+    QSlider *patchParamSlider;
 
     QVBoxLayout *cordsLayout;
     QVBoxLayout *rightLayout;
