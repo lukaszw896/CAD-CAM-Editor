@@ -9,7 +9,7 @@ BezierPatch::BezierPatch()
 BezierPatch::BezierPatch(Camera *camera)
 {
     this->camera = camera;
-
+    pixelVector.resize(10000);
     u=0.25f;
     v=0.25f;
 
@@ -25,7 +25,7 @@ void BezierPatch::draw()
             controlPoints[i][j]->draw();
         }
     }
-    float dt=0.003;
+    float dt=0.01;
     /*float pixNum;
     if(camera->screenWidth > camera->screenHeight){
         pixNum = camera->screenHeight;
@@ -41,8 +41,7 @@ void BezierPatch::draw()
     //draw columns
     for(float i=0;i<1.01f;i+=u)
     {
-
-
+        
         for(float j=0;j<1.f;j+=dt)
         {
             pointToDraw = vec4(computePoint(i,j),1);
@@ -158,3 +157,32 @@ vec3 BezierPatch::computePoint(float u, float v)
     return tmp;
 }
 
+/*void calcU(float i, float bottomT, float upperT)
+{
+    for(float j=0;j<1.f;j+=dt)
+    {
+        pointToDraw = vec4(computePoint(i,j),1);
+        if(!camera->isStereoscopic){
+            pointToDraw = camera->transformationMatrix* pointToDraw;
+            pointToDraw.x = pointToDraw.x / pointToDraw.w;
+            pointToDraw.y = pointToDraw.y / pointToDraw.w;
+            pointToDraw.x /= camera->xRatio;
+            pointToDraw.y /= camera->yRatio;    
+        }
+        else{
+            vec4 point2 = vec4(pointToDraw);
+            pointToDraw = camera->transformationMatrixLeftEye * pointToDraw;
+            pointToDraw.x /= pointToDraw.w;
+            pointToDraw.y /= pointToDraw.w;
+            pointToDraw.x /= camera->xRatio;
+            pointToDraw.y /= camera->yRatio;
+
+            point2 = camera->transformationMatrixRightEye * point2;
+            point2.x /= point2.w;
+            point2.y /= point2.w;
+            point2.x /= camera->xRatio;
+            point2.y /= camera->yRatio;
+        }
+    }
+}
+*/

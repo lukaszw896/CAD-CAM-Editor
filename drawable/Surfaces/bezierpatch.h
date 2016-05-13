@@ -28,12 +28,13 @@ private:
     vec3 tmp;
     vec4 pointToDraw;
     vec4 pointToDraw2;
+    vector<vec4> pixelVector;
 
     float width,height;
 
     float berBasis(int i, float u);
     vec3 computePoint(float u, float v);
-    float getMaxLength()
+    /*float getMaxLength()
     {
         float max = 0;
         float tmpCol =0;
@@ -50,11 +51,11 @@ private:
             tmpCol=0;
             tmpRow=0;
         }
-    }
-    float euclideanDistance2(vec3& point1, vec3& point2)
+    }*/
+   /* float euclideanDistance2(vec3& point1, vec3& point2)
     {
         return sqrt(pow(point1.x-point2.x,2)+pow(point1.y-point2.y,2)+pow(point1.z-point2.z,2));
-    }
+    }*/
 
 };
 

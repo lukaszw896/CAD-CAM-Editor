@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui opengl
-
+RESOURCES = qdarkstyle/style.qrc
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = CCEditor
