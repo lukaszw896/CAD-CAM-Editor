@@ -14,6 +14,10 @@ Point::Point(Camera* camera)
     name += std::to_string(id);
     isRemovable = true;
 }
+Point::Point(vec3 cordVec)
+{
+    localTransPointCoordinates = cordVec;
+}
 
 int Point::id =0;
 
@@ -29,6 +33,8 @@ void Point::computeGlobalTransformationMatrix()
 
 void Point::transform()
 {
+    computeLocalTransformationMatrix();
+    computeGlobalTransformationMatrix();
     localTransPointCoordinates = vec3(localTransformationMatrix * pointCoordinates);
 
     if(!camera->isStereoscopic)
@@ -57,8 +63,6 @@ void Point::transform()
 
 void Point::draw()
 {
-    computeLocalTransformationMatrix();
-    computeGlobalTransformationMatrix();
     transform();
 
     glBegin(GL_POINTS);

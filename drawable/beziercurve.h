@@ -19,6 +19,9 @@ public:
     vector<Point*> pointVector;
     void removePointByName(string name);
     bool drawPolygon;
+    vector<glm::vec4> curvePointsCoordinates;
+    void draw();
+
 private:
 
     static int id;
@@ -28,7 +31,7 @@ private:
 
 
 
-    vector<glm::vec4> curvePointsCoordinates;
+
     vector<glm::vec4> curveTransPointsCooridnates;
     vector<int> sectionPointNum;
 
@@ -69,7 +72,6 @@ private:
     void drawSingleOGLPoint(vec4* point);
 
     void transform();
-    void draw();
 };
 
 #endif // BEZIERCURVE_H

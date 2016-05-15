@@ -13,11 +13,13 @@ class Point : public Drawable
 public:
     Point();
     Point(Camera* camera);
+    Point(vec3);
     glm::vec4 transPointCoordinates;
     glm::vec3 localTransPointCoordinates;
     glm::vec4 leftEyeTransPointCoordinate;
     glm::vec4 rightEyeTransPointCoordinate;
     bool isRemovable;
+    void transform();
     void draw();
 private:
     static int id;
@@ -33,7 +35,7 @@ private:
 
     void computeLocalTransformationMatrix();
     void computeGlobalTransformationMatrix();
-    void transform();
+
 
 };
 

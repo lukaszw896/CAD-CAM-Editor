@@ -12,6 +12,7 @@ BSpline::BSpline(Camera *camera)
     id++;
     name = "BSpline_";
     name += to_string(id);
+    bezierCurve = new BezierCurve(camera);
 }
 
 void BSpline::removePointByName(string name)
@@ -48,10 +49,16 @@ void BSpline::draw()
 
 
 
+
         int degree = deBoorPoints.size() -1;
         if(degree>3)degree = 3;
         else if(degree<0) return;
 
+        if(drawPolygon){
+        calculateBezierPoints(&(bezierCurve->pointVector));
+        bezierCurve->draw();
+        }
+        else{
         int knotNumber = deBoorPoints.size()+4;
         float startValue = 0.f;
         float knotDT = 1.0f / knotNumber;
@@ -64,9 +71,9 @@ void BSpline::draw()
         }
 
         //TMP
-        float dt = 0.0001/(float)deBoorPoints.size();
+        float dt = 0.001/(float)deBoorPoints.size();
 
-        float t = knotVector[1];
+        float t = knotVector[3];
         //dt /= 5*t_max;
 
         glPointSize(1.0f);
@@ -88,25 +95,44 @@ void BSpline::draw()
 
 
         glEnd();
-
+            }
 }
 
-vector<vec4> BSpline::calculateBezierPoints(){
+void BSpline::calculateBezierPoints(vector<Point*>* pointVector){
 
     int segmentCount = deBoorPoints.size() - 3;
-    vector<vec4> bezierPoints;
-    for(int i = 0; i < segmentCount; i++){
+    pointVector->clear();
+    //vector<vec4> bezierPoints;
+    const vec3& pos0 = deBoorPoints[0]->localTransPointCoordinates;
+    const vec3& pos1 = deBoorPoints[1]->localTransPointCoordinates;
+    const vec3& pos2 = deBoorPoints[2]->localTransPointCoordinates;
+    const vec3& pos3 = deBoorPoints[3]->localTransPointCoordinates;
+
+    pointVector->push_back(new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f)));
+    pointVector->push_back(new Point(vec3((pos1*4.0f + pos2*2.0f)/6.0f)));
+    pointVector->push_back(new Point(vec3((pos1*2.0f + pos2*4.0f)/6.0f)));
+    pointVector->push_back(new Point(vec3((pos1 + pos2*4.0f + pos3)/6.0f)));
+    for(int i = 1; i < segmentCount; i++){
         const vec3& pos0 = deBoorPoints[i+0]->localTransPointCoordinates;
         const vec3& pos1 = deBoorPoints[i+1]->localTransPointCoordinates;
         const vec3& pos2 = deBoorPoints[i+2]->localTransPointCoordinates;
         const vec3& pos3 = deBoorPoints[i+3]->localTransPointCoordinates;
 
-        bezierPoints.push_back(vec4((pos0 + pos1*4.0f + pos2)/6.0f,1));
-        bezierPoints.push_back(vec4((pos1*4.0f + pos2*2.0f)/6.0f,1));
-        bezierPoints.push_back(vec4((pos1*2.0f + pos2*4.0f)/6.0f,1));
-        bezierPoints.push_back(vec4((pos1 + pos2*4.0f + pos3)/6.0f,1));
+       // pointVector->push_back(new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f)));
+        pointVector->push_back(new Point(vec3((pos1*4.0f + pos2*2.0f)/6.0f)));
+        pointVector->push_back(new Point(vec3((pos1*2.0f + pos2*4.0f)/6.0f)));
+        pointVector->push_back(new Point(vec3((pos1 + pos2*4.0f + pos3)/6.0f)));
+
+        drawPoint(vec3((pos0 + pos1*4.0f + pos2)/6.0f));
+        drawPoint(vec3((pos1*4.0f + pos2*2.0f)/6.0f));
+        drawPoint(vec3((pos1*2.0f + pos2*4.0f)/6.0f));
+        drawPoint(vec3((pos1 + pos2*4.0f + pos3)/6.0f));
+
+        /*printVec(vec3((pos0 + pos1*4.0f + pos2)/6.0f));
+        printVec(vec3((pos1*4.0f + pos2*2.0f)/6.0f));
+        printVec(vec3((pos1*2.0f + pos2*4.0f)/6.0f));
+        printVec(vec3((pos1 + pos2*4.0f + pos3)/6.0f));*/
     }
-    return bezierPoints;
 }
 
 

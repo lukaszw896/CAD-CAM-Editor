@@ -31,6 +31,8 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
    // bezierSurface = new BezierSurface(&camera);
     //drawableObjectsData.addBezierSurface(bezierSurface);
 
+    bSplineSurface = new BSplineSurface(&camera,1.f,1.f,2,2);
+
     isSpacePressed = false;
     this->installEventFilter(this);
 
@@ -337,7 +339,7 @@ void OGlWidget::draw()
         glPointSize(-50/camera.zPos - (5.f-camera.rProjection)/5);
         drawableObjectsData.drawableObjects[i]->draw();
     }
-
+   // bSplineSurface->draw();
     //bezierPatch->draw();
    // bezierSurface->draw();
 

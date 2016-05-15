@@ -168,7 +168,7 @@ void BezierCurve::draw()
 
 int BezierCurve::twoPointsDist(Point* p1, Point* p2)
 {
-    int inPixVal = 0;
+    /*int inPixVal = 0;
 
     if(camera->screenWidth > camera->screenHeight)
     {
@@ -181,7 +181,8 @@ int BezierCurve::twoPointsDist(Point* p1, Point* p2)
 
     return inPixVal *sqrt(pow(p1->transPointCoordinates.x - p2->transPointCoordinates.x,2) +
                           pow(p1->transPointCoordinates.y - p2->transPointCoordinates.y,2) +
-                          pow(p1->transPointCoordinates.z - p2->transPointCoordinates.z,2) );
+                          pow(p1->transPointCoordinates.z - p2->transPointCoordinates.z,2) );*/
+    return 1000;
 }
 
 void BezierCurve::oneDimBezier0C(Point* p1, Point* p2, int pointNum)
