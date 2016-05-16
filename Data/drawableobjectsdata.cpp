@@ -75,11 +75,20 @@ void DrawableObjectsData::addBezierSurface(BezierSurface * bezierSurface)
     bezierSurfaceList.push_back(bezierSurface);
     drawableObjects.push_back(bezierSurface);
 
-    for(int i=0;i<bezierSurface->controlPoints.size();i++)
-    {
-        bezierSurface->controlPoints[i]->isRemovable = false;
-        pointList.push_back(bezierSurface->controlPoints[i]);
-        drawableObjects.push_back(bezierSurface->controlPoints[i]);
+    if(!bezierSurface->isDeBoorControled){
+        for(int i=0;i<bezierSurface->controlPoints.size();i++)
+        {
+            bezierSurface->controlPoints[i]->isRemovable = false;
+            pointList.push_back(bezierSurface->controlPoints[i]);
+            drawableObjects.push_back(bezierSurface->controlPoints[i]);
+        }
+    }else{
+        for(int i=0;i<bezierSurface->deBoorePoints.size();i++)
+        {
+            bezierSurface->deBoorePoints[i]->isRemovable = false;
+            pointList.push_back(bezierSurface->deBoorePoints[i]);
+            drawableObjects.push_back(bezierSurface->deBoorePoints[i]);
+        }
     }
 }
 

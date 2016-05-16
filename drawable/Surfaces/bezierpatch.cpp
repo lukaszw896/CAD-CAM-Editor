@@ -18,13 +18,13 @@ BezierPatch::BezierPatch(Camera *camera)
 void BezierPatch::draw()
 {
     glPointSize(-50/camera->zPos - (5.f-camera->rProjection)/5);
-    for(int i=0;i<4;i++)
+   /* for(int i=0;i<4;i++)
     {
         for(int j=0;j<4;j++)
         {
             controlPoints[i][j]->draw();
         }
-    }
+    }*/
     float dt=0.01;
     /*float pixNum;
     if(camera->screenWidth > camera->screenHeight){

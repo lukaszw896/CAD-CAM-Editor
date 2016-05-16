@@ -16,14 +16,21 @@ using namespace glm;
 class BezierSurface: public Drawable
 {
 public:
+    bool isDeBoorControled;
     bool isFlatSurface;
     bool drawBezierNet;
     BezierSurface();
-    BezierSurface(Camera* camera);
+    void initC0(Camera *camera, float totalHeight, int verNumOfPatches,
+                  int horNumOfPatches, bool isFlatSurface);
+    void initC2(Camera *camera, float totalHeight, int verNumOfPatches,
+                int horNumOfPatches, bool isFlatSurface);
     BezierSurface(Camera *camera,float totalWidth,float totalHeight,
                   int verNumOfPatches, int horNumOfPatches);
     BezierSurface(Camera *camera, float radius, float totalHeight,
                   int verNumOfPatches, int horNumOfPatches,bool tmp);
+
+
+
     Camera * camera;
     int verNumOfPatches;
     int horNumOfPatches;
@@ -31,34 +38,23 @@ public:
     int horNumOfConPoints;
     int verNumOfConPoints;
 
+    int horNumOfDeBoorePoints;
+    int verNumOfDeBoorePoints;
+
     float totalWidth;
     float totalHeight;
     float radius;
 
+    void initDeBoorePoints();
     void initControlPoints();
+    void deBooreToBezier();
     void initPatches();
     void draw();
     vector<Point*> controlPoints;
+    vector<Point*> deBoorePoints;
+    vector<Point*> rowTMPBezierPoints;
     vector<BezierPatch*> patches;
 private:
-   /* float getMaxLength()
-    {
-        float max = 0;
-        float tmpRow =0;
-        for(int i=0;i<horNumOfConPoints;i++)
-        {
-            for(int j=0;j<verNumOfConPoints-1;j++)
-            {
-                tmpRow += euclideanDistance2(controlPoints[j*horNumOfConPoints+i]->localTransPointCoordinates,controlPoints[(j+1)*horNumOfConPoints+i]->localTransPointCoordinates);
-            }
-            if(tmpRow>max)max=tmpRow;
-            tmpRow=0;
-        }
-    }
-    float euclideanDistance2(vec3& point1, vec3& point2)
-    {
-        return sqrt(pow(point1.x-point2.x,2)+pow(point1.y-point2.y,2)+pow(point1.z-point2.z,2));
-    }*/
 
     static int id;
 

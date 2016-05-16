@@ -7,75 +7,115 @@ BezierSurface::BezierSurface()
 
 int BezierSurface::id = 0;
 
-BezierSurface::BezierSurface(Camera* camera)
+ void BezierSurface::initC0(Camera *camera, float totalHeight, int verNumOfPatches, int horNumOfPatches, bool isFlatSurface)
 {
-
+    isDeBoorControled = false;
     this->camera = camera;
-    isFlatSurface = false;
-    verNumOfPatches = 3;
-    horNumOfPatches = 3;
-    totalWidth = 1.0f;
-    totalHeight = 1.0f;
-
+    drawBezierNet = false;
+    this->isFlatSurface = isFlatSurface;
+    this->totalHeight = totalHeight;
+    this->verNumOfPatches = verNumOfPatches;
+    this->horNumOfPatches = horNumOfPatches;
     if(isFlatSurface)horNumOfConPoints = horNumOfPatches*3+1;
     else horNumOfConPoints = horNumOfPatches*3;
     verNumOfConPoints = verNumOfPatches*3+1;
-
     controlPoints.resize(verNumOfConPoints*horNumOfConPoints);
     patches.resize(verNumOfPatches*horNumOfPatches);
-
     initControlPoints();
     initPatches();
 }
+
+ void BezierSurface::initC2(Camera *camera, float totalHeight, int verNumOfPatches, int horNumOfPatches, bool isFlatSurface)
+ {
+     isDeBoorControled = true;
+     this->camera = camera;
+     drawBezierNet = false;
+     this->isFlatSurface = isFlatSurface;
+     this->totalHeight = totalHeight;
+     this->verNumOfPatches = verNumOfPatches;
+     this->horNumOfPatches = horNumOfPatches;
+     if(isFlatSurface){
+         horNumOfDeBoorePoints = horNumOfPatches + 3;
+         horNumOfConPoints = horNumOfPatches*3+1;
+     }
+     else{
+         horNumOfDeBoorePoints = horNumOfPatches+2;
+         horNumOfConPoints = horNumOfPatches*3;
+     }
+     verNumOfDeBoorePoints = verNumOfPatches + 3;
+     verNumOfConPoints = verNumOfPatches*3+1;
+     controlPoints.resize(verNumOfConPoints*horNumOfConPoints);
+     deBoorePoints.resize(verNumOfDeBoorePoints*horNumOfDeBoorePoints);
+     patches.resize(verNumOfPatches*horNumOfPatches);
+     initDeBoorePoints();
+     deBooreToBezier();
+     initPatches();
+ }
 
 BezierSurface::BezierSurface(Camera *camera, float totalWidth, float totalHeight, int verNumOfPatches, int horNumOfPatches)
 {
     id++;
     name = "BezierFlatSurface_";
     name += std::to_string(id);
-    drawBezierNet = false;
-
-    this->camera = camera;
-    isFlatSurface = true;
-    this->verNumOfPatches = verNumOfPatches;
-    this->horNumOfPatches = horNumOfPatches;
     this->totalWidth = totalWidth;
-    this->totalHeight = totalHeight;
-
-    horNumOfConPoints = horNumOfPatches*3+1;
-    verNumOfConPoints = verNumOfPatches*3+1;
-
-    controlPoints.resize(verNumOfConPoints*horNumOfConPoints);
-    patches.resize(verNumOfPatches*horNumOfPatches);
-
-    initControlPoints();
-    initPatches();
+   // initC0(camera,totalHeight,verNumOfPatches,horNumOfPatches,true);
+    initC2(camera,totalHeight,verNumOfPatches,horNumOfPatches,true);
 }
+
 BezierSurface::BezierSurface(Camera *camera, float radius, float totalHeight, int verNumOfPatches, int horNumOfPatches,bool tmp)
 {
     id++;
     name = "BezierCylinderSurface_";
     name += std::to_string(id);
-    drawBezierNet = false;
-
-    this->camera = camera;
-    isFlatSurface = false;
-    this->verNumOfPatches = verNumOfPatches;
-    this->horNumOfPatches = horNumOfPatches;
     this->totalWidth = 1.0f;
-    this->totalHeight = totalHeight;
     this->radius = radius;
-
-    horNumOfConPoints = horNumOfPatches*3;
-    verNumOfConPoints = verNumOfPatches*3+1;
-
-    controlPoints.resize(verNumOfConPoints*horNumOfConPoints);
-    patches.resize(verNumOfPatches*horNumOfPatches);
-
-    initControlPoints();
-    initPatches();
+    initC0(camera,totalHeight,verNumOfPatches,horNumOfPatches,false);
 }
 
+void BezierSurface::initDeBoorePoints()
+{
+    //flat surface
+
+    float widthDT = totalWidth / (horNumOfDeBoorePoints-1);
+    float heightDT = totalHeight / (verNumOfDeBoorePoints-1);
+    int m=0,n=0;
+    if(isFlatSurface){
+    for(float i = -(totalWidth/(float)2);i< totalWidth/(float)2+widthDT/2;i+=widthDT,m++)
+    {
+        n=0;
+        for(float j = -(totalHeight/(float)2);j< totalHeight/(float)2+heightDT/2;j+=heightDT,n++)
+        {
+            deBoorePoints[n*horNumOfDeBoorePoints + m] = new Point(camera);
+            deBoorePoints[n*horNumOfDeBoorePoints + m]->xPos = i;
+            deBoorePoints[n*horNumOfDeBoorePoints + m]->updateTranslationMatX();
+            deBoorePoints[n*horNumOfDeBoorePoints + m]->yPos = j;
+            deBoorePoints[n*horNumOfDeBoorePoints + m]->updateTranslationMatY();
+           // printf("Control point init pos : %d , x: %lf, y: %lf \n",m*verNumOfConPoints + n,i,j);
+        }
+    }
+    //TODO: add the same deboore point twice?
+    }else{
+    //// x=r\cos(t), \ \  y=r\sin(t)
+    float t = 0;
+    for(float i = 0;i< totalWidth+widthDT/2;i+=widthDT,m++)
+    {
+        n=0;
+        for(float j = 0;j< totalHeight+heightDT/2;j+=heightDT,n++)
+        {
+            t= i/totalWidth;
+            deBoorePoints[n*horNumOfDeBoorePoints + m] = new Point(camera);
+            deBoorePoints[n*horNumOfDeBoorePoints + m]->xPos = radius*cos(6.28*t);
+            deBoorePoints[n*horNumOfDeBoorePoints + m]->updateTranslationMatX();
+            deBoorePoints[n*horNumOfDeBoorePoints + m]->yPos = -totalHeight/4 + j/2;
+            deBoorePoints[n*horNumOfDeBoorePoints + m]->updateTranslationMatY();
+            deBoorePoints[n*horNumOfDeBoorePoints + m]->zPos = radius*sin(6.28*t);
+            deBoorePoints[n*horNumOfDeBoorePoints + m]->updateTranslationMatZ();
+           // printf("Control point init pos : %d , x: %lf, y: %lf \n",m*verNumOfConPoints + n,i,j);
+            printf("%lf \n",t);
+        }
+    }
+    }
+}
 
 void BezierSurface::initControlPoints()
 {
@@ -119,8 +159,67 @@ void BezierSurface::initControlPoints()
         }
     }
     }
-    //// x=r\cos(t), \ \  y=r\sin(t)
-    /// cylinder
+}
+
+void BezierSurface::deBooreToBezier()
+{
+    int segmentCount = horNumOfDeBoorePoints - 3;
+    rowTMPBezierPoints.clear();
+    for(int i= 0;i<verNumOfDeBoorePoints;i++)
+    {
+        for(int j=0;j<segmentCount-1;j++)
+        {
+            vec3& pos0 = deBoorePoints[i*horNumOfDeBoorePoints+j+0]->localTransPointCoordinates;
+            vec3& pos1 = deBoorePoints[i*horNumOfDeBoorePoints+j+1]->localTransPointCoordinates;
+            vec3& pos2 = deBoorePoints[i*horNumOfDeBoorePoints+j+2]->localTransPointCoordinates;
+            //vec3& pos3 = deBoorePoints[i*horNumOfDeBoorePoints+j+3]->localTransPointCoordinates;
+
+            rowTMPBezierPoints.push_back(new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f)));
+            rowTMPBezierPoints.push_back(new Point(vec3((pos1*4.0f + pos2*2.0f)/6.0f)));
+            rowTMPBezierPoints.push_back(new Point(vec3((pos1*2.0f + pos2*4.0f)/6.0f)));
+            //rowTMPBezierPoints.push_back(new Point(vec3((pos1 + pos2*4.0f + pos3)/6.0f)));
+        }
+        vec3& pos0 = deBoorePoints[i*horNumOfDeBoorePoints+segmentCount-1+0]->localTransPointCoordinates;
+        vec3& pos1 = deBoorePoints[i*horNumOfDeBoorePoints+segmentCount-1+1]->localTransPointCoordinates;
+        vec3& pos2 = deBoorePoints[i*horNumOfDeBoorePoints+segmentCount-1+2]->localTransPointCoordinates;
+        vec3& pos3 = deBoorePoints[i*horNumOfDeBoorePoints+segmentCount-1+3]->localTransPointCoordinates;
+
+        rowTMPBezierPoints.push_back(new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f)));
+        rowTMPBezierPoints.push_back(new Point(vec3((pos1*4.0f + pos2*2.0f)/6.0f)));
+        rowTMPBezierPoints.push_back(new Point(vec3((pos1*2.0f + pos2*4.0f)/6.0f)));
+        rowTMPBezierPoints.push_back(new Point(vec3((pos1 + pos2*4.0f + pos3)/6.0f)));
+    }
+
+    segmentCount = verNumOfDeBoorePoints -3;
+    int numOfRowBezPoints = 1+3*(horNumOfDeBoorePoints - 3);
+    for(int i=0;i<numOfRowBezPoints;i++)
+    {
+        for(int j=0;j<segmentCount-1;j++)
+        {
+            vec3& pos0 = rowTMPBezierPoints[j*numOfRowBezPoints+i+0]->localTransPointCoordinates;
+            vec3& pos1 = rowTMPBezierPoints[j*numOfRowBezPoints+i+1*numOfRowBezPoints]->localTransPointCoordinates;
+            vec3& pos2 = rowTMPBezierPoints[j*numOfRowBezPoints+i+2*numOfRowBezPoints]->localTransPointCoordinates;
+            //vec3& pos3 = rowTMPBezierPoints[j*numOfRowBezPoints+i+3*numOfRowBezPoints]->localTransPointCoordinates;
+
+            controlPoints[(j*3+0)*numOfRowBezPoints + i] = new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f));
+            controlPoints[(j*3+1)*numOfRowBezPoints + i] = new Point(vec3((pos1*4.0f + pos2*2.0f)/6.0f));
+            controlPoints[(j*3+2)*numOfRowBezPoints + i] = new Point(vec3((pos1*2.0f + pos2*4.0f)/6.0f));
+            /*controlPoints.push_back(new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f)));
+            controlPoints.push_back(new Point(vec3((pos1*4.0f + pos2*2.0f)/6.0f)));
+            controlPoints.push_back(new Point(vec3((pos1*2.0f + pos2*4.0f)/6.0f)));
+            controlPoints.push_back(new Point(vec3((pos1 + pos2*4.0f + pos3)/6.0f)));*/
+        }
+        vec3& pos0 = rowTMPBezierPoints[(segmentCount-1)*numOfRowBezPoints+i+0]->localTransPointCoordinates;
+        vec3& pos1 = rowTMPBezierPoints[(segmentCount-1)*numOfRowBezPoints+i+1*numOfRowBezPoints]->localTransPointCoordinates;
+        vec3& pos2 = rowTMPBezierPoints[(segmentCount-1)*numOfRowBezPoints+i+2*numOfRowBezPoints]->localTransPointCoordinates;
+        vec3& pos3 = rowTMPBezierPoints[(segmentCount-1)*numOfRowBezPoints+i+3*numOfRowBezPoints]->localTransPointCoordinates;
+
+        controlPoints[((segmentCount-1)*3+0)*numOfRowBezPoints + i] = new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f));
+        controlPoints[((segmentCount-1)*3+1)*numOfRowBezPoints + i] = new Point(vec3((pos1*4.0f + pos2*2.0f)/6.0f));
+        controlPoints[((segmentCount-1)*3+2)*numOfRowBezPoints + i] = new Point(vec3((pos1*2.0f + pos2*4.0f)/6.0f));
+        controlPoints[((segmentCount-1)*3+3)*numOfRowBezPoints + i] = new Point(vec3((pos1 + pos2*4.0f + pos3)/6.0f));
+
+    }
 
 }
 
@@ -157,7 +256,8 @@ void BezierSurface::initPatches()
 }
 
 void BezierSurface::draw()
-{
+{   deBooreToBezier();
+    initPatches();
     if(drawBezierNet)
     {
         glBegin(GL_LINES);

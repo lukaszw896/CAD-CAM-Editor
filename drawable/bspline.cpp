@@ -59,7 +59,30 @@ void BSpline::draw()
         bezierCurve->draw();
         }
         else{
-        int knotNumber = deBoorPoints.size()+4;
+
+
+            /************/
+            int knotNumber = deBoorPoints.size() +4;
+            float startValue = 0.f;
+            float knotDT = 1.0f / (knotNumber-7);
+            knotVector.resize(knotNumber);
+            knotVector[0] = 0;
+            knotVector[1] = 0;
+            knotVector[2] = 0;
+            knotVector[knotNumber-3] = 1;
+            knotVector[knotNumber-2] = 1;
+            knotVector[knotNumber-1] = 1;
+            for(int i=3;i<knotNumber-3;i++)
+            {
+
+                knotVector[i] = startValue;
+                startValue += knotDT;
+
+            }
+
+
+            /************/
+        /*int knotNumber = deBoorPoints.size()+4;
         float startValue = 0.f;
         float knotDT = 1.0f / knotNumber;
         knotVector.resize(knotNumber);
@@ -68,7 +91,7 @@ void BSpline::draw()
             startValue += knotDT;
             knotVector[i] = startValue;
 
-        }
+        }*/
 
         //TMP
         float dt = 0.001/(float)deBoorPoints.size();
@@ -103,22 +126,21 @@ void BSpline::calculateBezierPoints(vector<Point*>* pointVector){
     int segmentCount = deBoorPoints.size() - 3;
     pointVector->clear();
     //vector<vec4> bezierPoints;
-    const vec3& pos0 = deBoorPoints[0]->localTransPointCoordinates;
-    const vec3& pos1 = deBoorPoints[1]->localTransPointCoordinates;
-    const vec3& pos2 = deBoorPoints[2]->localTransPointCoordinates;
-    const vec3& pos3 = deBoorPoints[3]->localTransPointCoordinates;
-
-    pointVector->push_back(new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f)));
-    pointVector->push_back(new Point(vec3((pos1*4.0f + pos2*2.0f)/6.0f)));
-    pointVector->push_back(new Point(vec3((pos1*2.0f + pos2*4.0f)/6.0f)));
+    vec3& pos0 = deBoorPoints[0]->localTransPointCoordinates;
+    vec3& pos1 = deBoorPoints[1]->localTransPointCoordinates;
+    vec3& pos2 = deBoorPoints[2]->localTransPointCoordinates;
+    vec3& pos3 = deBoorPoints[3]->localTransPointCoordinates;
+    pointVector->push_back(new Point(vec3(pos0)));
+    pointVector->push_back(new Point(vec3(pos1)));
+    pointVector->push_back(new Point(vec3(pos2)));
     pointVector->push_back(new Point(vec3((pos1 + pos2*4.0f + pos3)/6.0f)));
-    for(int i = 1; i < segmentCount; i++){
-        const vec3& pos0 = deBoorPoints[i+0]->localTransPointCoordinates;
-        const vec3& pos1 = deBoorPoints[i+1]->localTransPointCoordinates;
-        const vec3& pos2 = deBoorPoints[i+2]->localTransPointCoordinates;
-        const vec3& pos3 = deBoorPoints[i+3]->localTransPointCoordinates;
+    for(int i = 1; i < segmentCount-1; i++){
+        vec3& pos0 = deBoorPoints[i+0]->localTransPointCoordinates;
+        vec3& pos1 = deBoorPoints[i+1]->localTransPointCoordinates;
+        vec3& pos2 = deBoorPoints[i+2]->localTransPointCoordinates;
+        vec3& pos3 = deBoorPoints[i+3]->localTransPointCoordinates;
 
-       // pointVector->push_back(new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f)));
+        pointVector->push_back(new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f)));
         pointVector->push_back(new Point(vec3((pos1*4.0f + pos2*2.0f)/6.0f)));
         pointVector->push_back(new Point(vec3((pos1*2.0f + pos2*4.0f)/6.0f)));
         pointVector->push_back(new Point(vec3((pos1 + pos2*4.0f + pos3)/6.0f)));
