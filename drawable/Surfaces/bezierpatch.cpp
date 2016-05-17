@@ -37,7 +37,7 @@ void BezierPatch::draw()
     dt = 1.0f/pixNum/length/2;*/
     glPointSize(1);
     glBegin(GL_POINTS);
-
+    glColor3f(1.0,1.0,0.8);
     //draw columns
     for(float i=0;i<1.01f;i+=u)
     {

@@ -39,12 +39,16 @@ int BezierSurface::id = 0;
          horNumOfConPoints = horNumOfPatches*3+1;
      }
      else{
-         horNumOfDeBoorePoints = horNumOfPatches+2;
-         horNumOfConPoints = horNumOfPatches*3;
+         horNumOfDeBoorePoints = horNumOfPatches+3;
+         horNumOfConPoints = horNumOfPatches*3+1;
      }
      verNumOfDeBoorePoints = verNumOfPatches + 3;
      verNumOfConPoints = verNumOfPatches*3+1;
      controlPoints.resize(verNumOfConPoints*horNumOfConPoints);
+     for(int i=0;i<verNumOfConPoints*horNumOfConPoints;i++)
+     {
+        controlPoints[i] = new Point(camera);
+     }
      deBoorePoints.resize(verNumOfDeBoorePoints*horNumOfDeBoorePoints);
      patches.resize(verNumOfPatches*horNumOfPatches);
      initDeBoorePoints();
@@ -69,7 +73,8 @@ BezierSurface::BezierSurface(Camera *camera, float radius, float totalHeight, in
     name += std::to_string(id);
     this->totalWidth = 1.0f;
     this->radius = radius;
-    initC0(camera,totalHeight,verNumOfPatches,horNumOfPatches,false);
+    //initC0(camera,totalHeight,verNumOfPatches,horNumOfPatches,false);
+    initC2(camera,totalHeight,verNumOfPatches,horNumOfPatches,false);
 }
 
 void BezierSurface::initDeBoorePoints()
@@ -97,6 +102,7 @@ void BezierSurface::initDeBoorePoints()
     }else{
     //// x=r\cos(t), \ \  y=r\sin(t)
     float t = 0;
+    widthDT = totalWidth / (horNumOfDeBoorePoints-2);
     for(float i = 0;i< totalWidth+widthDT/2;i+=widthDT,m++)
     {
         n=0;
@@ -113,6 +119,11 @@ void BezierSurface::initDeBoorePoints()
            // printf("Control point init pos : %d , x: %lf, y: %lf \n",m*verNumOfConPoints + n,i,j);
             printf("%lf \n",t);
         }
+    }
+    n=0;
+    for(float j = 0;j< totalHeight+heightDT/2;j+=heightDT,n++)
+    {
+        deBoorePoints[n*horNumOfDeBoorePoints + m] = deBoorePoints[n*horNumOfDeBoorePoints];
     }
     }
 }
@@ -159,30 +170,35 @@ void BezierSurface::initControlPoints()
         }
     }
     }
+    n=0;
+    /*m++;
+    for(float j = 0;j< totalHeight+heightDT/2;j+=heightDT,n++)
+    {
+        controlPoints[n*horNumOfConPoints + m] = controlPoints[n*horNumOfConPoints];
+    }*/
 }
 
 void BezierSurface::deBooreToBezier()
 {
+    vec3 pos0,pos1,pos2,pos3;
     int segmentCount = horNumOfDeBoorePoints - 3;
     rowTMPBezierPoints.clear();
     for(int i= 0;i<verNumOfDeBoorePoints;i++)
     {
         for(int j=0;j<segmentCount-1;j++)
         {
-            vec3& pos0 = deBoorePoints[i*horNumOfDeBoorePoints+j+0]->localTransPointCoordinates;
-            vec3& pos1 = deBoorePoints[i*horNumOfDeBoorePoints+j+1]->localTransPointCoordinates;
-            vec3& pos2 = deBoorePoints[i*horNumOfDeBoorePoints+j+2]->localTransPointCoordinates;
-            //vec3& pos3 = deBoorePoints[i*horNumOfDeBoorePoints+j+3]->localTransPointCoordinates;
+            pos0 = deBoorePoints[i*horNumOfDeBoorePoints+j+0]->localTransPointCoordinates;
+            pos1 = deBoorePoints[i*horNumOfDeBoorePoints+j+1]->localTransPointCoordinates;
+            pos2 = deBoorePoints[i*horNumOfDeBoorePoints+j+2]->localTransPointCoordinates;
 
             rowTMPBezierPoints.push_back(new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f)));
             rowTMPBezierPoints.push_back(new Point(vec3((pos1*4.0f + pos2*2.0f)/6.0f)));
             rowTMPBezierPoints.push_back(new Point(vec3((pos1*2.0f + pos2*4.0f)/6.0f)));
-            //rowTMPBezierPoints.push_back(new Point(vec3((pos1 + pos2*4.0f + pos3)/6.0f)));
         }
-        vec3& pos0 = deBoorePoints[i*horNumOfDeBoorePoints+segmentCount-1+0]->localTransPointCoordinates;
-        vec3& pos1 = deBoorePoints[i*horNumOfDeBoorePoints+segmentCount-1+1]->localTransPointCoordinates;
-        vec3& pos2 = deBoorePoints[i*horNumOfDeBoorePoints+segmentCount-1+2]->localTransPointCoordinates;
-        vec3& pos3 = deBoorePoints[i*horNumOfDeBoorePoints+segmentCount-1+3]->localTransPointCoordinates;
+        pos0 = deBoorePoints[i*horNumOfDeBoorePoints+segmentCount-1+0]->localTransPointCoordinates;
+        pos1 = deBoorePoints[i*horNumOfDeBoorePoints+segmentCount-1+1]->localTransPointCoordinates;
+        pos2 = deBoorePoints[i*horNumOfDeBoorePoints+segmentCount-1+2]->localTransPointCoordinates;
+        pos3 = deBoorePoints[i*horNumOfDeBoorePoints+segmentCount-1+3]->localTransPointCoordinates;
 
         rowTMPBezierPoints.push_back(new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f)));
         rowTMPBezierPoints.push_back(new Point(vec3((pos1*4.0f + pos2*2.0f)/6.0f)));
@@ -196,31 +212,24 @@ void BezierSurface::deBooreToBezier()
     {
         for(int j=0;j<segmentCount-1;j++)
         {
-            vec3& pos0 = rowTMPBezierPoints[j*numOfRowBezPoints+i+0]->localTransPointCoordinates;
-            vec3& pos1 = rowTMPBezierPoints[j*numOfRowBezPoints+i+1*numOfRowBezPoints]->localTransPointCoordinates;
-            vec3& pos2 = rowTMPBezierPoints[j*numOfRowBezPoints+i+2*numOfRowBezPoints]->localTransPointCoordinates;
-            //vec3& pos3 = rowTMPBezierPoints[j*numOfRowBezPoints+i+3*numOfRowBezPoints]->localTransPointCoordinates;
+            pos0 = rowTMPBezierPoints[j*numOfRowBezPoints+i+0]->localTransPointCoordinates;
+            pos1 = rowTMPBezierPoints[j*numOfRowBezPoints+i+1*numOfRowBezPoints]->localTransPointCoordinates;
+            pos2 = rowTMPBezierPoints[j*numOfRowBezPoints+i+2*numOfRowBezPoints]->localTransPointCoordinates;
 
-            controlPoints[(j*3+0)*numOfRowBezPoints + i] = new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f));
-            controlPoints[(j*3+1)*numOfRowBezPoints + i] = new Point(vec3((pos1*4.0f + pos2*2.0f)/6.0f));
-            controlPoints[(j*3+2)*numOfRowBezPoints + i] = new Point(vec3((pos1*2.0f + pos2*4.0f)/6.0f));
-            /*controlPoints.push_back(new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f)));
-            controlPoints.push_back(new Point(vec3((pos1*4.0f + pos2*2.0f)/6.0f)));
-            controlPoints.push_back(new Point(vec3((pos1*2.0f + pos2*4.0f)/6.0f)));
-            controlPoints.push_back(new Point(vec3((pos1 + pos2*4.0f + pos3)/6.0f)));*/
+            controlPoints[(j*3+0)*numOfRowBezPoints + i]->localTransPointCoordinates = vec3((pos0 + pos1*4.0f + pos2)/6.0f);
+            controlPoints[(j*3+1)*numOfRowBezPoints + i]->localTransPointCoordinates = vec3((pos1*4.0f + pos2*2.0f)/6.0f);
+            controlPoints[(j*3+2)*numOfRowBezPoints + i]->localTransPointCoordinates = vec3((pos1*2.0f + pos2*4.0f)/6.0f);
         }
-        vec3& pos0 = rowTMPBezierPoints[(segmentCount-1)*numOfRowBezPoints+i+0]->localTransPointCoordinates;
-        vec3& pos1 = rowTMPBezierPoints[(segmentCount-1)*numOfRowBezPoints+i+1*numOfRowBezPoints]->localTransPointCoordinates;
-        vec3& pos2 = rowTMPBezierPoints[(segmentCount-1)*numOfRowBezPoints+i+2*numOfRowBezPoints]->localTransPointCoordinates;
-        vec3& pos3 = rowTMPBezierPoints[(segmentCount-1)*numOfRowBezPoints+i+3*numOfRowBezPoints]->localTransPointCoordinates;
+        pos0 = rowTMPBezierPoints[(segmentCount-1)*numOfRowBezPoints+i+0]->localTransPointCoordinates;
+        pos1 = rowTMPBezierPoints[(segmentCount-1)*numOfRowBezPoints+i+1*numOfRowBezPoints]->localTransPointCoordinates;
+        pos2 = rowTMPBezierPoints[(segmentCount-1)*numOfRowBezPoints+i+2*numOfRowBezPoints]->localTransPointCoordinates;
+        pos3 = rowTMPBezierPoints[(segmentCount-1)*numOfRowBezPoints+i+3*numOfRowBezPoints]->localTransPointCoordinates;
 
-        controlPoints[((segmentCount-1)*3+0)*numOfRowBezPoints + i] = new Point(vec3((pos0 + pos1*4.0f + pos2)/6.0f));
-        controlPoints[((segmentCount-1)*3+1)*numOfRowBezPoints + i] = new Point(vec3((pos1*4.0f + pos2*2.0f)/6.0f));
-        controlPoints[((segmentCount-1)*3+2)*numOfRowBezPoints + i] = new Point(vec3((pos1*2.0f + pos2*4.0f)/6.0f));
-        controlPoints[((segmentCount-1)*3+3)*numOfRowBezPoints + i] = new Point(vec3((pos1 + pos2*4.0f + pos3)/6.0f));
-
+        controlPoints[((segmentCount-1)*3+0)*numOfRowBezPoints + i]->localTransPointCoordinates = vec3((pos0 + pos1*4.0f + pos2)/6.0f);
+        controlPoints[((segmentCount-1)*3+1)*numOfRowBezPoints + i]->localTransPointCoordinates = vec3((pos1*4.0f + pos2*2.0f)/6.0f);
+        controlPoints[((segmentCount-1)*3+2)*numOfRowBezPoints + i]->localTransPointCoordinates = vec3((pos1*2.0f + pos2*4.0f)/6.0f);
+        controlPoints[((segmentCount-1)*3+3)*numOfRowBezPoints + i]->localTransPointCoordinates = vec3((pos1 + pos2*4.0f + pos3)/6.0f);
     }
-
 }
 
 void BezierSurface::initPatches()
@@ -257,7 +266,6 @@ void BezierSurface::initPatches()
 
 void BezierSurface::draw()
 {   deBooreToBezier();
-    initPatches();
     if(drawBezierNet)
     {
         glBegin(GL_LINES);
