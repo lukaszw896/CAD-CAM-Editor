@@ -22,9 +22,9 @@ public:
     BSplineSurface();
     BSplineSurface(Camera* camera);
     BSplineSurface(Camera *camera,float totalWidth,float totalHeight,
-                  int verNumOfPatches, int horNumOfPatches);
+                  int verNumOfPatches, int horNumOfPatches,bool isC0);
     BSplineSurface(Camera *camera, float radius, float totalHeight,
-                  int verNumOfPatches, int horNumOfPatches,bool tmp);
+                  int verNumOfPatches, int horNumOfPatches,bool tmp, bool isC0);
     Camera * camera;
     int verNumOfPatches;
     int horNumOfPatches;

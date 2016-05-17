@@ -9,6 +9,8 @@
 #include <QPushButton>
 #include <QTextBlock>
 #include <QLineEdit>
+#include <QCheckBox>
+#include <QGroupBox>
 #include "Data/drawableobjectsdata.h"
 
 class AddC0FlatSurfaceDialog : public QDialog
@@ -30,6 +32,12 @@ private:
     QHBoxLayout *patchesLayout;
     QHBoxLayout *buttonsLayout;
 
+    QHBoxLayout *checkBoxLayout;
+    QGroupBox *groupBox;
+    QCheckBox *c0CheckBox;
+    bool c0PrevState;
+    QCheckBox *c2CheckBox;
+
     QLabel *infoLabel;
     QLabel *heightLabel;
     QLabel *widthLabel;
@@ -45,11 +53,13 @@ private:
     QPushButton *okButton;
 
     void setupLayout();
+    void initGroupBox();
 
 
 private slots:
     void cancelButtonClicked();
     void addFlatBezierSurface();
+    void checkBoxChecked();
 };
 
 #endif // ADDC0FLATSURFACEDIALOG_H

@@ -25,9 +25,9 @@ public:
     void initC2(Camera *camera, float totalHeight, int verNumOfPatches,
                 int horNumOfPatches, bool isFlatSurface);
     BezierSurface(Camera *camera,float totalWidth,float totalHeight,
-                  int verNumOfPatches, int horNumOfPatches);
+                  int verNumOfPatches, int horNumOfPatches,bool isC0);
     BezierSurface(Camera *camera, float radius, float totalHeight,
-                  int verNumOfPatches, int horNumOfPatches,bool tmp);
+                  int verNumOfPatches, int horNumOfPatches,bool tmp,bool isC0);
 
 
 

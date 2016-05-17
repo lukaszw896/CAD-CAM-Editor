@@ -56,25 +56,33 @@ int BezierSurface::id = 0;
      initPatches();
  }
 
-BezierSurface::BezierSurface(Camera *camera, float totalWidth, float totalHeight, int verNumOfPatches, int horNumOfPatches)
+BezierSurface::BezierSurface(Camera *camera, float totalWidth, float totalHeight, int verNumOfPatches, int horNumOfPatches,bool isC0)
 {
     id++;
-    name = "BezierFlatSurface_";
+    string continuity;
+    if(isC0)continuity="C0";
+    else continuity="C2";
+    name = continuity + "BezierFlatSurface_";
     name += std::to_string(id);
     this->totalWidth = totalWidth;
-   // initC0(camera,totalHeight,verNumOfPatches,horNumOfPatches,true);
-    initC2(camera,totalHeight,verNumOfPatches,horNumOfPatches,true);
+    if(isC0)initC0(camera,totalHeight,verNumOfPatches,horNumOfPatches,true);
+    else initC2(camera,totalHeight,verNumOfPatches,horNumOfPatches,true);
 }
 
-BezierSurface::BezierSurface(Camera *camera, float radius, float totalHeight, int verNumOfPatches, int horNumOfPatches,bool tmp)
+
+
+BezierSurface::BezierSurface(Camera *camera, float radius, float totalHeight, int verNumOfPatches, int horNumOfPatches,bool tmp, bool isC0)
 {
     id++;
-    name = "BezierCylinderSurface_";
+    string continuity;
+    if(isC0)continuity="C0";
+    else continuity="C2";
+    name = continuity + "BezierCylinderSurface_";
     name += std::to_string(id);
     this->totalWidth = 1.0f;
     this->radius = radius;
-    //initC0(camera,totalHeight,verNumOfPatches,horNumOfPatches,false);
-    initC2(camera,totalHeight,verNumOfPatches,horNumOfPatches,false);
+    if(isC0)initC0(camera,totalHeight,verNumOfPatches,horNumOfPatches,false);
+    else initC2(camera,totalHeight,verNumOfPatches,horNumOfPatches,false);
 }
 
 void BezierSurface::initDeBoorePoints()

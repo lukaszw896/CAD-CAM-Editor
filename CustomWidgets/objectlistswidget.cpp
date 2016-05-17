@@ -476,7 +476,7 @@ void ObjectListsWidget::showBezierSurfaceContextMenu(const QPoint &pos)
 
         // Create menu and insert some actions
         QMenu myMenu;
-        if(name[0] == 'B')
+        if(name[0] == 'C')
         {
             myMenu.addAction("Remove Bezier Surface", this, SLOT(removeBezierSurface()));
             myMenu.addAction("Turn on/off Bezier Net", this, SLOT(turnOnBezierNet()));

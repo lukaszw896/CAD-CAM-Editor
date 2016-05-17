@@ -31,7 +31,7 @@ OGlWidget::OGlWidget(QWidget *parent): QGLWidget(QGLFormat(QGL::SampleBuffers), 
    // bezierSurface = new BezierSurface(&camera);
     //drawableObjectsData.addBezierSurface(bezierSurface);
 
-    bSplineSurface = new BSplineSurface(&camera,1.f,1.f,2,2);
+  //  bSplineSurface = new BSplineSurface(&camera,1.f,1.f,2,2);
 
     isSpacePressed = false;
     this->installEventFilter(this);

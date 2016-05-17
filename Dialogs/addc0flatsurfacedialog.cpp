@@ -6,8 +6,12 @@ AddC0FlatSurfaceDialog::AddC0FlatSurfaceDialog(QWidget* parent): QDialog(parent)
     setupLayout();
 }
 
+
+
 void AddC0FlatSurfaceDialog::setupLayout()
 {
+    initGroupBox();
+
     infoLabel = new QLabel("Size in floats");
     heightLabel = new QLabel("Height");
     widthLabel = new QLabel("Width");
@@ -53,10 +57,32 @@ void AddC0FlatSurfaceDialog::setupLayout()
     mainLayout->addLayout(heightLayout);
     mainLayout->addLayout(widthLayout);
     mainLayout->addLayout(patchesLayout);
+    mainLayout->addWidget(groupBox);
     mainLayout->addLayout(buttonsLayout);
 
     setLayout(mainLayout);
 
+}
+
+void AddC0FlatSurfaceDialog::initGroupBox()
+{
+    checkBoxLayout = new QHBoxLayout;
+    c0CheckBox = new QCheckBox(tr("C0"));
+    c0CheckBox->setChecked(true);
+    c0PrevState = true;
+    connect(c0CheckBox,SIGNAL(clicked(bool)),this,SLOT(checkBoxChecked()));
+    c2CheckBox = new QCheckBox(tr("C2"));
+    connect(c2CheckBox,SIGNAL(clicked(bool)),this,SLOT(checkBoxChecked()));
+    checkBoxLayout->addWidget(c0CheckBox);
+    checkBoxLayout->addWidget(c2CheckBox);
+    groupBox = new QGroupBox(tr("Continuity"));
+    groupBox->setAlignment(Qt::AlignLeft);
+    groupBox->setLayout(checkBoxLayout);
+}
+
+void AddC0FlatSurfaceDialog::cancelButtonClicked()
+{
+    close();
 }
 
 void AddC0FlatSurfaceDialog::addFlatBezierSurface()
@@ -68,20 +94,28 @@ void AddC0FlatSurfaceDialog::addFlatBezierSurface()
     BezierSurface* bezierSurface;
     if(isAddingFlat){
         bezierSurface = new BezierSurface(data.camera,totalWidth,totalHeight,
-                                          verNumOfPatches,horNumOfPatches);
+                                          verNumOfPatches,horNumOfPatches,c0CheckBox->isChecked());
     }
     else{
         bezierSurface = new BezierSurface(data.camera,totalWidth,totalHeight,
-                                          verNumOfPatches,horNumOfPatches,true);
+                                          verNumOfPatches,horNumOfPatches,true,c0CheckBox->isChecked());
     }
     data.addBezierSurface(bezierSurface);
     emit bezFlatSurfAdded();
     close();
 }
 
-void AddC0FlatSurfaceDialog::cancelButtonClicked()
+void AddC0FlatSurfaceDialog::checkBoxChecked()
 {
-    close();
+    if(c0PrevState == c0CheckBox->isChecked())
+    {
+        c0PrevState = false;
+        c0CheckBox->setChecked(false);
+    }else
+    {
+        c0PrevState = true;
+        c2CheckBox->setChecked(false);
+    }
 }
 
 void AddC0FlatSurfaceDialog::show()
