@@ -3,6 +3,7 @@
 #include "drawable/drawable.h"
 #include "drawable/point.h"
 #include "Camera/camera.h"
+#include "glm/vec2.hpp"
 #include "glm/vec4.hpp"
 #include "glm/mat4x4.hpp"
 #include <vector>
@@ -20,6 +21,7 @@ public:
     BezierPatch(Camera* camera);
     Point* controlPoints[4][4];
     float dt;
+    void calculatePoints();
     void draw();
     float u,v;
 private:
@@ -29,9 +31,11 @@ private:
     vec4 pointToDraw;
     vec4 pointToDraw2;
     vector<vec4> pixelVector;
+    vector<vec4> leftEyePixelVector;
+    vector<vec4> rightEyePixelVector;
 
+    int pointCounter;
     float width,height;
-
     float berBasis(int i, float u);
     vec3 computePoint(float u, float v);
     /*float getMaxLength()

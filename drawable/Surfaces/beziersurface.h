@@ -9,6 +9,7 @@
 #include <vector>
 #include <GL/gl.h>
 #include <algorithm>
+#include <thread>
 
 using namespace std;
 using namespace glm;
@@ -29,7 +30,7 @@ public:
     BezierSurface(Camera *camera, float radius, float totalHeight,
                   int verNumOfPatches, int horNumOfPatches,bool tmp,bool isC0);
 
-
+    int threadTable[8] ={0};
 
     Camera * camera;
     int verNumOfPatches;
@@ -49,6 +50,7 @@ public:
     void initControlPoints();
     void deBooreToBezier();
     void initPatches();
+    void initThreads();
     void draw();
     vector<Point*> controlPoints;
     vector<Point*> deBoorePoints;

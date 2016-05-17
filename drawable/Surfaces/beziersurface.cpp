@@ -23,6 +23,7 @@ int BezierSurface::id = 0;
     patches.resize(verNumOfPatches*horNumOfPatches);
     initControlPoints();
     initPatches();
+    initThreads();
 }
 
  void BezierSurface::initC2(Camera *camera, float totalHeight, int verNumOfPatches, int horNumOfPatches, bool isFlatSurface)
@@ -54,6 +55,7 @@ int BezierSurface::id = 0;
      initDeBoorePoints();
      deBooreToBezier();
      initPatches();
+     initThreads();
  }
 
 BezierSurface::BezierSurface(Camera *camera, float totalWidth, float totalHeight, int verNumOfPatches, int horNumOfPatches,bool isC0)
@@ -84,6 +86,15 @@ BezierSurface::BezierSurface(Camera *camera, float radius, float totalHeight, in
     if(isC0)initC0(camera,totalHeight,verNumOfPatches,horNumOfPatches,false);
     else initC2(camera,totalHeight,verNumOfPatches,horNumOfPatches,false);
 }
+
+void BezierSurface::initThreads()
+{
+    for(int i=0;i<patches.size();i++)
+    {
+        threadTable[i%8]++;
+    }
+}
+
 
 void BezierSurface::initDeBoorePoints()
 {
@@ -125,7 +136,6 @@ void BezierSurface::initDeBoorePoints()
             deBoorePoints[n*horNumOfDeBoorePoints + m]->zPos = radius*sin(6.28*t);
             deBoorePoints[n*horNumOfDeBoorePoints + m]->updateTranslationMatZ();
            // printf("Control point init pos : %d , x: %lf, y: %lf \n",m*verNumOfConPoints + n,i,j);
-            printf("%lf \n",t);
         }
     }
 
@@ -276,7 +286,8 @@ void BezierSurface::initPatches()
 }
 
 void BezierSurface::draw()
-{   deBooreToBezier();
+{
+    if(isDeBoorControled) deBooreToBezier();
     if(drawBezierNet)
     {
         glBegin(GL_LINES);
@@ -368,6 +379,30 @@ void BezierSurface::draw()
         }
         glEnd();
     }
+    vector<thread> workers;
+    int patchCounter = 0;
+    for(int i=0;i<8;i++)
+    {
+        workers.push_back(thread([this,i,patchCounter](){
+            for(int j=0;j<threadTable[i];j++)
+            {
+               patches[patchCounter+j]->calculatePoints();
+            }
+        }));
+        patchCounter += threadTable[i];
+    }
+    std::for_each(workers.begin(), workers.end(), [](std::thread &t)
+        {
+            t.join();
+        });
+
+
+
+   /* for(int i=0;i<patches.size();i++)
+    {
+            patches[i]->calculatePoints();
+    }*/
+
     for(int i=0;i<patches.size();i++)
     {
             patches[i]->draw();
