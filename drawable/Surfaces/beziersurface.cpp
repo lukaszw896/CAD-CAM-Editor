@@ -103,7 +103,7 @@ void BezierSurface::initDeBoorePoints()
     //// x=r\cos(t), \ \  y=r\sin(t)
     float t = 0;
     widthDT = totalWidth / (horNumOfDeBoorePoints-2);
-    for(float i = 0;i< totalWidth+widthDT/2;i+=widthDT,m++)
+    for(float i = 0;i< totalWidth;i+=widthDT,m++)
     {
         n=0;
         for(float j = 0;j< totalHeight+heightDT/2;j+=heightDT,n++)
@@ -120,10 +120,13 @@ void BezierSurface::initDeBoorePoints()
             printf("%lf \n",t);
         }
     }
-    n=0;
-    for(float j = 0;j< totalHeight+heightDT/2;j+=heightDT,n++)
-    {
-        deBoorePoints[n*horNumOfDeBoorePoints + m] = deBoorePoints[n*horNumOfDeBoorePoints];
+
+    for(int i=0;i<2;i++){
+        n=0;
+        for(float j = 0;j< totalHeight+heightDT/2;j+=heightDT,n++)
+        {
+            deBoorePoints[n*horNumOfDeBoorePoints + m+i] = deBoorePoints[n*horNumOfDeBoorePoints+i];
+        }
     }
     }
 }

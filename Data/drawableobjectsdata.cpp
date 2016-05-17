@@ -11,8 +11,14 @@ DrawableObjectsData& DrawableObjectsData::getInstance()
 DrawableObjectsData::DrawableObjectsData(){}
 
 
+
 void DrawableObjectsData::addPoint(Point* point)
 {
+   for(int i=0;i<pointList.size();i++)
+   {
+       if(pointList[i]->name == point->name)return;
+   }
+
    for(int i=0;i<bezierCurveList.size();i++)
    {
        if(bezierCurveList[i]->isSelected)
@@ -79,15 +85,17 @@ void DrawableObjectsData::addBezierSurface(BezierSurface * bezierSurface)
         for(int i=0;i<bezierSurface->controlPoints.size();i++)
         {
             bezierSurface->controlPoints[i]->isRemovable = false;
-            pointList.push_back(bezierSurface->controlPoints[i]);
-            drawableObjects.push_back(bezierSurface->controlPoints[i]);
+            this->addPoint(bezierSurface->controlPoints[i]);
+            /*pointList.push_back(bezierSurface->controlPoints[i]);
+            drawableObjects.push_back(bezierSurface->controlPoints[i]);*/
         }
     }else{
         for(int i=0;i<bezierSurface->deBoorePoints.size();i++)
         {
             bezierSurface->deBoorePoints[i]->isRemovable = false;
-            pointList.push_back(bezierSurface->deBoorePoints[i]);
-            drawableObjects.push_back(bezierSurface->deBoorePoints[i]);
+            this->addPoint(bezierSurface->deBoorePoints[i]);
+            //pointList.push_back(bezierSurface->deBoorePoints[i]);
+           // drawableObjects.push_back(bezierSurface->deBoorePoints[i]);
         }
     }
 }
