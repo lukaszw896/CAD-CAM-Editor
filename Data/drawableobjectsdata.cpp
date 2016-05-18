@@ -224,10 +224,19 @@ void DrawableObjectsData::removeBezierSurfaceByName(std::string name)
     for(int i=0; i<bezierSurfaceList.size();i++){
         if(bezierSurfaceList[i]->name == name)
         {
-            for(int j=0;j<bezierSurfaceList[i]->controlPoints.size();j++)
+            if(!bezierSurfaceList[i]->isDeBoorControled){
+                for(int j=0;j<bezierSurfaceList[i]->controlPoints.size();j++)
+                {
+                    bezierSurfaceList[i]->controlPoints[j]->isRemovable = true;
+                    removePoint(bezierSurfaceList[i]->controlPoints[j]);
+                }
+            }else
             {
-                bezierSurfaceList[i]->controlPoints[j]->isRemovable = true;
-                removePoint(bezierSurfaceList[i]->controlPoints[j]);
+                for(int j=0;j<bezierSurfaceList[i]->deBoorePoints.size();j++)
+                {
+                    bezierSurfaceList[i]->deBoorePoints[j]->isRemovable = true;
+                    removePoint(bezierSurfaceList[i]->deBoorePoints[j]);
+                }
             }
             removeBezierSurface(bezierSurfaceList[i]);
             break;

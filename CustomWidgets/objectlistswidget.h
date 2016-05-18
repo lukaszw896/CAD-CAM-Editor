@@ -12,6 +12,9 @@
 #include <QAbstractAnimation>
 #include <QScrollArea>
 #include <QPushButton>
+#include <QSpacerItem>
+#include <QSplitter>
+#include <QHeaderView>
 #include "drawable/point.h"
 #include "drawable/torus.h"
 #include "Data/drawableobjectsdata.h"
@@ -82,6 +85,9 @@ public slots:
     void removeBezierSurface();
     void turnOnBezierNet();
 
+    //LAYOUT
+    void updateLayoutHeight(int);
+
 signals:
 
 
@@ -90,6 +96,7 @@ private:
 
     DrawableObjectsData& drawableObjectsData = DrawableObjectsData::getInstance();
 
+    QWidget* scrollWidget;
     QScrollArea* scrollArea;
 
     QVBoxLayout* mainLayout;

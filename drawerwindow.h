@@ -10,6 +10,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QSlider>
+#include <QResizeEvent>
 #include <CustomWidgets/oglwidget.h>
 #include <CustomWidgets/objectlistswidget.h>
 #include <Dialogs/settingsdialog.h>
@@ -24,6 +25,7 @@ public:
 
 signals:
     void drawableDataChanged();
+    void heightChanged(int);
 
 public slots:
     void updateCursorInfo();
@@ -33,7 +35,7 @@ protected:
    // void contextMenuEvent(QContextMenuEvent *event) Q_DECL_OVERRIDE;
 
 private:
-
+    int oldHeight= 200;
     DrawableObjectsData& drawableObjectsData = DrawableObjectsData::getInstance();
 
     void createActions();
@@ -83,6 +85,8 @@ private:
     void addBezierCurve();
     void addBSpline();
     void addInterBSpline();
+
+    void resizeEvent(QResizeEvent *);
    // void addBezierSurface();
 
 };

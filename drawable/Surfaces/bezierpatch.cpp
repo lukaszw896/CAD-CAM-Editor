@@ -9,16 +9,16 @@ BezierPatch::BezierPatch()
 BezierPatch::BezierPatch(Camera *camera)
 {
     this->camera = camera;
-    pixelVector.resize(10000);
-    leftEyePixelVector.resize(10000);
-    rightEyePixelVector.resize(10000);
+    pixelVector.resize(2000);
+    leftEyePixelVector.resize(2000);
+    rightEyePixelVector.resize(2000);
     u=0.25f;
     v=0.25f;
 }
 
 void BezierPatch::calculatePoints()
 {
-    float dt=0.01;
+    float dt=0.06;
     pointCounter = 0;
     //draw columns
     for(float i=0;i<1.01f;i+=u)
@@ -122,19 +122,15 @@ float BezierPatch::berBasis(int i, float u)
     {
     case 0:
         return -u*u*u+3*u*u-3*u+1;
-        //return pow((1-u),3);
         break;
     case 1:
         return 3*u - 6*u*u + 3*u*u*u;
-        ///return 3*u*pow(1-u,2);
         break;
     case 2:
         return 3*u*u- 3*u*u*u;
-        //return 3*u*u*(1-u);
         break;
     case 3:
         return u*u*u;
-       // return pow(u,3);
         break;
     }
 }
@@ -152,33 +148,3 @@ vec3 BezierPatch::computePoint(float u, float v)
     }
     return tmp;
 }
-
-/*void calcU(float i, float bottomT, float upperT)
-{
-    for(float j=0;j<1.f;j+=dt)
-    {
-        pointToDraw = vec4(computePoint(i,j),1);
-        if(!camera->isStereoscopic){
-            pointToDraw = camera->transformationMatrix* pointToDraw;
-            pointToDraw.x = pointToDraw.x / pointToDraw.w;
-            pointToDraw.y = pointToDraw.y / pointToDraw.w;
-            pointToDraw.x /= camera->xRatio;
-            pointToDraw.y /= camera->yRatio;    
-        }
-        else{
-            vec4 point2 = vec4(pointToDraw);
-            pointToDraw = camera->transformationMatrixLeftEye * pointToDraw;
-            pointToDraw.x /= pointToDraw.w;
-            pointToDraw.y /= pointToDraw.w;
-            pointToDraw.x /= camera->xRatio;
-            pointToDraw.y /= camera->yRatio;
-
-            point2 = camera->transformationMatrixRightEye * point2;
-            point2.x /= point2.w;
-            point2.y /= point2.w;
-            point2.x /= camera->xRatio;
-            point2.y /= camera->yRatio;
-        }
-    }
-}
-*/

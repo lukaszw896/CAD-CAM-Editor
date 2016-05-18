@@ -29,6 +29,7 @@ void DrawerWindow::createActions()
 
     stereoscopyAct = new QAction(tr("&Stereoscopy"),this);
     connect(stereoscopyAct, &QAction::triggered, this, &DrawerWindow::openStereoscopySettingsDialog);
+
 }
 
 void DrawerWindow::createMenus()
@@ -68,7 +69,7 @@ void DrawerWindow::initObjects()
     oglWidget = new OGlWidget();
     objectListsWidget = new ObjectListsWidget();
     connect(this,SIGNAL(drawableDataChanged()),objectListsWidget,SLOT(updateListsContent()));
-
+    connect(this,SIGNAL(heightChanged(int)),objectListsWidget,SLOT(updateLayoutHeight(int)));
     //connection between on scene click and item list
     connect(oglWidget,SIGNAL(pointOnScreenClick(Point*)),objectListsWidget,SLOT(pointOnSceneSelection(Point*)));
     connect(oglWidget,SIGNAL(pointOnScreenDoubleClick(Point*)),objectListsWidget,SLOT(pointOnSceneDoubleClick(Point*)));
@@ -106,7 +107,7 @@ void DrawerWindow::initLayout()
     rightLayout->addStretch();
 
     QWidget *rightContainer = new QWidget();
-    rightContainer->setMaximumWidth(200);
+    rightContainer->setMaximumWidth(250);
     rightContainer->setLayout(rightLayout);
 
     mainLayout = new QHBoxLayout;
@@ -237,6 +238,25 @@ void DrawerWindow::updateCursorInfo()
 void DrawerWindow::updatePatchParam(int n)
 {
     drawableObjectsData.updatePatchParam(n);
+}
+
+void DrawerWindow::resizeEvent(QResizeEvent * resizeEvent)
+{
+    int currentHeight = this->size().height();
+    if(oldHeight == 200)
+    {
+        oldHeight = currentHeight;
+         emit heightChanged(600);
+        return;
+    }
+    if(oldHeight == currentHeight) return;
+    /*int currentHeight = resizeEvent->size().height();
+    int patchParamHeight = patchParamSlider->size().height();
+    int cordsBoxHeight = cordsBox->size().height();*/
+    oldHeight = currentHeight;
+    int listObjectHeight = this->height() - cordsBox->size().height()
+            - patchParamSlider->size().height() - 170;
+    emit heightChanged(listObjectHeight);
 }
 
 

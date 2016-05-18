@@ -50,19 +50,29 @@ void ObjectListsWidget::setupLayout()
 
 
     torusList = new QListWidget;
+    torusList->setFixedHeight(150);
     connect(torusList,SIGNAL(clicked(QModelIndex)),this,SLOT(torusHasBeenSelected()));
     connect(torusList,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(torusHasBeenDoubleClicked()));
     pointList = new QListWidget;
+    pointList->setFixedHeight(150);
     pointList->setSelectionMode(QAbstractItemView::ExtendedSelection);
     connect(pointList,SIGNAL(clicked(QModelIndex)),this,SLOT(pointHasBeenSelected()));
     connect(pointList,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(pointHasBeenDoubleClicked()));
     bezierCurveTreeList = new QTreeWidget;
+    bezierCurveTreeList->setFixedHeight(150);
+    bezierCurveTreeList->header()->close();
     connect(bezierCurveTreeList, SIGNAL(clicked(QModelIndex)),this, SLOT(bezierCurveHasBeenClicked()));  
     bSplineCurveTreeList = new QTreeWidget;
+    bSplineCurveTreeList->setFixedHeight(150);
+    bSplineCurveTreeList->header()->close();
     connect(bSplineCurveTreeList,SIGNAL(clicked(QModelIndex)),this,SLOT(bSplineHasBeenClicked()));
     interBSplineCurveTreeList = new QTreeWidget;
+    interBSplineCurveTreeList->setFixedHeight(150);
+    interBSplineCurveTreeList->header()->close();
     connect(interBSplineCurveTreeList,SIGNAL(clicked(QModelIndex)),this,SLOT(interBSplineHasBeenClicked()));
     bezierSurfaceTreeList = new QTreeWidget;
+    bezierSurfaceTreeList->setFixedHeight(150);
+    bezierSurfaceTreeList->header()->close();
     connect(bezierSurfaceTreeList,SIGNAL(clicked(QModelIndex)),this,SLOT(bezierSurfaceHasBeenClicked()));
     //connect
     torusLayout->addWidget(torusListLabel);
@@ -86,24 +96,32 @@ void ObjectListsWidget::setupLayout()
     mainLayout = new QVBoxLayout;
 
 
+    widgetContainerLayout->minimumSize().setHeight(1000);
+    widgetContainerLayout->addLayout(torusLayout);
+    widgetContainerLayout->addLayout(pointLayout);
+    widgetContainerLayout->addLayout(curveLayout);
+    widgetContainerLayout->addLayout(bSplineLayout);
+    widgetContainerLayout->addLayout(interBSplineLayout);
+    widgetContainerLayout->addLayout(bezierSurfaceLayout);
+    widgetContainerLayout->setMargin(0);
+    scrollWidget = new QWidget;
+    scrollWidget->setLayout(widgetContainerLayout);
+    scrollWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    mainLayout->addLayout(torusLayout);
-    mainLayout->addLayout(pointLayout);
-    mainLayout->addLayout(curveLayout);
-    mainLayout->addLayout(bSplineLayout);
-    mainLayout->addLayout(interBSplineLayout);
-    mainLayout->addLayout(bezierSurfaceLayout);
-    /*scrollArea->setLayout(widgetContainerLayout);
+    scrollArea->setWidget(scrollWidget);
     scrollArea->setWidgetResizable(true);
+    scrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //scrollArea->setFixedHeight(1000);
     QSizePolicy policy = scrollArea->sizePolicy();
-
     policy.setVerticalStretch(1);
     policy.setHorizontalStretch(1);
 
-    scrollArea->minimumSize().setHeight(500);
-    mainLayout->minimumSize().setHeight(500);
+    updateLayoutHeight(600);
 
-    mainLayout->addWidget(scrollArea);*/
+    QVBoxLayout* scrollLayout = new QVBoxLayout;
+    scrollLayout->addWidget(scrollArea);
+    mainLayout->addLayout(scrollLayout);
+    mainLayout->addStretch();
 
     setLayout(mainLayout);
 }
@@ -834,6 +852,12 @@ void ObjectListsWidget::addBezierSurfaceTolist(BezierSurface* bezierSurface, QTr
     }
     parent->addTopLevelItem(treeWidgetItem);
 }
+
+void ObjectListsWidget::updateLayoutHeight(int height)
+{
+    scrollArea->setFixedHeight(height);
+}
+
 
 
 
