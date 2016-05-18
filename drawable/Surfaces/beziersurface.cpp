@@ -100,7 +100,7 @@ void BezierSurface::initDeBoorePoints()
 {
     //flat surface
 
-    float widthDT = totalWidth / (horNumOfDeBoorePoints-1);
+    float widthDT = totalWidth / (horNumOfDeBoorePoints - 1);
     float heightDT = totalHeight / (verNumOfDeBoorePoints-1);
     int m=0,n=0;
     if(isFlatSurface){
@@ -114,14 +114,12 @@ void BezierSurface::initDeBoorePoints()
             deBoorePoints[n*horNumOfDeBoorePoints + m]->updateTranslationMatX();
             deBoorePoints[n*horNumOfDeBoorePoints + m]->yPos = j;
             deBoorePoints[n*horNumOfDeBoorePoints + m]->updateTranslationMatY();
-           // printf("Control point init pos : %d , x: %lf, y: %lf \n",m*verNumOfConPoints + n,i,j);
         }
     }
-    //TODO: add the same deboore point twice?
     }else{
     //// x=r\cos(t), \ \  y=r\sin(t)
     float t = 0;
-    widthDT = totalWidth / (horNumOfDeBoorePoints-2);
+    widthDT = totalWidth / (horNumOfDeBoorePoints-3);
     for(float i = 0;i< totalWidth;i+=widthDT,m++)
     {
         n=0;
@@ -135,11 +133,10 @@ void BezierSurface::initDeBoorePoints()
             deBoorePoints[n*horNumOfDeBoorePoints + m]->updateTranslationMatY();
             deBoorePoints[n*horNumOfDeBoorePoints + m]->zPos = radius*sin(6.28*t);
             deBoorePoints[n*horNumOfDeBoorePoints + m]->updateTranslationMatZ();
-           // printf("Control point init pos : %d , x: %lf, y: %lf \n",m*verNumOfConPoints + n,i,j);
         }
     }
 
-    for(int i=0;i<2;i++){
+    for(int i=0;i<3;i++){
         n=0;
         for(float j = 0;j< totalHeight+heightDT/2;j+=heightDT,n++)
         {
@@ -192,11 +189,6 @@ void BezierSurface::initControlPoints()
     }
     }
     n=0;
-    /*m++;
-    for(float j = 0;j< totalHeight+heightDT/2;j+=heightDT,n++)
-    {
-        controlPoints[n*horNumOfConPoints + m] = controlPoints[n*horNumOfConPoints];
-    }*/
 }
 
 void BezierSurface::deBooreToBezier()
