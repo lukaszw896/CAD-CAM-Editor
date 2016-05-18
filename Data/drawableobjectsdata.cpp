@@ -544,7 +544,7 @@ Point* DrawableObjectsData::findPointBySceneClick(QPoint screenPos, QPoint scree
         float distance = sqrt(pow(screenPos.x() - tmpXPos,2)+pow(screenPos.y() - tmpYPos,2));
         if(distance < 10)
         {
-            return pointList[i];
+             return pointList[i];
         }
     }
     return NULL;

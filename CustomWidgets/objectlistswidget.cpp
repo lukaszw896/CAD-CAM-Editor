@@ -321,7 +321,8 @@ void ObjectListsWidget::pointOnSceneSelection(Point* point)
 
 void ObjectListsWidget::pointOnSceneDoubleClick(Point * point)
 {
-    for(int i=0;i<pointList->size().rheight();i++)
+    int height = pointList->count();
+       for(int i=0;i<pointList->count();i++)
     {
         if(pointList->item(i)->text().toStdString() == point->name)
         {
