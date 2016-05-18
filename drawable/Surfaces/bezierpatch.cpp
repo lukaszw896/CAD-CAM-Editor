@@ -23,8 +23,9 @@ void BezierPatch::calculatePoints()
     //draw columns
     for(float i=0;i<1.01f;i+=u)
     {
-        for(float j=0;j<1.f;j+=dt)
+        for(float j=0;j<1.01f +dt/2;j+=dt)
         {
+            if(j>1) j= 1.0f;
             pointToDraw = vec4(computePoint(i,j),1);
             if(!camera->isStereoscopic){
                 pointToDraw = camera->transformationMatrix* pointToDraw;
@@ -34,7 +35,6 @@ void BezierPatch::calculatePoints()
                 pointToDraw.y /= camera->yRatio;
                 pixelVector[pointCounter] = vec4(pointToDraw);
                 pointCounter++;
-
             }
             else{
                 vec4 point2 = vec4(pointToDraw);
@@ -53,13 +53,15 @@ void BezierPatch::calculatePoints()
                 rightEyePixelVector[pointCounter] = vec4(point2);
                 pointCounter++;
             }
+            if(j==1.0f)break;
         }
     }
 
     for(float i=0;i<1.01f;i+=v)
     {
-        for(float j=0;j<1.f;j+=dt)
+        for(float j=0;j<1.01f+dt/2;j+=dt)
         {
+            if(j>1) j= 1.0f;
             pointToDraw = vec4(computePoint(j,i),1);
                 if(!camera->isStereoscopic){
                     pointToDraw = camera->transformationMatrix* pointToDraw;
@@ -87,6 +89,7 @@ void BezierPatch::calculatePoints()
                     rightEyePixelVector[pointCounter] = vec4(point2);
                     pointCounter++;
                 }
+                if(j==1.0f)break;
         }
     }
 }
@@ -95,12 +98,16 @@ void BezierPatch::draw()
 {
     glPointSize(-50/camera->zPos - (5.f-camera->rProjection)/5);
 
+    int linePointNum = (int)(1.f /0.06) +2;
     glPointSize(1);
-    glBegin(GL_POINTS);
+    glBegin(GL_LINES);
     glColor3f(1.0,1.0,0.8);
     //draw columns
-    for(int i=0;i<pointCounter;i++){
+    for(int i=1;i<pointCounter+1;i++){
+        if(i!=0 && !(i%linePointNum))
+            continue;
         if(!camera->isStereoscopic){
+            glVertex2f(pixelVector[i-1].x,pixelVector[i-1].y);
             glVertex2f(pixelVector[i].x,pixelVector[i].y);
         }
         else{

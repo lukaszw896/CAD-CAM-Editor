@@ -390,7 +390,7 @@ void BezierSurface::draw()
 
 
 
-   /* for(int i=0;i<patches.size();i++)
+   /*for(int i=0;i<patches.size();i++)
     {
             patches[i]->calculatePoints();
     }*/
