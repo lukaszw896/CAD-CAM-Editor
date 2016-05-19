@@ -16,6 +16,7 @@
 #include <Dialogs/settingsdialog.h>
 #include <Dialogs/addc0flatsurfacedialog.h>
 #include "Data/drawableobjectsdata.h"
+#include "Data/fileio.h"
 
 class DrawerWindow : public QMainWindow
 {
@@ -37,6 +38,7 @@ protected:
 private:
     int oldHeight= 200;
     DrawableObjectsData& drawableObjectsData = DrawableObjectsData::getInstance();
+    FileIO* fileIO = new FileIO();
 
     void createActions();
     void createMenus();
@@ -45,9 +47,12 @@ private:
 
     QWidget *centralWidget;
 
+    QMenu * fileMenu;
     QMenu *addMenu;
     QMenu *settingsMenu;
     QMenu *addBezierSurfaceMenu;
+    QAction *saveFileAct;
+    QAction *openFileAct;
     QAction *addTorusAct;
     QAction *addPointAct;
     QAction *addCurveAct;
@@ -80,6 +85,8 @@ private:
     void openStereoscopySettingsDialog();
     void openAddC0FlatSurfaceDialog();
     void openAddC0CylinderSurfaceDialog();
+    void saveFile();
+    void openFile();
     void addPoint();
     void addTorus();
     void addBezierCurve();

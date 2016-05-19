@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     drawable/Surfaces/bezierpatch.cpp \
     drawable/Surfaces/beziersurface.cpp \
     Dialogs/addc0cylindersurfacedialog.cpp \
-    Dialogs/addc0flatsurfacedialog.cpp
+    Dialogs/addc0flatsurfacedialog.cpp \
+    Data/fileio.cpp
 
 HEADERS  += window.h \
     edge.h \
@@ -201,6 +202,7 @@ HEADERS  += window.h \
     drawable/Surfaces/beziersurface.h \
     Dialogs/addc0cylindersurfacedialog.h \
     Dialogs/addc0flatsurfacedialog.h \
-    Math/general.h
+    Math/general.h \
+    Data/fileio.h
 
 FORMS    += window.ui

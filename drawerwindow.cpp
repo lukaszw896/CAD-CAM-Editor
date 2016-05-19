@@ -11,6 +11,13 @@ DrawerWindow::DrawerWindow(QWidget *parent) : QMainWindow(parent)
 
 void DrawerWindow::createActions()
 {
+    //FILE IO
+    saveFileAct = new QAction(tr("&Save file"),this);
+    connect(saveFileAct,&QAction::triggered,this,&DrawerWindow::saveFile);
+    openFileAct = new QAction(tr("&Open file"),this);
+    connect(openFileAct,&QAction::triggered,this,&DrawerWindow::openFile);
+
+    //ADD OBJECTS
     addTorusAct = new QAction(tr("&Torus"),this);
     connect(addTorusAct, &QAction::triggered, this, &DrawerWindow::addTorus);
     addPointAct = new QAction(tr("&Point"),this);
@@ -21,12 +28,12 @@ void DrawerWindow::createActions()
     connect(addBSplineAct, &QAction::triggered, this, &DrawerWindow::addBSpline);
     addInterBSplineAct = new QAction(tr("&InterBSpline"),this);
     connect(addInterBSplineAct,&QAction::triggered,this,&DrawerWindow::addInterBSpline);
-
     addBezierFlatSurface = new QAction(tr("&Flat surface"),this);
     connect(addBezierFlatSurface,&QAction::triggered,this,&DrawerWindow::openAddC0FlatSurfaceDialog);
     addBezierCylinderSurface = new QAction(tr("&Cylinder surface"),this);
     connect(addBezierCylinderSurface,&QAction::triggered,this,&DrawerWindow::openAddC0CylinderSurfaceDialog);
 
+    //SETTINGS
     stereoscopyAct = new QAction(tr("&Stereoscopy"),this);
     connect(stereoscopyAct, &QAction::triggered, this, &DrawerWindow::openStereoscopySettingsDialog);
 
@@ -34,6 +41,9 @@ void DrawerWindow::createActions()
 
 void DrawerWindow::createMenus()
 {
+    fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu->addAction(saveFileAct);
+    fileMenu->addAction(openFileAct);
     addMenu = menuBar()->addMenu(tr("&Add"));
     addMenu->addAction(addTorusAct);
     addMenu->addAction(addPointAct);
@@ -78,6 +88,7 @@ void DrawerWindow::initObjects()
     settingsDialog = new SettingsDialog(this);
     addC0FlatSurfaceDialog = new AddC0FlatSurfaceDialog(this);
     connect(addC0FlatSurfaceDialog,SIGNAL(bezFlatSurfAdded()),objectListsWidget,SLOT(updateListsContent()));
+    QObject::connect(fileIO,SIGNAL(dataChanged()),objectListsWidget,SLOT(updateListsContent()));
 
     connect(scaleSlider,SIGNAL(valueChanged(int)),oglWidget,SLOT(changeScale(int)));
     connect(patchParamSlider,SIGNAL(valueChanged(int)),this,SLOT(updatePatchParam(int)));
@@ -259,6 +270,15 @@ void DrawerWindow::resizeEvent(QResizeEvent * resizeEvent)
     emit heightChanged(listObjectHeight);
 }
 
+void DrawerWindow::saveFile()
+{
+    fileIO->saveModel();
+}
+
+void DrawerWindow::openFile()
+{
+    fileIO->openModel();
+}
 
 
 

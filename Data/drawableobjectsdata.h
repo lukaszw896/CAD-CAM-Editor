@@ -90,6 +90,8 @@ public:
     std::vector<InterBSpline*> interBSplineList;
     vector<BezierSurface*> bezierSurfaceList;
 
+    int getPointListIndex(Point*);
+
     void updatePatchParam(int n)
     {
         for(int i=0;i<bezierSurfaceList.size();i++)

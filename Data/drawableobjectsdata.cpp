@@ -549,3 +549,13 @@ Point* DrawableObjectsData::findPointBySceneClick(QPoint screenPos, QPoint scree
     }
     return NULL;
 }
+
+
+int DrawableObjectsData::getPointListIndex(Point * point)
+{
+    for(int i=0;i<pointList.size();i++)
+    {
+        if(pointList[i]->name == point->name) return i;
+    }
+    return -1;
+}
