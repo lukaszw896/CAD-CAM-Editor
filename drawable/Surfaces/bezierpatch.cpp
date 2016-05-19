@@ -1,4 +1,4 @@
-#include "bezierpatch.h"
+﻿#include "bezierpatch.h"
 
 
 BezierPatch::BezierPatch()
@@ -107,8 +107,11 @@ void BezierPatch::draw()
         if(i!=0 && !(i%linePointNum))
             continue;
         if(!camera->isStereoscopic){
+            if(!(pixelVector[i-1].w >=-0.06))
+            {
             glVertex2f(pixelVector[i-1].x,pixelVector[i-1].y);
             glVertex2f(pixelVector[i].x,pixelVector[i].y);
+            }
         }
         else{
             glColor3f(0.4,0.0, 0.0);
