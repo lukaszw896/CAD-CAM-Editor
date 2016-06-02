@@ -282,6 +282,7 @@ void BezierSurface::draw()
     if(isDeBoorControled) deBooreToBezier();
     if(drawBezierNet)
     {
+        glColor3f(0.2,1,0.3);
         glBegin(GL_LINES);
         if(!camera->isStereoscopic){
             for(int i=0;i<horNumOfConPoints-1;i++){
@@ -370,7 +371,101 @@ void BezierSurface::draw()
 
         }
         glEnd();
+        if(isDeBoorControled)
+        {
+            glColor3f(0.2,1,0.3);
+            glBegin(GL_LINES);
+            if(!camera->isStereoscopic){
+                for(int i=0;i<horNumOfDeBoorePoints-1;i++){
+                    for(int j=0;j<verNumOfDeBoorePoints-1;j++)
+                    {
+                        glVertex2f(deBoorePoints[j*horNumOfDeBoorePoints + i]->transPointCoordinates.x,
+                                deBoorePoints[j*horNumOfDeBoorePoints + i]->transPointCoordinates.y);
+                        glVertex2f(deBoorePoints[j*horNumOfDeBoorePoints + i +1]->transPointCoordinates.x,
+                                deBoorePoints[j*horNumOfDeBoorePoints + i +1]->transPointCoordinates.y);
+
+                        glVertex2f(deBoorePoints[j*horNumOfDeBoorePoints + i]->transPointCoordinates.x,
+                                deBoorePoints[j*horNumOfDeBoorePoints + i]->transPointCoordinates.y);
+                        glVertex2f(deBoorePoints[(j+1)*horNumOfDeBoorePoints + i]->transPointCoordinates.x,
+                                deBoorePoints[(j+1)*horNumOfDeBoorePoints + i]->transPointCoordinates.y);
+                    }
+                }
+                for(int i=0;i<horNumOfDeBoorePoints-1;i++){
+                    {
+                        glVertex2f(deBoorePoints[(verNumOfDeBoorePoints-1)*horNumOfDeBoorePoints + i]->transPointCoordinates.x,
+                                deBoorePoints[(verNumOfDeBoorePoints-1)*horNumOfDeBoorePoints + i]->transPointCoordinates.y);
+                        glVertex2f(deBoorePoints[(verNumOfDeBoorePoints-1)*horNumOfDeBoorePoints + i +1]->transPointCoordinates.x,
+                                deBoorePoints[(verNumOfDeBoorePoints-1)*horNumOfDeBoorePoints + i +1]->transPointCoordinates.y);
+                    }
+                }
+                for(int j=0;j<verNumOfDeBoorePoints-1;j++)
+                {
+                    glVertex2f(deBoorePoints[j*horNumOfDeBoorePoints + horNumOfDeBoorePoints-1]->transPointCoordinates.x,
+                            deBoorePoints[j*horNumOfDeBoorePoints + horNumOfDeBoorePoints-1]->transPointCoordinates.y);
+                    glVertex2f(deBoorePoints[(j+1)*horNumOfDeBoorePoints + horNumOfDeBoorePoints-1]->transPointCoordinates.x,
+                            deBoorePoints[(j+1)*horNumOfDeBoorePoints + horNumOfDeBoorePoints-1]->transPointCoordinates.y);
+                }
+            }
+            else{
+                for(int i=0;i<horNumOfDeBoorePoints-1;i++){
+                    for(int j=0;j<verNumOfDeBoorePoints-1;j++)
+                    {
+                        glColor3f(0.4,0.0, 0.0);
+                        glVertex2f(controlPoints[j*horNumOfDeBoorePoints + i]->leftEyeTransPointCoordinate.x,
+                                controlPoints[j*horNumOfDeBoorePoints + i]->leftEyeTransPointCoordinate.y);
+                        glVertex2f(controlPoints[j*horNumOfConPoints + i +1]->leftEyeTransPointCoordinate.x,
+                                controlPoints[j*horNumOfConPoints + i +1]->leftEyeTransPointCoordinate.y);
+
+                        glVertex2f(controlPoints[j*horNumOfConPoints + i]->leftEyeTransPointCoordinate.x,
+                                controlPoints[j*horNumOfConPoints + i]->leftEyeTransPointCoordinate.y);
+                        glVertex2f(controlPoints[(j+1)*horNumOfConPoints + i]->leftEyeTransPointCoordinate.x,
+                                controlPoints[(j+1)*horNumOfConPoints + i]->leftEyeTransPointCoordinate.y);
+                        glColor3f(0, 0.5, 0.5);
+                        glVertex2f(controlPoints[j*horNumOfConPoints + i]->rightEyeTransPointCoordinate.x,
+                                controlPoints[j*horNumOfConPoints + i]->rightEyeTransPointCoordinate.y);
+                        glVertex2f(controlPoints[j*horNumOfConPoints + i +1]->rightEyeTransPointCoordinate.x,
+                                controlPoints[j*horNumOfConPoints + i +1]->rightEyeTransPointCoordinate.y);
+
+                        glVertex2f(controlPoints[j*horNumOfConPoints + i]->rightEyeTransPointCoordinate.x,
+                                controlPoints[j*horNumOfConPoints + i]->rightEyeTransPointCoordinate.y);
+                        glVertex2f(controlPoints[(j+1)*horNumOfConPoints + i]->rightEyeTransPointCoordinate.x,
+                                controlPoints[(j+1)*horNumOfConPoints + i]->rightEyeTransPointCoordinate.y);
+                    }
+                }
+                for(int i=0;i<horNumOfConPoints-1;i++){
+                    {
+                        glColor3f(0.4,0.0, 0.0);
+                        glVertex2f(controlPoints[(verNumOfConPoints-1)*horNumOfConPoints + i]->leftEyeTransPointCoordinate.x,
+                                controlPoints[(verNumOfConPoints-1)*horNumOfConPoints + i]->leftEyeTransPointCoordinate.y);
+                        glVertex2f(controlPoints[(verNumOfConPoints-1)*horNumOfConPoints + i +1]->leftEyeTransPointCoordinate.x,
+                                controlPoints[(verNumOfConPoints-1)*horNumOfConPoints + i +1]->leftEyeTransPointCoordinate.y);
+                        glColor3f(0, 0.5, 0.5);
+                        glVertex2f(controlPoints[(verNumOfConPoints-1)*horNumOfConPoints + i]->rightEyeTransPointCoordinate.x,
+                                controlPoints[(verNumOfConPoints-1)*horNumOfConPoints + i]->rightEyeTransPointCoordinate.y);
+                        glVertex2f(controlPoints[(verNumOfConPoints-1)*horNumOfConPoints + i +1]->rightEyeTransPointCoordinate.x,
+                                controlPoints[(verNumOfConPoints-1)*horNumOfConPoints + i +1]->rightEyeTransPointCoordinate.y);
+                    }
+                }
+                for(int j=0;j<verNumOfConPoints-1;j++)
+                {
+                    glColor3f(0.4,0.0, 0.0);
+                    glVertex2f(controlPoints[j*horNumOfConPoints + horNumOfConPoints-1]->leftEyeTransPointCoordinate.x,
+                            controlPoints[j*horNumOfConPoints + horNumOfConPoints-1]->leftEyeTransPointCoordinate.y);
+                    glVertex2f(controlPoints[(j+1)*horNumOfConPoints + horNumOfConPoints-1]->leftEyeTransPointCoordinate.x,
+                            controlPoints[(j+1)*horNumOfConPoints + horNumOfConPoints-1]->leftEyeTransPointCoordinate.y);
+                    glColor3f(0, 0.5, 0.5);
+                    glVertex2f(controlPoints[j*horNumOfConPoints + horNumOfConPoints-1]->rightEyeTransPointCoordinate.x,
+                            controlPoints[j*horNumOfConPoints + horNumOfConPoints-1]->rightEyeTransPointCoordinate.y);
+                    glVertex2f(controlPoints[(j+1)*horNumOfConPoints + horNumOfConPoints-1]->rightEyeTransPointCoordinate.x,
+                            controlPoints[(j+1)*horNumOfConPoints + horNumOfConPoints-1]->rightEyeTransPointCoordinate.y);
+                }
+
+            }
+            glEnd();
+        }
     }
+
+
     vector<thread> workers;
     int patchCounter = 0;
     for(int i=0;i<8;i++)
