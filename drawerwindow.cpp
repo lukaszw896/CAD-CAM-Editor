@@ -170,9 +170,9 @@ void DrawerWindow::addPoint()
     point->updateTranslationMatZ();
     drawableObjectsData.addPoint(point);
 
-    drawableObjectsData.deselectToruses();
-    drawableObjectsData.deselectPoints();
-    drawableObjectsData.deselectBezierCurves();
+    drawableObjectsData.deselectObjects(TORUS);
+    drawableObjectsData.deselectObjects(POINT);
+    drawableObjectsData.deselectObjects(BEZIERCURVE);
 
     emit drawableDataChanged();
 }
@@ -180,9 +180,9 @@ void DrawerWindow::addPoint()
 void DrawerWindow::addTorus()
 {
     //items in lists are deseleted while adding new element (?)
-    drawableObjectsData.deselectToruses();
-    drawableObjectsData.deselectPoints();
-    drawableObjectsData.deselectBezierCurves();
+    drawableObjectsData.deselectObjects(TORUS);
+    drawableObjectsData.deselectObjects(POINT);
+    drawableObjectsData.deselectObjects(BEZIERCURVE);
 
     Torus* torus = new Torus(drawableObjectsData.camera);
     glm::vec4 position = drawableObjectsData.cursor->getCursorPos();
@@ -192,43 +192,43 @@ void DrawerWindow::addTorus()
     torus->updateTranslationMatY();
     torus->zPos = position.z;
     torus->updateTranslationMatZ();
-    drawableObjectsData.addTorus(torus);
+    drawableObjectsData.addObject(TORUS,torus);
     emit drawableDataChanged();
 }
 
 void DrawerWindow::addBezierCurve()
 {
     //items in lists are deseleted while adding new element (?)
-    drawableObjectsData.deselectToruses();
-    drawableObjectsData.deselectPoints();
-    drawableObjectsData.deselectBezierCurves();
+    drawableObjectsData.deselectObjects(TORUS);
+    drawableObjectsData.deselectObjects(POINT);
+    drawableObjectsData.deselectObjects(BEZIERCURVE);
 
     BezierCurve* bezierCurve = new BezierCurve(drawableObjectsData.camera);
-    drawableObjectsData.addBezierCurve(bezierCurve);
+    drawableObjectsData.addObject(BEZIERCURVE,bezierCurve);
     emit drawableDataChanged();
 }
 
 void DrawerWindow::addBSpline()
 {
     //items in lists are deseleted while adding new element (?)
-    drawableObjectsData.deselectToruses();
-    drawableObjectsData.deselectPoints();
-    drawableObjectsData.deselectBezierCurves();
+    drawableObjectsData.deselectObjects(TORUS);
+    drawableObjectsData.deselectObjects(POINT);
+    drawableObjectsData.deselectObjects(BEZIERCURVE);
 
     BSpline* bSpline = new BSpline(drawableObjectsData.camera);
-    drawableObjectsData.addBSpline(bSpline);
+    drawableObjectsData.addObject(BSPLINE,bSpline);
     emit drawableDataChanged();
 }
 
 void DrawerWindow::addInterBSpline()
 {
     //items in lists are deseleted while adding new element (?)
-    drawableObjectsData.deselectToruses();
-    drawableObjectsData.deselectPoints();
-    drawableObjectsData.deselectBezierCurves();
+    drawableObjectsData.deselectObjects(TORUS);
+    drawableObjectsData.deselectObjects(POINT);
+    drawableObjectsData.deselectObjects(BEZIERCURVE);
 
     InterBSpline* interBSpline = new InterBSpline(drawableObjectsData.camera);
-    drawableObjectsData.addInterBSpline(interBSpline);
+    drawableObjectsData.addObject(INTERPBSPLINE,interBSpline);
     emit drawableDataChanged();
 }
 

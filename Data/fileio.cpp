@@ -27,11 +27,11 @@ void FileIO::saveModel()
         for(int i=0;i<data.bezierCurveList.size();i++)
         {
             stream<<"BEZIERCURVE " + QString::fromStdString(data.bezierCurveList[i]->name)<<endl;
-            stream<<QString::fromStdString((to_string(data.bezierCurveList[i]->pointVector.size())))<<endl;
-            for(int j=0;j<data.bezierCurveList[i]->pointVector.size();j++)
+            stream<<QString::fromStdString((to_string(((BezierCurve*)data.bezierCurveList[i])->pointVector.size())))<<endl;
+            for(int j=0;j<((BezierCurve*)data.bezierCurveList[i])->pointVector.size();j++)
             {
 
-                stream<< QString::fromStdString(to_string(data.getPointListIndex(data.bezierCurveList[i]->pointVector[j])))+ " " ;
+                stream<< QString::fromStdString(to_string(data.getPointListIndex(((BezierCurve*)data.bezierCurveList[i])->pointVector[j])))+ " " ;
             }
             stream<<endl;
             stream<<"END"<<endl;
@@ -39,11 +39,11 @@ void FileIO::saveModel()
         for(int i=0;i<data.bSplineList.size();i++)
         {
             stream<<"BSPLINECURVE " + QString::fromStdString(data.bSplineList[i]->name) <<endl;
-            stream<<QString::fromStdString((to_string(data.bSplineList[i]->deBoorPoints.size())))<<endl;
-            for(int j=0;j<data.bSplineList[i]->deBoorPoints.size();j++)
+            stream<<QString::fromStdString((to_string(((BSpline*)data.bSplineList[i])->deBoorPoints.size())))<<endl;
+            for(int j=0;j<((BSpline*)data.bSplineList[i])->deBoorPoints.size();j++)
             {
 
-                stream<< QString::fromStdString(to_string(data.getPointListIndex(data.bSplineList[i]->deBoorPoints[j])))+ " " ;
+                stream<< QString::fromStdString(to_string(data.getPointListIndex(((BSpline*)data.bSplineList[i])->deBoorPoints[j])))+ " " ;
             }
             stream<<endl;
             stream<<"END"<<endl;
@@ -51,11 +51,11 @@ void FileIO::saveModel()
         for(int i=0;i<data.interBSplineList.size();i++)
         {
             stream<<"INTERP " + QString::fromStdString(data.interBSplineList[i]->name) <<endl;
-            stream<<QString::fromStdString((to_string(data.interBSplineList[i]->deBoorPoints.size())))<<endl;
-            for(int j=0;j<data.interBSplineList[i]->deBoorPoints.size();j++)
+            stream<<QString::fromStdString((to_string(((InterBSpline*)data.interBSplineList[i])->deBoorPoints.size())))<<endl;
+            for(int j=0;j<((InterBSpline*)data.interBSplineList[i])->deBoorPoints.size();j++)
             {
 
-                stream<< QString::fromStdString(to_string(data.getPointListIndex(data.interBSplineList[i]->deBoorPoints[j])))+ " " ;
+                stream<< QString::fromStdString(to_string(data.getPointListIndex(((InterBSpline*)data.interBSplineList[i])->deBoorPoints[j])))+ " " ;
             }
             stream<<endl;
             stream<<"END"<<endl;
@@ -194,13 +194,13 @@ QString FileIO::getVec3Cords(vec3 vec)
 void FileIO::loadBezierCurve(QTextStream* in)
 {
     BezierCurve* bezierCurve = new BezierCurve(data.camera);
-    data.addBezierCurve(bezierCurve);
+    data.addObject(BEZIERCURVE,bezierCurve);
     QString line = in->readLine();
     line = in->readLine();
     std::vector<std::string> stringVec = split(line.toStdString(), ' ');
     for(int i=0;i<stringVec.size();i++)
     {
-        data.addPointToBezierCurve(bezierCurve,data.pointList[stoi(stringVec[i])]);
+        data.addPointToBezierCurve(bezierCurve,(Point*)data.pointList[stoi(stringVec[i])]);
     }
     line = in->readLine();
     emit dataChanged();
@@ -209,13 +209,13 @@ void FileIO::loadBezierCurve(QTextStream* in)
 void FileIO::loadBSplineCurve(QTextStream* in)
 {
     BSpline* bSpline = new BSpline(data.camera);
-    data.addBSpline(bSpline);
+    data.addObject(BSPLINE,bSpline);
     QString line = in->readLine();
     line = in->readLine();
     std::vector<std::string> stringVec = split(line.toStdString(), ' ');
     for(int i=0;i<stringVec.size();i++)
     {
-        data.addPointToBSpline(bSpline,data.pointList[stoi(stringVec[i])]);
+        data.addPointToBSpline(bSpline,(Point*)data.pointList[stoi(stringVec[i])]);
     }
     line = in->readLine();
     emit dataChanged();
@@ -224,13 +224,13 @@ void FileIO::loadBSplineCurve(QTextStream* in)
 void FileIO::loadInterpCurve(QTextStream* in)
 {
     InterBSpline* interBSpline = new InterBSpline(data.camera);
-    data.addInterBSpline(interBSpline);
+    data.addObject(INTERPBSPLINE,interBSpline);
     QString line = in->readLine();
     line = in->readLine();
     std::vector<std::string> stringVec = split(line.toStdString(), ' ');
     for(int i=0;i<stringVec.size();i++)
     {
-        data.addPointToInterBSpline(interBSpline,data.pointList[stoi(stringVec[i])]);
+        data.addPointToInterBSpline(interBSpline,(Point*)data.pointList[stoi(stringVec[i])]);
     }
     line = in->readLine();
     emit dataChanged();

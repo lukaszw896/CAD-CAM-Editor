@@ -149,25 +149,25 @@ void ObjectListsWidget::updateListsContent()
 
     for(int i=0; i<drawableObjectsData.bezierCurveList.size();i++)
     {
-        addBezierCurveToList(drawableObjectsData.bezierCurveList[i],bezierCurveTreeList,
+        addBezierCurveToList((BezierCurve*)drawableObjectsData.bezierCurveList[i],bezierCurveTreeList,
                              QString::fromStdString(drawableObjectsData.bezierCurveList[i]->name));
     }
 
     for(int i=0; i<drawableObjectsData.bSplineList.size(); i++)
     {
-        addBSplineTolist(drawableObjectsData.bSplineList[i],bSplineCurveTreeList,
+        addBSplineTolist((BSpline*)drawableObjectsData.bSplineList[i],bSplineCurveTreeList,
                          QString::fromStdString(drawableObjectsData.bSplineList[i]->name));
     }
 
     for(int i=0; i<drawableObjectsData.interBSplineList.size(); i++)
     {
-        addInterBSplineTolist(drawableObjectsData.interBSplineList[i],interBSplineCurveTreeList,
+        addInterBSplineTolist((InterBSpline*)drawableObjectsData.interBSplineList[i],interBSplineCurveTreeList,
                               QString::fromStdString(drawableObjectsData.interBSplineList[i]->name));
     }
 
     for(int i=0; i<drawableObjectsData.bezierSurfaceList.size();i++)
     {
-        addBezierSurfaceTolist(drawableObjectsData.bezierSurfaceList[i],bezierSurfaceTreeList,
+        addBezierSurfaceTolist((BezierSurface*)drawableObjectsData.bezierSurfaceList[i],bezierSurfaceTreeList,
                                QString::fromStdString(drawableObjectsData.bezierSurfaceList[i]->name));
     }
 
@@ -175,93 +175,93 @@ void ObjectListsWidget::updateListsContent()
 
 void ObjectListsWidget::torusHasBeenSelected()
 {
-    drawableObjectsData.deselectToruses();
+    drawableObjectsData.deselectObjects(TORUS);
     QList<QListWidgetItem *> itemList = torusList->selectedItems();
     for (int i=0; i<itemList.size(); i++) {
-        drawableObjectsData.selectTorusByName(itemList[i]->text().toStdString());
+        drawableObjectsData.selectObjectByName(TORUS,itemList[i]->text().toStdString());
     }
 }
 
 void ObjectListsWidget::torusHasBeenDoubleClicked()
 {
-    drawableObjectsData.deselectToruses();
+    drawableObjectsData.deselectObjects(TORUS);
     QList<QListWidgetItem *> itemList = torusList->selectedItems();
     for (int i=0; i<itemList.size(); i++) {
-        drawableObjectsData.selectTorusByName(itemList[i]->text().toStdString());
+        drawableObjectsData.selectObjectByName(TORUS,itemList[i]->text().toStdString());
         drawableObjectsData.moveCursorToTorusByName(itemList[i]->text().toStdString());
     }
 }
 
 void ObjectListsWidget::pointHasBeenSelected()
 {
-    drawableObjectsData.deselectPoints();
+    drawableObjectsData.deselectObjects(POINT);
     QList<QListWidgetItem *> itemList = pointList->selectedItems();
     for (int i=0; i<itemList.size(); i++) {
-        drawableObjectsData.selectPointByName(itemList[i]->text().toStdString());
+        drawableObjectsData.selectObjectByName(POINT,itemList[i]->text().toStdString());
     }
 }
 
 void ObjectListsWidget::pointHasBeenDoubleClicked()
 {
-    drawableObjectsData.deselectPoints();
+    drawableObjectsData.deselectObjects(POINT);
     QList<QListWidgetItem *> itemList = pointList->selectedItems();
     for (int i=0; i<itemList.size(); i++) {
-        drawableObjectsData.selectPointByName(itemList[i]->text().toStdString());
+        drawableObjectsData.selectObjectByName(POINT,itemList[i]->text().toStdString());
         drawableObjectsData.moveCursorToPointByName(itemList[i]->text().toStdString());
     }
 }
 
 void ObjectListsWidget::bezierCurveHasBeenClicked()
 {
-    drawableObjectsData.deselectBezierCurves();
+    drawableObjectsData.deselectObjects(BEZIERCURVE);
     QList<QTreeWidgetItem*> itemList = bezierCurveTreeList->selectedItems();
     for(int i=0; i < itemList.size(); i++)
     {
-        drawableObjectsData.selectBezierCurveByName(itemList[i]->text(0).toStdString());
+        drawableObjectsData.selectObjectByName(BEZIERCURVE,itemList[i]->text(0).toStdString());
     }
 }
 
 void ObjectListsWidget::bSplineHasBeenClicked()
 {
-    drawableObjectsData.deselectBSplines();
+    drawableObjectsData.deselectObjects(BSPLINE);
     QList<QTreeWidgetItem*> itemList = bSplineCurveTreeList->selectedItems();
     for(int i=0; i < itemList.size(); i++)
     {
-        drawableObjectsData.selectBSplineByName(itemList[i]->text(0).toStdString());
+        drawableObjectsData.selectObjectByName(BSPLINE,itemList[i]->text(0).toStdString());
     }
 }
 
 void ObjectListsWidget::interBSplineHasBeenClicked()
 {
-    drawableObjectsData.deselectInterBSplines();
+    drawableObjectsData.deselectObjects(INTERPBSPLINE);
     QList<QTreeWidgetItem*> itemList = interBSplineCurveTreeList->selectedItems();
     for(int i=0; i < itemList.size(); i++)
     {
-        drawableObjectsData.selectInterBSplineByName(itemList[i]->text(0).toStdString());
+        drawableObjectsData.selectObjectByName(INTERPBSPLINE,itemList[i]->text(0).toStdString());
     }
 }
 
 void ObjectListsWidget::bezierSurfaceHasBeenClicked()
 {
-    drawableObjectsData.deselectBezierSurface();
+    drawableObjectsData.deselectObjects(BEZIERSURFACE);
     QList<QTreeWidgetItem*> itemList = bezierSurfaceTreeList->selectedItems();
     for(int i=0; i < itemList.size(); i++)
     {
-        drawableObjectsData.selectBezierSurfaceByName(itemList[i]->text(0).toStdString());
+        drawableObjectsData.selectObjectByName(BEZIERSURFACE,itemList[i]->text(0).toStdString());
     }
 }
 
 void ObjectListsWidget::deleteTorusButtonClicked()
 {
     //items in lists are deseleted while deleting element (?)
-    drawableObjectsData.deselectToruses();
-    drawableObjectsData.deselectPoints();
-    drawableObjectsData.deselectBezierCurves();
+    drawableObjectsData.deselectObjects(TORUS);
+    drawableObjectsData.deselectObjects(POINT);
+    drawableObjectsData.deselectObjects(BEZIERCURVE);
 
 
     QList<QListWidgetItem *> itemList = torusList->selectedItems();
     for (int i=0; i<itemList.size(); i++) {
-            drawableObjectsData.removeTorusByName(itemList[i]->text().toStdString());
+            drawableObjectsData.removeObjectByName(TORUS,itemList[i]->text().toStdString());
             torusList->removeItemWidget(itemList[i]);
            // torusList->takeItem(torusList->indexFromItem(itemList[i]));
     }
@@ -270,8 +270,8 @@ void ObjectListsWidget::deleteTorusButtonClicked()
 void ObjectListsWidget::deletePointButtonClicked()
 {
     //items in lists are deseleted while deleting element (?)
-    drawableObjectsData.deselectToruses();
-    drawableObjectsData.deselectPoints();
+    drawableObjectsData.deselectObjects(TORUS);
+    drawableObjectsData.deselectObjects(POINT);
 
     QList<QListWidgetItem *> itemList = pointList->selectedItems();
     for (int i=0; i<itemList.size(); i++) {
@@ -286,8 +286,8 @@ void ObjectListsWidget::deleteCurveButtonClicked()
 {
 
     //items in lists are deseleted while deleting element (?)
-    drawableObjectsData.deselectToruses();
-    drawableObjectsData.deselectPoints();
+    drawableObjectsData.deselectObjects(TORUS);
+    drawableObjectsData.deselectObjects(POINT);
 
 }
 
@@ -524,100 +524,100 @@ void ObjectListsWidget::drawableHasBeenRenamed()
 void ObjectListsWidget::addToCurve(QAction * act)
 {
     QList<QListWidgetItem*> listItem = pointList->selectedItems();
-    Point* point = drawableObjectsData.getPointByName(listItem.at(0)->text().toStdString());
+    Point* point = (Point*)drawableObjectsData.getObjectByName(POINT,listItem.at(0)->text().toStdString());
     string curveName = act->text().toStdString();
     if(curveName != "Create New Bezier")
     {
-        BezierCurve* bezierCurve = drawableObjectsData.getBezierCurveByName(curveName);
+        BezierCurve* bezierCurve = (BezierCurve*)drawableObjectsData.getObjectByName(BEZIERCURVE,curveName);
         for(int i=0;i<listItem.count();i++)
         {
-            point = drawableObjectsData.getPointByName(listItem.at(i)->text().toStdString());
+            point = (Point*)drawableObjectsData.getObjectByName(POINT,listItem.at(i)->text().toStdString());
             drawableObjectsData.addPointToBezierCurve(bezierCurve,point);
         }
     }
     else
     {
         BezierCurve* bezierCurve = new BezierCurve(drawableObjectsData.camera);
-        drawableObjectsData.addBezierCurve(bezierCurve);
+        drawableObjectsData.addObject(BEZIERCURVE,bezierCurve);
         for(int i=0;i<listItem.count();i++)
         {
-            point = drawableObjectsData.getPointByName(listItem.at(i)->text().toStdString());
+            point = (Point*)drawableObjectsData.getObjectByName(POINT,listItem.at(i)->text().toStdString());
             drawableObjectsData.addPointToBezierCurve(bezierCurve,point);
         }
     }
-     drawableObjectsData.deselectToruses();
-     drawableObjectsData.deselectPoints();
-     drawableObjectsData.deselectBezierCurves();
+     drawableObjectsData.deselectObjects(TORUS);
+     drawableObjectsData.deselectObjects(POINT);
+     drawableObjectsData.deselectObjects(BEZIERCURVE);
      updateListsContent();
 }
 
 void ObjectListsWidget::addToBSpline(QAction * act)
 {
     QList<QListWidgetItem*> listItem = pointList->selectedItems();
-    Point* point = drawableObjectsData.getPointByName(listItem.at(0)->text().toStdString());
+    Point* point = (Point*)drawableObjectsData.getObjectByName(POINT,listItem.at(0)->text().toStdString());
     string bSplineName = act->text().toStdString();
     if(bSplineName != "Create new BSpline")
     {
-        BSpline * bSpline = drawableObjectsData.getBSplineByName(bSplineName);
+        BSpline * bSpline = (BSpline*)drawableObjectsData.getObjectByName(BSPLINE,bSplineName);
         for(int i=0;i<listItem.count();i++)
         {
-            point = drawableObjectsData.getPointByName(listItem.at(i)->text().toStdString());
+            point = (Point*)drawableObjectsData.getObjectByName(POINT,listItem.at(i)->text().toStdString());
             drawableObjectsData.addPointToBSpline(bSpline,point);
         }
     }
     else
     {
         BSpline* bSpline= new BSpline(drawableObjectsData.camera);
-        drawableObjectsData.addBSpline(bSpline);
+        drawableObjectsData.addObject(BSPLINE,bSpline);
         for(int i=0;i<listItem.count();i++)
         {
-            point = drawableObjectsData.getPointByName(listItem.at(i)->text().toStdString());
+            point = (Point*)drawableObjectsData.getObjectByName(POINT,listItem.at(i)->text().toStdString());
             drawableObjectsData.addPointToBSpline(bSpline,point);
         }
     }
-     drawableObjectsData.deselectToruses();
-     drawableObjectsData.deselectPoints();
-     drawableObjectsData.deselectBezierCurves();
-     drawableObjectsData.deselectBSplines();
+     drawableObjectsData.deselectObjects(TORUS);
+     drawableObjectsData.deselectObjects(POINT);
+     drawableObjectsData.deselectObjects(BEZIERCURVE);
+     drawableObjectsData.deselectObjects(BSPLINE);
      updateListsContent();
 }
 
 void ObjectListsWidget::addToInterBSpline(QAction * act)
 {
     QList<QListWidgetItem*> listItem = pointList->selectedItems();
-    Point* point = drawableObjectsData.getPointByName(listItem.at(0)->text().toStdString());
+    Point* point = (Point*)drawableObjectsData.getObjectByName(POINT,listItem.at(0)->text().toStdString());
     string interBSplineName = act->text().toStdString();
     if(interBSplineName != "Create new InterBSpline")
     {
-        InterBSpline * interBSpline = drawableObjectsData.getInterBSplineByName(interBSplineName);
+        InterBSpline * interBSpline = (InterBSpline*)drawableObjectsData.getObjectByName(INTERPBSPLINE,interBSplineName);
         for(int i=0;i<listItem.count();i++)
         {
-            point = drawableObjectsData.getPointByName(listItem.at(i)->text().toStdString());
+            point = (Point*)drawableObjectsData.getObjectByName(POINT,listItem.at(i)->text().toStdString());
             drawableObjectsData.addPointToInterBSpline(interBSpline,point);
         }
     }
     else
     {
         InterBSpline* interBSpline= new InterBSpline(drawableObjectsData.camera);
-        drawableObjectsData.addInterBSpline(interBSpline);
+        drawableObjectsData.addObject(INTERPBSPLINE,interBSpline);
         for(int i=0;i<listItem.count();i++)
         {
-            point = drawableObjectsData.getPointByName(listItem.at(i)->text().toStdString());
+            point = (Point*)drawableObjectsData.getObjectByName(POINT,listItem.at(i)->text().toStdString());
             drawableObjectsData.addPointToInterBSpline(interBSpline,point);
         }
     }
-     drawableObjectsData.deselectToruses();
-     drawableObjectsData.deselectPoints();
-     drawableObjectsData.deselectBezierCurves();
-     drawableObjectsData.deselectBSplines();
-     drawableObjectsData.deselectInterBSplines();
+     drawableObjectsData.deselectObjects(TORUS);
+     drawableObjectsData.deselectObjects(POINT);
+     drawableObjectsData.deselectObjects(BEZIERCURVE);
+     drawableObjectsData.deselectObjects(BSPLINE);
+     drawableObjectsData.deselectObjects(INTERPBSPLINE);
      updateListsContent();
 }
 
 void ObjectListsWidget::renamePoint()
 {
     QList<QListWidgetItem*> itemList = pointList->selectedItems();
-    Point* point = drawableObjectsData.getPointByName(itemList.at(0)->text().toStdString());
+    Point* point = (Point*)drawableObjectsData.getObjectByName(POINT,itemList.at(0)->text().toStdString());
     nameChangeDialog->setDrawable(point);
     nameChangeDialog->show();
 }
@@ -633,7 +633,7 @@ void ObjectListsWidget::removeBezierCurve()
     QList<QTreeWidgetItem*> itemList = bezierCurveTreeList->selectedItems();
     string name = itemList.at(0)->text(0).toStdString();
 
-    drawableObjectsData.removeBezierCurveByName(name);
+    drawableObjectsData.removeObjectByName(BEZIERCURVE,name);
     updateListsContent();
 }
 
@@ -644,7 +644,7 @@ void ObjectListsWidget::removePointFromBezierCurve()
     string parentName = itemList.at(0)->parent()->text(0).toStdString();
 
 
-    BezierCurve* bezierCurve = drawableObjectsData.getBezierCurveByName(parentName);
+    BezierCurve* bezierCurve = (BezierCurve*)drawableObjectsData.getObjectByName(BEZIERCURVE,parentName);
     std::vector<Point*>::iterator position = bezierCurve->pointVector.begin();
     for(int i=0;i<bezierCurve->pointVector.size();i++)
     {
@@ -662,7 +662,7 @@ void ObjectListsWidget::turnOnOffBezierPolygon()
 {
     QList<QTreeWidgetItem*> itemList = bezierCurveTreeList->selectedItems();
     string name = itemList.at(0)->text(0).toStdString();
-    BezierCurve* bezierCurve = drawableObjectsData.getBezierCurveByName(name);
+    BezierCurve* bezierCurve = (BezierCurve*)drawableObjectsData.getObjectByName(BEZIERCURVE,name);
     if(bezierCurve->drawPolygon == true)
     {
         bezierCurve->drawPolygon = false;
@@ -684,7 +684,7 @@ void ObjectListsWidget::removeBSpline()
     QList<QTreeWidgetItem*> itemList = bSplineCurveTreeList->selectedItems();
     string name = itemList.at(0)->text(0).toStdString();
 
-    drawableObjectsData.removeBSplineByName(name);
+    drawableObjectsData.removeObjectByName(BSPLINE,name);
     updateListsContent();
 }
 
@@ -695,7 +695,7 @@ void ObjectListsWidget::removePointFromBSpline()
     string parentName = itemList.at(0)->parent()->text(0).toStdString();
 
 
-    BSpline* bSpline = drawableObjectsData.getBSplineByName(parentName);
+    BSpline* bSpline = (BSpline*)drawableObjectsData.getObjectByName(BSPLINE,parentName);
     std::vector<Point*>::iterator position = bSpline->deBoorPoints.begin();
     for(int i=0;i<bSpline->deBoorPoints.size();i++)
     {
@@ -712,7 +712,7 @@ void ObjectListsWidget::turnOnOffBSplinePolygon()
 {
     QList<QTreeWidgetItem*> itemList = bSplineCurveTreeList->selectedItems();
     string name = itemList.at(0)->text(0).toStdString();
-    BSpline* bSpline = drawableObjectsData.getBSplineByName(name);
+    BSpline* bSpline = (BSpline*)drawableObjectsData.getObjectByName(BSPLINE,name);
     if(bSpline->drawPolygon == true)
     {
         bSpline->drawPolygon = false;
@@ -735,7 +735,7 @@ void ObjectListsWidget::removeInterBSpline()
     QList<QTreeWidgetItem*> itemList = interBSplineCurveTreeList->selectedItems();
     string name = itemList.at(0)->text(0).toStdString();
 
-    drawableObjectsData.removeInterBSplineByName(name);
+    drawableObjectsData.removeObjectByName(INTERPBSPLINE,name);
     updateListsContent();
 }
 
@@ -746,7 +746,7 @@ void ObjectListsWidget::removePointFromInterBSpline()
     string parentName = itemList.at(0)->parent()->text(0).toStdString();
 
 
-    InterBSpline* interBSpline = drawableObjectsData.getInterBSplineByName(parentName);
+    InterBSpline* interBSpline = (InterBSpline*)drawableObjectsData.getObjectByName(INTERPBSPLINE,parentName);
     std::vector<Point*>::iterator position = interBSpline->deBoorPoints.begin();
     for(int i=0;i<interBSpline->deBoorPoints.size();i++)
     {
@@ -763,7 +763,7 @@ void ObjectListsWidget::turnOnOffInterBSplinePolygon()
 {
     QList<QTreeWidgetItem*> itemList = interBSplineCurveTreeList->selectedItems();
     string name = itemList.at(0)->text(0).toStdString();
-    InterBSpline* interBSpline = drawableObjectsData.getInterBSplineByName(name);
+    InterBSpline* interBSpline = (InterBSpline*)drawableObjectsData.getObjectByName(INTERPBSPLINE,name);
     if(interBSpline->drawPolygon == true)
     {
         interBSpline->drawPolygon = false;
@@ -788,7 +788,7 @@ void ObjectListsWidget::turnOnBezierNet()
 {
     QList<QTreeWidgetItem*> itemList = bezierSurfaceTreeList->selectedItems();
     string name = itemList.at(0)->text(0).toStdString();
-    BezierSurface* bezierSurface = drawableObjectsData.getBezierSurfaceByName(name);
+    BezierSurface* bezierSurface = (BezierSurface*)drawableObjectsData.getObjectByName(BEZIERSURFACE,name);
     if(bezierSurface->drawBezierNet == true)
     {
         bezierSurface->drawBezierNet = false;

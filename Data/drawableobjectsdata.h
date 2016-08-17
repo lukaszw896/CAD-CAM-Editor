@@ -15,66 +15,45 @@
 #include <math.h>
 #include <QPoint>
 
+using namespace std;
 class DrawableObjectsData
 {
 public:
-        static DrawableObjectsData& getInstance();
+    static DrawableObjectsData& getInstance();
 
-    std::vector<Drawable*> drawableObjects;
+    vector<Drawable*> allDrawableObjects;
+    DrawableType currentDrawableObject;
+
+
+    vector<Drawable*> drawableObjectsContainer;
     Cursor* cursor;
     Camera* camera;
+    vector<Drawable*> torusList;
+    vector<Drawable*> pointList;
+    vector<Drawable*> bezierCurveList;
+    vector<Drawable*> bSplineList;
+    vector<Drawable*> interBSplineList;
+    vector<Drawable*> bezierSurfaceList;
 
-    void addTorus(Torus*);
+    void addObject(DrawableType drawableType, Drawable* drawable);
     void addPoint(Point*);
-    void addBezierCurve(BezierCurve*);
-    void addBSpline(BSpline*);
-    void addInterBSpline(InterBSpline*);
-    //
     void addBezierSurface(BezierSurface*);
-
     void addPointToBezierCurve(BezierCurve*, Point*);
     void addPointToBSpline(BSpline*, Point*);
     void addPointToInterBSpline(InterBSpline*,Point*);
     void addCursor(Cursor*);
 
-    void removeTorusByName(std::string);
+    void removeObjectByName(DrawableType drawableType,string name);
     void removePointByName(std::string);
-    void removeBezierCurveByName(std::string);
-    void removeBSplineByName(std::string);
-    void removeInterBSplineByName(std::string);
-    //
     void removeBezierSurfaceByName(std::string);
 
-    void selectTorusByName(std::string);
-    void selectPointByName(std::string);
-    void selectBezierCurveByName(std::string);
-    void selectBSplineByName(std::string);
-    void selectInterBSplineByName(std::string);
-    //
-    void selectBezierSurfaceByName(std::string);
+    void selectObjectByName(DrawableType drawableType, string name);
 
-    Point* getPointByName(string);
-    BezierCurve* getBezierCurveByName(std::string);
-    BSpline* getBSplineByName(std::string);
-    InterBSpline* getInterBSplineByName(std::string);
-    //
-    BezierSurface* getBezierSurfaceByName(std::string);
+    Drawable* getObjectByName(DrawableType drawableType, string name);
 
-    void deselectToruses();
-    void deselectPoints();
-    void deselectBezierCurves();
-    void deselectBSplines();
-    void deselectInterBSplines();
-    //
-    void deselectBezierSurface();
+    void deselectObjects(DrawableType drawableType);
 
-    void removeTorus(Torus*);
-    void removePoint(Point*);
-    void removeBezierCurves(BezierCurve*);
-    void removeBSpline(BSpline*);
-    void removeInterBSpline(InterBSpline*);
-    //
-    void removeBezierSurface(BezierSurface*);
+    void removeObject(DrawableType drawableType, Drawable* drawable);
 
     void moveCursorToTorusByName(std::string);
     void moveCursorToPointByName(std::string);
@@ -83,32 +62,26 @@ public:
 
     Drawable* findObjectNearCursor();
 
-    std::vector<Torus*> torusList;
-    std::vector<Point*> pointList;
-    std::vector<BezierCurve*> bezierCurveList;
-    std::vector<BSpline*> bSplineList;
-    std::vector<InterBSpline*> interBSplineList;
-    vector<BezierSurface*> bezierSurfaceList;
-
     int getPointListIndex(Point*);
 
     void updatePatchParam(int n)
     {
         for(int i=0;i<bezierSurfaceList.size();i++)
         {
-            for(int j=0;j<bezierSurfaceList[i]->patches.size();j++)
+            for(int j=0;j<((BezierSurface*)bezierSurfaceList[i])->patches.size();j++)
             {
-                bezierSurfaceList[i]->patches[j]->u = 1.0f/n;
-                bezierSurfaceList[i]->patches[j]->v = 1.0f/n;
+                ((BezierSurface*)bezierSurfaceList[i])->patches[j]->u = 1.0f/n;
+                ((BezierSurface*)bezierSurfaceList[i])->patches[j]->v = 1.0f/n;
             }
         }
     }
 
-    private:
+private:
+    DrawableObjectsData();
 
-        DrawableObjectsData();
-
-        void initDrawableObjectsList();
+    void initDrawableObjectsList();
+    void assignDrawableObjectsListToContainer(DrawableType drawableType);
+    void assignContainerToDrawableObjectsList();
 
 };
 

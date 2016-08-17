@@ -25,9 +25,9 @@ void NameChangeDialog::okButtonClicked()
     }
     else
     {
-        for(int i=2;i<data.drawableObjects.size();i++)
+        for(int i=2;i<data.allDrawableObjects.size();i++)
         {
-            if(data.drawableObjects[i]->name == newName)
+            if(data.allDrawableObjects[i]->name == newName)
             {
                 changeName = false;
             }

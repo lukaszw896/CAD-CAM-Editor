@@ -1,14 +1,31 @@
 #ifndef DRAWABLE_H
 #define DRAWABLE_H
 
-
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
 #include "cmath"
 #include <string>
 
+enum DrawableType
+{
+    CURSOR,
+    TORUS,
+    POINT,
+    BEZIERCURVE,
+    BSPLINE,
+    INTERPBSPLINE,
+    BEZIERSURFACE
+};
+
 class Drawable
 {
 public:
+    glm::vec4 transPointCoordinates;
+    glm::vec3 localTransPointCoordinates;
+    glm::vec4 leftEyeTransPointCoordinate;
+    glm::vec4 rightEyeTransPointCoordinate;
+
     Drawable();
     void updateTranslationMatX();
     void updateTranslationMatY();

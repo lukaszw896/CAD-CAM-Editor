@@ -335,9 +335,9 @@ void OGlWidget::draw()
     //glLineWidth(-15/camera.zPos - (5.f-camera.rProjection)/5);
     glLineWidth(1);
 
-    for(int i=0; i<drawableObjectsData.drawableObjects.size();i++){
+    for(int i=0; i<drawableObjectsData.allDrawableObjects.size();i++){
         glPointSize(-50/camera.zPos - (5.f-camera.rProjection)/5);
-        drawableObjectsData.drawableObjects[i]->draw();
+        drawableObjectsData.allDrawableObjects[i]->draw();
     }
    // bSplineSurface->draw();
     //bezierPatch->draw();
